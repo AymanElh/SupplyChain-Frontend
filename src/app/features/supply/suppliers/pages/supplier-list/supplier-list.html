@@ -1,0 +1,44 @@
+<div>
+  <h1>Suppliers page</h1>
+  <button>Add new supplier</button>
+</div>
+
+@if (isLoading()) {
+  <p>Loading suppliers ...</p>
+} @else {
+  @if (suppliers().length == 0) {
+    <div>No suppliers available right now</div>
+  } @else {
+    @for (supplier of suppliers(); track supplier.id) {
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Rating</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (supplier of suppliers(); track supplier.id) {
+            <tr>
+              <td>{{ supplier.name }}</td>
+              <td>
+                <div>{{ supplier.phone || 'N/A' }}</div>
+                <div>{{ supplier.email || 'N/A' }}</div>
+              </td>
+              <td></td>
+              <td>
+                <button>View</button>
+                <button>Edit</button>
+                <button>Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  }
+
+}
