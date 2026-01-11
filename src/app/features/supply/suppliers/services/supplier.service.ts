@@ -1,7 +1,7 @@
 import {Injectable, signal} from '@angular/core';
 import {SupplierApiService} from './supplier-api.service';
 import {tap} from 'rxjs';
-import {SupplierResponse} from '../models/supplier.model';
+import {SupplierRequest, SupplierResponse} from '../models/supplier.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +24,7 @@ export class SupplierService {
     return this.api.getAll(page, size, sortBy).pipe(
       tap({
         next: (response) => {
+          console.log(response);
           this.suppliers.set(response.content);
           this.currentPage.set(response.number);
           this.totalPages.set(response.totalPages);
@@ -35,5 +36,29 @@ export class SupplierService {
         }
       })
     )
+  }
+
+  getSupplier(id: number) {
+    return this.api.getById(id);
+  }
+
+  create(supplier: SupplierRequest) {
+    return this.api.create(supplier).pipe(
+      tap({
+        next: (newSupplier) => {
+          this.suppliers.update(curr => [...curr, newSupplier]);
+        }
+      })
+    );
+  }
+
+  deleteSupplier(id: number) {
+    return this.api.delete(id).pipe(
+      tap({
+        next: () => {
+          this.suppliers.update(current => current.filter(s => s.id !== id));
+        }
+      })
+    );
   }
 }

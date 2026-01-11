@@ -37,16 +37,16 @@ export class SupplierApiService {
    * Get Supplier by id
    * @param id
    */
-  getById(id: number) {
-    return this.http.get(`${this.apiUrl}/${id}`);
+  getById(id: number): Observable<SupplierResponse> {
+    return this.http.get<SupplierResponse>(`${this.apiUrl}/${id}`);
   }
 
   /**
    * Create a new supplier
    * @param supplier
    */
-  create(supplier: SupplierRequest) {
-    return this.http.post(this.apiUrl, supplier);
+  create(supplier: SupplierRequest): Observable<SupplierResponse> {
+    return this.http.post<SupplierResponse>(this.apiUrl, supplier);
   }
 
   /**
@@ -54,8 +54,8 @@ export class SupplierApiService {
    * @param id
    * @param supplier
    */
-  update(id: number, supplier: SupplierRequest) {
-    return this.http.put(`${this.apiUrl}/${id}`, supplier);
+  update(id: number, supplier: SupplierRequest): Observable<SupplierResponse> {
+    return this.http.put<SupplierResponse>(`${this.apiUrl}/${id}`, supplier);
   }
 
 
@@ -63,7 +63,7 @@ export class SupplierApiService {
    * Delete a supplier by id
    * @param id
    */
-  delete(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

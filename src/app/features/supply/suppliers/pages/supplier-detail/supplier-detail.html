@@ -1,1 +1,11 @@
-<p>supplier-detail works!</p>
+<div>
+  <h1>Supplier {{ supplier()?.name }} Details</h1>
+</div>
+
+<div                                                      >
+  @if (isLoading()) {
+    <div>Loading supplier details ... </div>
+  } @else if (supplier()) {
+    <h2>This component is not ready yet</h2>
+  }
+</div>
