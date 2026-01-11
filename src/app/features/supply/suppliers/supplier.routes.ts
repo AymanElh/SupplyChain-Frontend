@@ -16,5 +16,9 @@ export default [
   {
     path: ':id',
     component: SupplierDetail
+  },
+  {
+    path: ':id/edit',
+    component: SupplierForm
   }
 ] as Routes;

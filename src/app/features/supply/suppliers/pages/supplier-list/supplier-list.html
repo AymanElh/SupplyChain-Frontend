@@ -34,8 +34,8 @@
           <button type="button" [routerLink]="['/suppliers', supplier.id]" class="btn btn-primary">
             View
           </button>
-          <button type="button" class="btn btn-warning">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
+          <button type="button" class="btn btn-warning" [routerLink]="['/suppliers', supplier.id, 'edit']">Edit</button>
+          <button type="button" class="btn btn-danger" (click)="onDelete(supplier)">Delete</button>
         </td>
       </tr>
       }

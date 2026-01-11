@@ -17,6 +17,7 @@ export class SupplierList implements OnInit {
 
   searchQuery = signal<string>('');
   pageSize = signal<number>(10);
+  sortBy = signal<string>('id');
 
   suppliers = this.supplierService.suppliers;
   isLoading = this.supplierService.isLoading;
@@ -30,7 +31,8 @@ export class SupplierList implements OnInit {
   loadSuppliers(): void {
     this.supplierService.loadSuppliers(
       this.currentPage(),
-      this.pageSize()
+      this.pageSize(),
+      this.sortBy()
     ).subscribe();
 
     console.log("Data fetched: ", this.suppliers);

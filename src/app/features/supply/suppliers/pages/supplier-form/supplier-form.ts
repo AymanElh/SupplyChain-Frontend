@@ -22,6 +22,7 @@ export class SupplierForm implements OnInit{
 
   ngOnInit() {
     this.initForm();
+    this.checkIsEditMode();
   }
 
   private initForm() {
@@ -32,6 +33,26 @@ export class SupplierForm implements OnInit{
       rating: ['', [Validators.min(0), Validators.max(5)]],
       leadTime: ['', [Validators.min(0)]]
     });
+  }
+
+  private checkIsEditMode() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEditMode = true;
+      this.supplierId = +id;
+      this.loadSupplier(this.supplierId);
+    }
+  }
+
+  private loadSupplier(id: number) {
+    this.supplierService.getSupplier(id).subscribe({
+      next: (supplier) => {
+        this.supplierForm.patchValue(supplier);
+      },
+      error: () => {
+        this.router.navigate(['/suppliers']);
+      }
+    })
   }
 
   onSubmit() {

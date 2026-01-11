@@ -5,17 +5,36 @@
 
   <div>
     @if (isLoading()) {
-      <div>Loading supplier details ...</div>
+    <div class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading supplier details ...</p>
+    </div>
+    } @else if (notFound()) {
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <div>
+        <h4 class="alert-heading">404 - Supplier Not Found</h4>
+        <p class="mb-0">The supplier you're looking for doesn't exist or has been removed.</p>
+        <hr />
+        <a routerLink="../" class="btn btn-outline-danger">
+          <i class="bi bi-arrow-left"></i> Back to Suppliers List
+        </a>
+      </div>
+    </div>
     } @else if (supplier()) {
-      <h3>Supplier Informations</h3>
-      <ul class="list-group">
-        <li class="list-group-item"><strong>Email:</strong> {{ supplier()?.email }}</li>
-        <li class="list-group-item"><strong>Phone:</strong> {{ supplier()?.phone }}</li>
-        <li class="list-group-item"><strong>Rating:</strong> {{ supplier()?.rating }}</li>
-        <li class="list-group-item"><strong>Lead Time:</strong> {{ supplier()?.leadTime }}</li>
-      </ul>
-
+    <h3>Supplier Informations</h3>
+    <ul class="list-group">
+      <li class="list-group-item"><strong>Email:</strong> {{ supplier()?.email }}</li>
+      <li class="list-group-item"><strong>Phone:</strong> {{ supplier()?.phone }}</li>
+      <li class="list-group-item"><strong>Rating:</strong> {{ supplier()?.rating }}</li>
+      <li class="list-group-item"><strong>Lead Time:</strong> {{ supplier()?.leadTime }}</li>
+    </ul>
     }
   </div>
+  <div class="mt-3 d-flex gap-2">
+    <button class="btn btn-warning" (click)="onEdit()">Edit</button>
+    <button class="btn btn-danger" (click)="onDelete()">Delete</button>
+  </div>
 </div>
-j
