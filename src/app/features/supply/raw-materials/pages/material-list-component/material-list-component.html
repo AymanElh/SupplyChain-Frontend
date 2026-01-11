@@ -1,0 +1,56 @@
+<div class="container mt-5">
+  <h1>Raw material list</h1>
+  @if (isLoading()) {
+  <div>Loading materials ...</div>
+  } @else if (materials().length == 0) {
+  <div>No materials found</div>
+  } @else {
+  <div>
+    <button class="btn btn-primary">Add new material</button>
+    @for (m of materials(); track $index) {
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Stock Min</th>
+          <th scope="col">Unit</th>
+          <th scope="col">Unit Cost</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (material of materials(); track material.id) {
+        <tr>
+          <th scope="row">{{ material.id }}</th>
+          <td>{{ material.name }}</td>
+          <td>{{ material.stock }}</td>
+          <td>{{ material.stockMin }}</td>
+          <td>{{ material.unit }}</td>
+          <td>{{ material.unitCost }}</td>
+          <td class="d-flex gap-2">
+            <button
+              type="button"
+              class="btn btn-primary"
+            >
+              View
+            </button>
+            <button
+              type="button"
+              class="btn btn-warning"
+            >
+              Edit
+            </button>
+            <button type="button" class="btn btn-danger">
+              Delete
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
+  </div>
+  }
+</div>
