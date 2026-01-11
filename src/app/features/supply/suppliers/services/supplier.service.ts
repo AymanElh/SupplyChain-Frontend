@@ -1,6 +1,6 @@
 import {Injectable, signal} from '@angular/core';
 import {SupplierApiService} from './supplier-api.service';
-import {tap} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {SupplierRequest, SupplierResponse} from '../models/supplier.model';
 
 @Injectable({
@@ -42,7 +42,7 @@ export class SupplierService {
     return this.api.getById(id);
   }
 
-  create(supplier: SupplierRequest) {
+  createSupplier(supplier: SupplierRequest) {
     return this.api.create(supplier).pipe(
       tap({
         next: (newSupplier) => {
@@ -50,6 +50,11 @@ export class SupplierService {
         }
       })
     );
+  }
+
+  updateSupplier(id: number, supplier: SupplierRequest): Observable<SupplierResponse> {
+    console.log("Update supplier is not available yet");
+    return this.api.update(id, supplier);
   }
 
   deleteSupplier(id: number) {

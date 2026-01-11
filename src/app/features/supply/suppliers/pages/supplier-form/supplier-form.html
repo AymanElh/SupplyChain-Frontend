@@ -1,1 +1,106 @@
-<p>supplier-form works!</p>
+<div class="container mt-3">
+  <button type="button" class="btn btn-outline-secondary" routerLink="../">
+    <i class="bi bi-arrow-left"></i> Back
+  </button>
+</div>
+
+<div class="container mt-5" style="height: 100vh">
+  <h2>{{ isEditMode ? 'Edit Supplier' : 'Add Supplier' }}</h2>
+
+  <div>
+    <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()" class="row g-3 needs-validation" novalidate>
+      <div class="col-md-4">
+        <label 
+            for="supplier-name" 
+            class="form-label"
+            >Supplier name *</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="supplier-name" 
+            formControlName="name"
+            [class.is-invalid]="isFieldInvalid('name')"
+            placeholder="Mark" />
+        @if(isFieldInvalid('name')) {
+            <div class="invalid-feedback">{{getFieldError('name')}}</div>
+        }
+      </div>
+      <div class="col-md-4">
+        <label for="supplier-email" class="form-label">Email</label>
+        <div class="input-group has-validation">
+          <span class="input-group-text" id="supplier-email">@</span>
+          <input
+            type="text"
+            class="form-control"
+            id="supplier-email"
+            aria-describedby="inputGroupPrepend"
+            placeholder="supplier@example.com"
+            formControlName="email"
+            [class.is-invalid]="isFieldInvalid('email')"
+          />
+          @if (isFieldInvalid('email')) {
+              <div class="invalid-feedback">{{getFieldError('email')}}</div>
+          }
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label for="supplier-phone" class="form-label">Phone</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="supplier-phone" 
+            placeholder="0XXXXXXXX" 
+            formControlName="phone"
+            [class.border-red-500]="isFieldInvalid('phone')"
+        />
+        @if (isFieldInvalid('phone')) {
+            <div class="valid-feedback">Looks good!</div>
+        }
+      </div>
+    
+      <div class="col-md-6">
+        <label for="supplier-rating" class="form-label">Rating (0-5)</label>
+        <input 
+            type="number" 
+            class="form-control" 
+            id="supplier-rating" 
+            formControlName="rating"
+            [class.is-invalid]="isFieldInvalid('rating')"
+        />
+        @if (isFieldInvalid('rating')) {
+            <div class="invalid-feedback">{{getFieldError('rating')}}</div>
+        }
+      </div>
+      <div class="col-md-6">
+        <label for="supplier-leadTime" class="form-label">Lead time (days)</label>
+        <input 
+            class="form-control" 
+            id="supplier-leadTime" 
+            type="text"
+            formControlName="leadTime"
+            [class.is-invalid]="isFieldInvalid('leadTime')"
+        />
+        @if (isFieldInvalid('leadTime')) {
+            <div class="invalid-feedback">{{getFieldError('leadTime')}}</div>
+        }
+      </div>
+    
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required />
+          <label class="form-check-label" for="invalidCheck"> Agree to terms and conditions </label>
+          <div class="invalid-feedback">You must agree before submitting.</div>
+        </div>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-danger" type="button">Cancel</button>
+        <button 
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="supplierForm.invalid || isSubmitting"
+            [class.opacity-50]="supplierForm.invalid || isSubmitting"
+            >{{ isSubmitting ? 'Saving ...' : (isEditMode ? 'Update' : 'Create') }}</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,11 +1,21 @@
-<div>
-  <h1>Supplier {{ supplier()?.name }} Details</h1>
-</div>
+<div class="container mt-5">
+  <div>
+    <h1>Supplier {{ supplier()?.name }} Details</h1>
+  </div>
 
-<div                                                      >
-  @if (isLoading()) {
-    <div>Loading supplier details ... </div>
-  } @else if (supplier()) {
-    <h2>This component is not ready yet</h2>
-  }
+  <div>
+    @if (isLoading()) {
+      <div>Loading supplier details ...</div>
+    } @else if (supplier()) {
+      <h3>Supplier Informations</h3>
+      <ul class="list-group">
+        <li class="list-group-item"><strong>Email:</strong> {{ supplier()?.email }}</li>
+        <li class="list-group-item"><strong>Phone:</strong> {{ supplier()?.phone }}</li>
+        <li class="list-group-item"><strong>Rating:</strong> {{ supplier()?.rating }}</li>
+        <li class="list-group-item"><strong>Lead Time:</strong> {{ supplier()?.leadTime }}</li>
+      </ul>
+
+    }
+  </div>
 </div>
+j

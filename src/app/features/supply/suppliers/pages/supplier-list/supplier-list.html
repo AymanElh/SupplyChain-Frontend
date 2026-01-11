@@ -1,16 +1,16 @@
-<div>
-  <h1>Suppliers page</h1>
-  <button>Add new supplier</button>
-</div>
+<div class="container mt-5">
+  <div class="mb-2">
+    <h1>Suppliers page</h1>
+    <button [routerLink]="['/suppliers/create']" class="btn btn-primary">Add new supplier</button>
+  </div>
 
-@if (isLoading()) {
+  @if (isLoading()) {
   <p>Loading suppliers ...</p>
-} @else {
-  @if (suppliers().length == 0) {
-    <div>No suppliers available right now</div>
+  } @else { @if (suppliers().length == 0) {
+  <div>No suppliers available right now</div>
   } @else {
-    <table class="table">
-      <thead>
+  <table class="table">
+    <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
@@ -19,42 +19,31 @@
         <th scope="col">Rating</th>
         <th scope="col">LeadTime</th>
         <th scope="col">Actions</th>
-
       </tr>
-      </thead>
-      <tbody>
-        @for (supplier of suppliers(); track supplier.id) {
-          <tr>
-            <th scope="row">{{ supplier.id }}</th>
-            <td>{{ supplier.name }}</td>
-            <td>{{ supplier.email }}</td>
-            <td>{{ supplier.phone }}</td>
-            <td>{{ supplier.rating }}</td>
-            <td>{{ supplier.leadTime }}</td>
-            <td class="d-flex gap-2">
-              <button
-                type="button"
-                [routerLink]="['/suppliers', supplier.id]"
-                class="btn btn-primary">View</button>
-              <button
-                type="button"
-                class="btn btn-warning">Edit</button>
-              <button type="button" class="btn btn-danger">Delete</button>
-
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  }
-}
-
-
-@if (totalPages() > 0) {
+    </thead>
+    <tbody>
+      @for (supplier of suppliers(); track supplier.id) {
+      <tr>
+        <th scope="row">{{ supplier.id }}</th>
+        <td>{{ supplier.name }}</td>
+        <td>{{ supplier.email }}</td>
+        <td>{{ supplier.phone }}</td>
+        <td>{{ supplier.rating }}</td>
+        <td>{{ supplier.leadTime }}</td>
+        <td class="d-flex gap-2">
+          <button type="button" [routerLink]="['/suppliers', supplier.id]" class="btn btn-primary">
+            View
+          </button>
+          <button type="button" class="btn btn-warning">Edit</button>
+          <button type="button" class="btn btn-danger">Delete</button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  } } @if (totalPages() > 0) {
   <div class="flex justify-between items-center mt-6">
-    <div class="text-sm text-gray-700">
-      Page {{ currentPage() + 1 }} of {{ totalPages() }}
-    </div>
+    <div class="text-sm text-gray-700">Page {{ currentPage() + 1 }} of {{ totalPages() }}</div>
 
     <div class="flex gap-2">
       <button
@@ -76,4 +65,5 @@
       </button>
     </div>
   </div>
-}
+  }
+</div>
