@@ -1,0 +1,145 @@
+<div class="container mt-3">
+  <button type="button" class="btn btn-outline-secondary" routerLink="../">
+    <i class="bi bi-arrow-left"></i> Back
+  </button>
+</div>
+
+<div class="container mt-5" style="height: 100vh">
+  <h2>{{ isEditMode ? 'Edit Material' : 'Add Material' }}</h2>
+
+  <div>
+    <form [formGroup]="materialForm" (ngSubmit)="onSubmit()" class="row g-3 needs-validation" novalidate>
+      <div class="col-md-4">
+        <label
+          for="material-name"
+          class="form-label"
+        >Material name *</label>
+        <input
+          type="text"
+          class="form-control"
+          id="material-name"
+          formControlName="name"
+          [class.is-invalid]="isFieldInvalid('name')"
+          placeholder=""/>
+        @if (isFieldInvalid('name')) {
+          <div class="invalid-feedback">{{ getFieldError('name') }}</div>
+        }
+      </div>
+      <div class="col-md-4">
+        <label for="supplier-email" class="form-label">Stock</label>
+        <div class="input-group has-validation">
+          <input
+            type="number"
+            class="form-control"
+            id="material-stock"
+            aria-describedby="inputGroupPrepend"
+            formControlName="stock"
+            [class.is-invalid]="isFieldInvalid('stock')"
+          />
+          @if (isFieldInvalid('stock')) {
+            <div class="invalid-feedback">{{ getFieldError('stock') }}</div>
+          }
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label for="material-stock-min" class="form-label">Stock Min</label>
+        <input
+          type="number"
+          class="form-control"
+          id="material-stock-min"
+          formControlName="stockMin"
+          [class.is-invalid]="isFieldInvalid('stockMin')"
+        />
+        @if (isFieldInvalid('stockMin')) {
+          <div class="invalid-feedback">{{ getFieldError('stockMin') }}</div>
+        }
+      </div>
+
+      <div class="col-md-6">
+        <label for="material-unit-cost" class="form-label">Unit Cost</label>
+        <input
+          type="number"
+          class="form-control"
+          id="material-unit-cost"
+          formControlName="unitCost"
+          [class.is-invalid]="isFieldInvalid('unitCost')"
+        />
+        @if (isFieldInvalid('unitCost')) {
+          <div class="invalid-feedback">{{ getFieldError('unitCost') }}</div>
+        }
+      </div>
+
+      <div>
+        <label for="unit" class="block text-sm font-medium text-gray-700 mb-2">
+          Unit of Measure *
+        </label>
+
+        <select id="unit"
+                class="form-select"
+                aria-label="Default select example"
+                formControlName="unit"
+                [class.is-invalid]="isFieldInvalid('unit')"
+        >
+          <option selected value="">Select unit</option>
+          <option value="kg">Kilograms (kg)</option>
+          <option value="m">Meters (m)</option>
+          <option value="pcs">Pieces (pcs)</option>
+          <option value="liter">Liters (L)</option>
+          <option value="ton">Tons</option>
+          <option value="box">Boxes</option>
+        </select>
+        @if (isFieldInvalid('unit')) {
+          <p class="invalid-feedback">{{ getFieldError('unit') }}</p>
+        }
+      </div>
+
+      <!-- Supplier selection-->
+      <div>
+        <label>Select Supplier</label>
+        @if (suppliers().length == 0) {
+          <p>No Supplier available please add supplier first</p>
+        } @else {
+          @for (supplier of suppliers(); track supplier.id) {
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [checked]="isSupplierSelected(supplier.id)"
+                (change)="onSupplierChange(supplier.id, $event)"
+              >
+              <span class="ml-3 text-sm text-gray-700">
+                    {{ supplier.name }}
+                @if (supplier.rating) {
+                  <span class="text-xs text-yellow-600 ml-2">★ {{ supplier.rating }}</span>
+                }
+              </span>
+            </div>
+          }
+          @if (isFieldInvalid('suppliersIds')) {
+            <p class="invalid-feedback">{{ getFieldError('suppliersIds') }}</p>
+          }
+        }
+
+      </div>
+
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required/>
+          <label class="form-check-label" for="invalidCheck"> Agree to terms and conditions </label>
+          <div class="invalid-feedback">You must agree before submitting.</div>
+        </div>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-danger" type="button">Cancel</button>
+        <button
+          class="btn btn-primary"
+          type="submit" 
+          [disabled]="materialForm.invalid || isSubmitting"
+          [class.opacity-50]="materialForm.invalid || isSubmitting"
+        >
+          {{ isSubmitting ? 'Saving ...' : (isEditMode ? 'Update' : 'Create') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
