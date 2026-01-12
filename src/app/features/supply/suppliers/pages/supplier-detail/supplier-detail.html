@@ -37,4 +37,18 @@
     <button class="btn btn-warning" (click)="onEdit()">Edit</button>
     <button class="btn btn-danger" (click)="onDelete()">Delete</button>
   </div>
+
+  @if (supplier()!.materials && supplier()!.materials!.length > 0) {
+  <div class="mt-3 border-top pt-3">
+    <h3>Supplier Materials</h3>
+    <ul class="list-group">
+      @for (material of supplier()?.materials; track material.id) {
+      <li class="list-group-item">
+        <strong>{{ material.name }}</strong>
+        <span class="badge bg-primary ms-2">{{ material.stock }}</span>
+      </li>
+      }
+    </ul>
+  </div>
+  }
 </div>
