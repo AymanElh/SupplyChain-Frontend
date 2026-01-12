@@ -13,5 +13,9 @@ export const routes: Routes = [
   {
     path: 'materials',
     loadChildren: () => import('./features/supply/raw-materials/material.route')
+  },
+  {
+    path: 'orders',
+    loadChildren: () => import('./features/supply/supplier-orders/supplier-orders-routes')
   }
 ];
