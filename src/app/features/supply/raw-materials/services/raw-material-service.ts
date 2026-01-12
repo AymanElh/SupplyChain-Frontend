@@ -19,15 +19,15 @@ export class RawMaterialService {
   isLoading = signal<boolean>(false);
 
   criticalMaterials = computed(() => {
-    this.materials().filter(m => m.isCritical)
+    return this.materials().filter(m => m.isCritical)
   })
 
   lowStockMaterials = computed(() => {
-    this.materials().filter(m => m.stock <= m.stockMin)
+    return this.materials().filter(m => m.stock <= m.stockMin)
   })
 
   totalInventoryValue = computed(() => {
-    this.materials().reduce((sum, m) => sum + (m.stock * m.unitCost), 0);
+    return this.materials().reduce((sum, m) => sum + (m.stock * m.unitCost), 0);
   })
 
   loadMaterials(page: number = 0, size: number = 10): Observable<PageResponse<RawMaterialResponse>> {
