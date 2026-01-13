@@ -76,7 +76,7 @@ export class SupplierForm implements OnInit{
     })
   }
 
-  isFieldInvalid(fieldName: string): boolean {
+    isFieldInvalid(fieldName: string): boolean {
     const field = this.supplierForm.get(fieldName);
     return !!(field && field.invalid && (field.dirty || field.touched));
   }
