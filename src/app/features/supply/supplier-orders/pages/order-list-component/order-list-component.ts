@@ -2,10 +2,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { SupplierOrderService } from '../../services/supplier-order-service';
 import { OrderStatus, SupplierOrderResponse } from '../../models/supplier-order-model';
 import { DecimalPipe } from '@angular/common';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-order-list-component',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, RouterLink],
   templateUrl: './order-list-component.html',
   styleUrl: './order-list-component.css',
 })

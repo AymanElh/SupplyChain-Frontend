@@ -1,0 +1,204 @@
+<div class="container p-2">
+  <!-- Header -->
+  <div class="mb-4">
+    <h1 class="display-5">Create Supplier Order</h1>
+    <p class="text-muted">
+      Fill in the order details and add materials to create a new supplier order
+    </p>
+  </div>
+
+  <!-- Form -->
+  <div class="card shadow">
+    <div class="card-body">
+      <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+        <!-- Order Information Section -->
+        <div class="mb-4">
+          <h2 class="h4 border-bottom pb-2 mb-3">Order Information</h2>
+
+          <div class="row g-3">
+            <!-- Supplier Selection -->
+            <div class="col-md-6">
+              <label for="supplierId" class="form-label">Select Supplier *</label>
+              <select id="supplierId" class="form-select" [class.is-invalid]="isFieldInvalid('supplierId')" formControlName="supplierId">
+                <option value="">-- Choose a supplier --</option>
+                @for (suppplier of suppliers(); track $index) {
+                <option [value]="suppplier.id">
+                  {{ suppplier.name }}
+                  @if (suppplier.rating) { - Rating: ★{{ suppplier.rating }} } @if
+                  (suppplier.leadTime) { - Lead Time: {{ suppplier.leadTime }} days }
+                </option>
+                }
+              </select>
+              @if(isFieldInvalid('supplierId')) {
+                <div class="invalid-feedback">{{ getFieldError('supplierId') }}</div>
+              }
+              @if(suppliers().length === 0) {
+                <div class="invalid-feedback">No Suppliers available. Please add supplier first</div>
+              }
+            </div>
+
+            <!-- Order Date -->
+            <div class="col-md-6">
+              <label for="orderDate" class="form-label">Order Date *</label>
+              <input type="date" id="orderDate" class="form-control" [class.is-invalid]="isFieldInvalid('orderDate')" formControlName="orderDate" />
+              @if(isFieldInvalid('orderDate')) {
+                <div class="invalid-feedback">{{ getFieldError('orderDate') }}</div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Items Section -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+            <div>
+              <h2 class="h4 mb-0">Order Items</h2>
+              <p class="text-muted small mb-0">Add materials to this order</p>
+            </div>
+            <button type="button" class="btn btn-success" (click)="addItem()">
+              <i class="bi bi-plus-circle me-1"></i>Add Item
+            </button>
+          </div>
+
+          <!-- Items Table -->
+          @if (hasItems()) {
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Material *</th>
+                  <th>Quantity *</th>
+                  <th>Unit Price ($) *</th>
+                  <th>Subtotal</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="items">
+                @for (item of items.controls; track $index; let i = $index) {
+                  <tr [formGroupName]="$index">
+                    <td>{{$index + 1}}</td>
+                    <td>
+                      <select class="form-select form-select-sm" [class.is-invalid]="isItemFieldInvalid(i, 'materialId')" formControlName="materialId">
+                        <option value="">Select material</option>
+                        @for (material of materials(); track $index) {
+                        <option [value]="material.id">
+                          {{ material.name }}
+                        </option>
+                        }
+                      </select>
+                      @if(isItemFieldInvalid(i, 'materialId')) {
+                        <div class="invalid-feedback">{{ getItemFieldError(i, 'materialId') }}</div>
+                      }
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        min="1"
+                        style="width: 100px"
+                        formControlName="quantity"
+                        [class.is-invalid]="isItemFieldInvalid(i, 'quantity')"
+                      />
+                      @if(isItemFieldInvalid(i, 'quantity')) {
+                        <div class="invalid-feedback">{{ getItemFieldError(i, 'quantity') }}</div>
+                      }
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        min="0"
+                        step="0.01"
+                        style="width: 120px"
+                        formControlName="unitPrice"
+                        [class.is-invalid]="isItemFieldInvalid(i, 'unitPrice')"
+                      />
+                      @if(isItemFieldInvalid(i, 'unitPrice')) {
+                        <div class="invalid-feedback">{{ getItemFieldError(i, 'unitPrice') }}</div>
+                      }
+                    </td>
+                    <td>
+                      <span class="fw-bold">${{ calculateSubTotal($index) }}</span>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-danger">Remove</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+
+              <!-- Table Footer with Totals -->
+              <tfoot class="table-light">
+                <tr>
+                  <td colspan="4" class="text-end">
+                    <div class="small text-muted">
+                      <div>Items: <span class="fw-semibold">2</span></div>
+                      <div>Total Quantity: <span class="fw-semibold">150</span></div>
+                    </div>
+                  </td>
+                  <td colspan="2">
+                    <div>
+                      <p class="small text-muted mb-1">Total Amount:</p>
+                      <p class="h4 mb-0 text-primary">${{ orderTotal() }}</p>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          } @else {
+          <p class="text-center">No items added to the order.</p>
+          }
+        </div>
+
+        <!-- Order Summary Card -->
+        <div class="card bg-light mb-4">
+          <div class="card-body">
+            <h3 class="h5 mb-3">Order Summary</h3>
+            <div class="row">
+              <div class="col-md-4">
+                <p class="small text-muted mb-1">Supplier</p>
+                <p class="fw-semibold">
+                  @if (orderForm.get('supplierId')?.value) {
+                    {{ getSupplierName(orderForm.get('supplierId')?.value) }}
+                  }
+                </p>
+              </div>
+              <div class="col-md-4">
+                <p class="small text-muted mb-1">Total Items</p>
+                <p class="fw-semibold">{{ getUniqueItemsCount() }} types ({{ getTotalQuantity() }} units)</p>
+              </div>
+              <div class="col-md-4">
+                <p class="small text-muted mb-1">Total Amount</p>
+                <p class="h4 text-primary mb-0">${{ orderTotal() }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="d-flex gap-3 justify-content-end pt-3 border-top">
+          <button type="button" class="btn btn-outline-secondary px-4">Cancel</button>
+          <button type="submit" class="btn btn-primary px-5">Create Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Instructions Card -->
+  <div class="card mt-4 bg-light">
+    <div class="card-body">
+      <h4 class="h6 mb-3">📝 Instructions:</h4>
+      <ul class="small text-muted mb-0">
+        <li>Select the supplier from whom you want to order materials</li>
+        <li>Add items by clicking "Add Item" button</li>
+        <li>Select a material from the dropdown - the unit price will be auto-filled</li>
+        <li>Enter the quantity you want to order</li>
+        <li>The subtotal and total will be calculated automatically</li>
+        <li>You can add multiple items to the same order</li>
+        <li>Remove items using the "Remove" button (minimum 1 item required)</li>
+      </ul>
+    </div>
+  </div>
+</div>
