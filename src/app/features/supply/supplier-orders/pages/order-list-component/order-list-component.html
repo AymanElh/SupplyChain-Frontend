@@ -149,7 +149,7 @@
               <td>{{ order.items.length }} items</td>
               <td>${{ orderService.calculateOrderTotal(order) | number : '1.2-2' }}</td>
               <td class="d-flex gap-2">
-                <button type="button" class="btn btn-sm btn-info">
+                <button type="button" class="btn btn-sm btn-info" [routerLink]="['/supply/orders', order.id]">
                   <i class="bi bi-eye"></i> View
                 </button>
                 <button type="button" class="btn btn-sm btn-warning">

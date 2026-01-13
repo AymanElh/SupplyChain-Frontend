@@ -1,0 +1,101 @@
+<div class="container mt-5">
+  @if (isLoading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading order details...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading order details...</p>
+  </div>
+  } @else if (order()) {
+  <div class="card shadow-lg">
+    <!-- Header with gradient background -->
+    <div class="card-header bg-primary text-white p-4">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h1 class="h3 mb-2">Order #{{ order()!.id }}</h1>
+          <p class="mb-1 opacity-75">Supplier: {{ order()!.supplierName }}</p>
+          <p class="mb-0 opacity-75">Order Date: {{ formatDate(order()!.orderDate) }}</p>
+        </div>
+
+        <div>
+          @if (order()!.status === SupplierOrderStatus.WAITING) {
+          <span class="badge bg-warning text-dark px-3 py-2">Waiting</span>
+          } @else if (order()!.status === SupplierOrderStatus.IN_PROGRESS) {
+          <span class="badge bg-info px-3 py-2">In Progress</span>
+          } @else if (order()!.status === SupplierOrderStatus.RECEIVED) {
+          <span class="badge bg-success px-3 py-2">Received</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Details Body -->
+    <div class="card-body p-4">
+      <!-- Order Items Table -->
+      <div class="mb-4">
+        <h2 class="h5 mb-3">Order Items</h2>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Material</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of order()!.items; track item.id) {
+              <tr>
+                <td>
+                  <span class="fw-medium">{{ item.rawMaterialName }}</span>
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.unitPrice | number : '1.2-2' }}</td>
+                <td class="fw-semibold">${{ item.subTotal | number : '1.2-2' }}</td>
+              </tr>
+              }
+            </tbody>
+            <tfoot class="table-light">
+              <tr>
+                <td colspan="3" class="text-end fw-semibold">Total:</td>
+                <td class="fw-bold text-primary fs-5">
+                  ${{ calculateTotal() | number : '1.2-2' }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex justify-content-between align-items-center border-top pt-4">
+        <button [routerLink]="['/supply/orders']" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left me-2"></i>Back to Orders
+        </button>
+
+        <div class="d-flex gap-2">
+          @if (order()!.status === SupplierOrderStatus.WAITING) {
+          <button (click)="onUpdateStatus(SupplierOrderStatus.IN_PROGRESS)" class="btn btn-primary">
+            <i class="bi bi-play-circle me-2"></i>Mark as In Progress
+          </button>
+          } @if (canMarkAsReceived()) {
+          <button (click)="onUpdateStatus(SupplierOrderStatus.RECEIVED)" class="btn btn-success">
+            <i class="bi bi-check-circle me-2"></i>Mark as Received
+          </button>
+          } @if (canCancel()) {
+          <button (click)="onDelete()" class="btn btn-danger">
+            <i class="bi bi-trash me-2"></i>Delete Order
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  } @else {
+  <div class="alert alert-warning" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    Order not found
+  </div>
+  }
+</div>

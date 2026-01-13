@@ -64,14 +64,15 @@ export class SupplierOrderService {
     );
   }
 
-  updateOrder(id: number, order: SupplierOrderRequest): Observable<SupplierOrderResponse> {
-    return this.api.update(id, order).pipe(
-      tap({
-        next: (updatedOrder) => {
-          this.orders.update(current => current.map(order => order.id === updatedOrder.id ? updatedOrder : order));
-        },
-        error: () => {
-          this.isLoading.set(false);
+  updateOrderStatus(id: number, status: OrderStatus): Observable<SupplierOrderResponse> {
+    const updatedRequest: SupplierOrderRequest = {status}
+    return this.api.updateStatus(id, updatedRequest).pipe(
+       tap({
+        next: (updated) => {
+          this.orders.update(current =>
+            current.map(o => o.id === id ? updated : o)
+          );
+          // this.notification.showSuccess('Order status updated successfully');
         }
       })
     );

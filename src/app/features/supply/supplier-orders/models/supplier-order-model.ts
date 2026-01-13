@@ -6,10 +6,10 @@ export enum OrderStatus {
 }
 
 export interface SupplierOrderRequest {
-  supplierId: number;
+  supplierId?: number;
   orderDate?: string;
   status?: OrderStatus;
-  items: SupplierOrderItemRequest[];
+  items?: SupplierOrderItemRequest[];
 }
 
 export interface SupplierOrderResponse {

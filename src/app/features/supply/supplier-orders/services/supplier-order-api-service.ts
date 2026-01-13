@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SupplierOrderRequest, SupplierOrderResponse } from '../models/supplier-order-model';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { PageResponse } from '../../../../core/models/page-response.model';
 
 @Injectable({
@@ -39,7 +39,19 @@ export class SupplierOrderApiService {
    * @returns 
    */
   getById(id: number): Observable<SupplierOrderResponse> {
-    return this.http.get<SupplierOrderResponse>(`${this.apiUrl}/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+      map(order => ({
+        ...order,
+        items: order.items.map((item: any) => ({
+          id: item.id,
+          rawMaterialId: item.materialId,
+          rawMaterialName: item.materialName,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          subTotal: item.subTotal,
+        }))
+      }))
+    );
   }
 
   /**
@@ -57,8 +69,8 @@ export class SupplierOrderApiService {
    * @param order supplier order
    * @returns 
    */
-  update(id: number, order: SupplierOrderRequest): Observable<SupplierOrderResponse> {
-    return this.http.put<SupplierOrderResponse>(`${this.apiUrl}/${id}`, order);
+  updateStatus(id: number, order: SupplierOrderRequest): Observable<SupplierOrderResponse> {
+    return this.http.put<SupplierOrderResponse>(`${this.apiUrl}/${id}/status`, order);
   }
 
   /**
