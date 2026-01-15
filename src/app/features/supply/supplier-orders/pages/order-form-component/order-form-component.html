@@ -1,204 +1,257 @@
-<div class="container p-2">
+<div class="p-8">
   <!-- Header -->
-  <div class="mb-4">
-    <h1 class="display-5">Create Supplier Order</h1>
-    <p class="text-muted">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Create Supplier Order</h1>
+    <p class="text-gray-400">
       Fill in the order details and add materials to create a new supplier order
     </p>
   </div>
 
   <!-- Form -->
-  <div class="card shadow">
-    <div class="card-body">
-      <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
-        <!-- Order Information Section -->
-        <div class="mb-4">
-          <h2 class="h4 border-bottom pb-2 mb-3">Order Information</h2>
+  <div class="bg-gray-900 border-2 border-gray-700 p-8">
+    <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+      <!-- Order Information Section -->
+      <div class="mb-8">
+        <h2 class="text-xl font-bold text-white mb-6 pb-3 border-b-2 border-gray-800">
+          Order Information
+        </h2>
 
-          <div class="row g-3">
-            <!-- Supplier Selection -->
-            <div class="col-md-6">
-              <label for="supplierId" class="form-label">Select Supplier *</label>
-              <select id="supplierId" class="form-select" [class.is-invalid]="isFieldInvalid('supplierId')" formControlName="supplierId">
-                <option value="">-- Choose a supplier --</option>
-                @for (suppplier of suppliers(); track $index) {
-                <option [value]="suppplier.id">
-                  {{ suppplier.name }}
-                  @if (suppplier.rating) { - Rating: ★{{ suppplier.rating }} } @if
-                  (suppplier.leadTime) { - Lead Time: {{ suppplier.leadTime }} days }
-                </option>
-                }
-              </select>
-              @if(isFieldInvalid('supplierId')) {
-                <div class="invalid-feedback">{{ getFieldError('supplierId') }}</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Supplier Selection -->
+          <div>
+            <label for="supplierId" class="block text-sm font-semibold text-gray-300 mb-2">
+              Select Supplier <span class="text-red-500">*</span>
+            </label>
+            <select
+              id="supplierId"
+              class="w-full px-4 py-3 bg-gray-950 border-2 text-white focus:outline-none focus:border-blue-600 transition-colors"
+              [class.border-gray-700]="!isFieldInvalid('supplierId')"
+              [class.border-red-600]="isFieldInvalid('supplierId')"
+              formControlName="supplierId"
+            >
+              <option value="" class="text-gray-400">-- Choose a supplier --</option>
+              @for (suppplier of suppliers(); track $index) {
+              <option [value]="suppplier.id">
+                {{ suppplier.name }}
+                @if (suppplier.rating) { - Rating: ★{{ suppplier.rating }} } @if
+                (suppplier.leadTime) { - Lead Time: {{ suppplier.leadTime }} days }
+              </option>
               }
-              @if(suppliers().length === 0) {
-                <div class="invalid-feedback">No Suppliers available. Please add supplier first</div>
-              }
+            </select>
+            @if(isFieldInvalid('supplierId')) {
+            <div class="text-red-400 text-sm mt-1">{{ getFieldError('supplierId') }}</div>
+            } @if(suppliers().length === 0) {
+            <div class="text-yellow-400 text-sm mt-1">
+              No Suppliers available. Please add supplier first
             </div>
+            }
+          </div>
 
-            <!-- Order Date -->
-            <div class="col-md-6">
-              <label for="orderDate" class="form-label">Order Date *</label>
-              <input type="date" id="orderDate" class="form-control" [class.is-invalid]="isFieldInvalid('orderDate')" formControlName="orderDate" />
-              @if(isFieldInvalid('orderDate')) {
-                <div class="invalid-feedback">{{ getFieldError('orderDate') }}</div>
-              }
-            </div>
+          <!-- Order Date -->
+          <div>
+            <label for="orderDate" class="block text-sm font-semibold text-gray-300 mb-2">
+              Order Date <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="date"
+              id="orderDate"
+              class="w-full px-4 py-3 bg-gray-950 border-2 text-white focus:outline-none focus:border-blue-600 transition-colors"
+              [class.border-gray-700]="!isFieldInvalid('orderDate')"
+              [class.border-red-600]="isFieldInvalid('orderDate')"
+              formControlName="orderDate"
+            />
+            @if(isFieldInvalid('orderDate')) {
+            <div class="text-red-400 text-sm mt-1">{{ getFieldError('orderDate') }}</div>
+            }
           </div>
         </div>
+      </div>
 
-        <!-- Order Items Section -->
-        <div class="mb-4">
-          <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-            <div>
-              <h2 class="h4 mb-0">Order Items</h2>
-              <p class="text-muted small mb-0">Add materials to this order</p>
-            </div>
-            <button type="button" class="btn btn-success" (click)="addItem()">
-              <i class="bi bi-plus-circle me-1"></i>Add Item
-            </button>
+      <!-- Order Items Section -->
+      <div class="mb-8">
+        <div class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-800">
+          <div>
+            <h2 class="text-xl font-bold text-white">Order Items</h2>
+            <p class="text-gray-400 text-sm mt-1">Add materials to this order</p>
           </div>
-
-          <!-- Items Table -->
-          @if (hasItems()) {
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <thead class="table-light">
-                <tr>
-                  <th>#</th>
-                  <th>Material *</th>
-                  <th>Quantity *</th>
-                  <th>Unit Price ($) *</th>
-                  <th>Subtotal</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody formArrayName="items">
-                @for (item of items.controls; track $index; let i = $index) {
-                  <tr [formGroupName]="$index">
-                    <td>{{$index + 1}}</td>
-                    <td>
-                      <select class="form-select form-select-sm" [class.is-invalid]="isItemFieldInvalid(i, 'materialId')" formControlName="materialId">
-                        <option value="">Select material</option>
-                        @for (material of materials(); track $index) {
-                        <option [value]="material.id">
-                          {{ material.name }}
-                        </option>
-                        }
-                      </select>
-                      @if(isItemFieldInvalid(i, 'materialId')) {
-                        <div class="invalid-feedback">{{ getItemFieldError(i, 'materialId') }}</div>
-                      }
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="form-control form-control-sm"
-                        min="1"
-                        style="width: 100px"
-                        formControlName="quantity"
-                        [class.is-invalid]="isItemFieldInvalid(i, 'quantity')"
-                      />
-                      @if(isItemFieldInvalid(i, 'quantity')) {
-                        <div class="invalid-feedback">{{ getItemFieldError(i, 'quantity') }}</div>
-                      }
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="form-control form-control-sm"
-                        min="0"
-                        step="0.01"
-                        style="width: 120px"
-                        formControlName="unitPrice"
-                        [class.is-invalid]="isItemFieldInvalid(i, 'unitPrice')"
-                      />
-                      @if(isItemFieldInvalid(i, 'unitPrice')) {
-                        <div class="invalid-feedback">{{ getItemFieldError(i, 'unitPrice') }}</div>
-                      }
-                    </td>
-                    <td>
-                      <span class="fw-bold">${{ calculateSubTotal($index) }}</span>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-sm btn-danger">Remove</button>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-
-              <!-- Table Footer with Totals -->
-              <tfoot class="table-light">
-                <tr>
-                  <td colspan="4" class="text-end">
-                    <div class="small text-muted">
-                      <div>Items: <span class="fw-semibold">2</span></div>
-                      <div>Total Quantity: <span class="fw-semibold">150</span></div>
-                    </div>
-                  </td>
-                  <td colspan="2">
-                    <div>
-                      <p class="small text-muted mb-1">Total Amount:</p>
-                      <p class="h4 mb-0 text-primary">${{ orderTotal() }}</p>
-                    </div>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-          } @else {
-          <p class="text-center">No items added to the order.</p>
-          }
+          <button
+            type="button"
+            (click)="addItem()"
+            class="px-4 py-2 bg-green-600 border-2 border-green-500 text-white font-semibold hover:bg-green-700 hover:border-green-600 transition-colors"
+          >
+            + Add Item
+          </button>
         </div>
 
-        <!-- Order Summary Card -->
-        <div class="card bg-light mb-4">
-          <div class="card-body">
-            <h3 class="h5 mb-3">Order Summary</h3>
-            <div class="row">
-              <div class="col-md-4">
-                <p class="small text-muted mb-1">Supplier</p>
-                <p class="fw-semibold">
-                  @if (orderForm.get('supplierId')?.value) {
-                    {{ getSupplierName(orderForm.get('supplierId')?.value) }}
+        <!-- Items Table -->
+        @if (hasItems()) {
+        <div class="overflow-x-auto mb-6">
+          <table class="w-full bg-gray-950 border-2 border-gray-800">
+            <thead class="bg-black border-b-2 border-gray-800">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">#</th>
+                <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">
+                  Material *
+                </th>
+                <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">
+                  Quantity *
+                </th>
+                <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">
+                  Unit Price ($) *
+                </th>
+                <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">
+                  Subtotal
+                </th>
+                <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody formArrayName="items" class="divide-y divide-gray-800">
+              @for (item of items.controls; track $index; let i = $index) {
+              <tr [formGroupName]="$index" class="hover:bg-gray-900 transition-colors">
+                <td class="px-4 py-3 text-sm text-gray-400">{{ $index + 1 }}</td>
+                <td class="px-4 py-3">
+                  <select
+                    class="px-3 py-2 bg-gray-900 border text-white text-sm focus:outline-none focus:border-blue-600"
+                    [class.border-gray-700]="!isItemFieldInvalid(i, 'materialId')"
+                    [class.border-red-600]="isItemFieldInvalid(i, 'materialId')"
+                    formControlName="materialId"
+                  >
+                    <option value="" class="text-gray-400">Select material</option>
+                    @for (material of materials(); track $index) {
+                    <option [value]="material.id">{{ material.name }}</option>
+                    }
+                  </select>
+                  @if(isItemFieldInvalid(i, 'materialId')) {
+                  <div class="text-red-400 text-xs mt-1">
+                    {{ getItemFieldError(i, 'materialId') }}
+                  </div>
                   }
-                </p>
-              </div>
-              <div class="col-md-4">
-                <p class="small text-muted mb-1">Total Items</p>
-                <p class="fw-semibold">{{ getUniqueItemsCount() }} types ({{ getTotalQuantity() }} units)</p>
-              </div>
-              <div class="col-md-4">
-                <p class="small text-muted mb-1">Total Amount</p>
-                <p class="h4 text-primary mb-0">${{ orderTotal() }}</p>
-              </div>
-            </div>
+                </td>
+                <td class="px-4 py-3">
+                  <input
+                    type="number"
+                    class="w-24 px-3 py-2 bg-gray-900 border text-white text-sm focus:outline-none focus:border-blue-600"
+                    [class.border-gray-700]="!isItemFieldInvalid(i, 'quantity')"
+                    [class.border-red-600]="isItemFieldInvalid(i, 'quantity')"
+                    min="1"
+                    formControlName="quantity"
+                  />
+                  @if(isItemFieldInvalid(i, 'quantity')) {
+                  <div class="text-red-400 text-xs mt-1">
+                    {{ getItemFieldError(i, 'quantity') }}
+                  </div>
+                  }
+                </td>
+                <td class="px-4 py-3">
+                  <input
+                    type="number"
+                    class="w-28 px-3 py-2 bg-gray-900 border text-white text-sm focus:outline-none focus:border-blue-600"
+                    [class.border-gray-700]="!isItemFieldInvalid(i, 'unitPrice')"
+                    [class.border-red-600]="isItemFieldInvalid(i, 'unitPrice')"
+                    min="0"
+                    step="0.01"
+                    formControlName="unitPrice"
+                  />
+                  @if(isItemFieldInvalid(i, 'unitPrice')) {
+                  <div class="text-red-400 text-xs mt-1">
+                    {{ getItemFieldError(i, 'unitPrice') }}
+                  </div>
+                  }
+                </td>
+                <td class="px-4 py-3 text-sm text-white font-bold">
+                  ${{ calculateSubTotal($index) }}
+                </td>
+                <td class="px-4 py-3">
+                  <button
+                    type="button"
+                    class="px-3 py-1 bg-red-600 border border-red-500 text-white text-xs font-semibold hover:bg-red-700 transition-colors"
+                  >
+                    Remove
+                  </button>
+                </td>
+              </tr>
+              }
+            </tbody>
+            <tfoot class="bg-black border-t-2 border-gray-800">
+              <tr>
+                <td colspan="4" class="px-4 py-4 text-right">
+                  <div class="text-sm text-gray-400 space-y-1">
+                    <div>Items: <span class="font-semibold text-white">2</span></div>
+                    <div>Total Quantity: <span class="font-semibold text-white">150</span></div>
+                  </div>
+                </td>
+                <td colspan="2" class="px-4 py-4">
+                  <p class="text-xs text-gray-500 mb-1">Total Amount:</p>
+                  <p class="text-2xl font-bold text-blue-500">${{ orderTotal() }}</p>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        } @else {
+        <p class="text-center text-gray-500 py-8">No items added to the order.</p>
+        }
+      </div>
+
+      <!-- Order Summary -->
+      <div class="bg-gray-950 border-2 border-gray-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-white mb-4">Order Summary</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <p class="text-xs text-gray-500 mb-1">Supplier</p>
+            <p class="text-white font-semibold">
+              @if (orderForm.get('supplierId')?.value) {
+              {{ getSupplierName(orderForm.get('supplierId')?.value) }}
+              } @else {
+              <span class="text-gray-500">Not selected</span>
+              }
+            </p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 mb-1">Total Items</p>
+            <p class="text-white font-semibold">
+              {{ getUniqueItemsCount() }} types ({{ getTotalQuantity() }} units)
+            </p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 mb-1">Total Amount</p>
+            <p class="text-2xl font-bold text-blue-500">${{ orderTotal() }}</p>
           </div>
         </div>
+      </div>
 
-        <!-- Form Actions -->
-        <div class="d-flex gap-3 justify-content-end pt-3 border-top">
-          <button type="button" class="btn btn-outline-secondary px-4">Cancel</button>
-          <button type="submit" class="btn btn-primary px-5">Create Order</button>
-        </div>
-      </form>
-    </div>
+      <!-- Form Actions -->
+      <div class="flex gap-4 justify-end pt-6 border-t-2 border-gray-800">
+        <button
+          type="button"
+          class="px-6 py-3 bg-gray-800 border-2 border-gray-700 text-gray-300 font-semibold hover:bg-gray-700 hover:text-white hover:border-gray-600 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-8 py-3 bg-blue-600 border-2 border-blue-500 text-white font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          [disabled]="orderForm.invalid"
+        >
+          Create Order
+        </button>
+      </div>
+    </form>
   </div>
 
-  <!-- Instructions Card -->
-  <div class="card mt-4 bg-light">
-    <div class="card-body">
-      <h4 class="h6 mb-3">📝 Instructions:</h4>
-      <ul class="small text-muted mb-0">
-        <li>Select the supplier from whom you want to order materials</li>
-        <li>Add items by clicking "Add Item" button</li>
-        <li>Select a material from the dropdown - the unit price will be auto-filled</li>
-        <li>Enter the quantity you want to order</li>
-        <li>The subtotal and total will be calculated automatically</li>
-        <li>You can add multiple items to the same order</li>
-        <li>Remove items using the "Remove" button (minimum 1 item required)</li>
-      </ul>
-    </div>
+  <!-- Instructions -->
+  <div class="bg-gray-950 border-2 border-gray-800 p-6 mt-6">
+    <h4 class="text-sm font-bold text-white mb-3">📝 Instructions:</h4>
+    <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside">
+      <li>Select the supplier from whom you want to order materials</li>
+      <li>Add items by clicking "Add Item" button</li>
+      <li>Select a material from the dropdown - the unit price will be auto-filled</li>
+      <li>Enter the quantity you want to order</li>
+      <li>The subtotal and total will be calculated automatically</li>
+      <li>You can add multiple items to the same order</li>
+      <li>Remove items using the "Remove" button (minimum 1 item required)</li>
+    </ul>
   </div>
 </div>

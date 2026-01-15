@@ -1,175 +1,254 @@
-<div class="container mt-5">
-  <h1>Supplier Orders</h1>
+<div class="p-8">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-white mb-2">Supplier Orders</h1>
+      <p class="text-gray-400">Manage orders from suppliers</p>
+    </div>
+    <button
+      [routerLink]="['/supply/orders/create']"
+      class="px-6 py-3 bg-blue-600 border-2 border-blue-500 text-white font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors"
+    >
+      + Create New Order
+    </button>
+  </div>
 
-  <!-- Stats cards -->
-  <div class="py-2">
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
-    />
-    <div class="container py-5">
-      <div class="row row-cols-1 row-cols-md-4 g-4">
-        <div class="col">
-          <div class="card h-100 text-center shadow">
-            <div class="card-body">
-              <div class="display-4 text-primary mb-2">
-                <i class="bi bi-cart"></i>
-              </div>
-              <h2 class="card-title mb-3">{{ orders().length }}</h2>
-              <p class="card-text text-muted">Total Orders</p>
-            </div>
-          </div>
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-blue-600 transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Orders</p>
+          <p class="text-4xl font-bold text-white mt-2">{{ orders().length }}</p>
         </div>
+        <div class="w-12 h-12 bg-blue-600 border border-blue-500 flex items-center justify-center">
+          <span class="text-2xl">🛒</span>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-3 mt-3">
+        <span class="text-gray-500 text-sm">All orders</span>
+      </div>
+    </div>
 
-        <div class="col">
-          <div class="card h-100 text-center shadow">
-            <div class="card-body">
-              <div class="display-4 text-warning mb-2">
-                <i class="bi bi-clock"></i>
-              </div>
-              <h2 class="card-title mb-3">{{ orderService.waitingOrders().length }}</h2>
-              <p class="card-text text-muted">Waiting Orders</p>
-            </div>
-          </div>
+    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-yellow-600 transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Waiting</p>
+          <p class="text-4xl font-bold text-white mt-2">
+            {{ orderService.waitingOrders().length }}
+          </p>
         </div>
+        <div
+          class="w-12 h-12 bg-yellow-600 border border-yellow-500 flex items-center justify-center"
+        >
+          <span class="text-2xl">⏰</span>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-3 mt-3">
+        <span class="text-yellow-500 text-sm font-semibold">Pending orders</span>
+      </div>
+    </div>
 
-        <div class="col">
-          <div class="card h-100 text-center shadow">
-            <div class="card-body">
-              <div class="display-4 text-info mb-2">
-                <i class="bi bi-hourglass-split"></i>
-              </div>
-              <h2 class="card-title mb-3">{{ orderService.inProgressOrders().length }}</h2>
-              <p class="card-text text-muted">In Progress</p>
-            </div>
-          </div>
+    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-blue-500 transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">In Progress</p>
+          <p class="text-4xl font-bold text-white mt-2">
+            {{ orderService.inProgressOrders().length }}
+          </p>
         </div>
+        <div class="w-12 h-12 bg-blue-500 border border-blue-400 flex items-center justify-center">
+          <span class="text-2xl">⏳</span>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-3 mt-3">
+        <span class="text-blue-500 text-sm font-semibold">Active orders</span>
+      </div>
+    </div>
 
-        <div class="col">
-          <div class="card h-100 text-center shadow">
-            <div class="card-body">
-              <div class="display-4 text-success mb-2">
-                <i class="bi bi-check-circle"></i>
-              </div>
-              <h2 class="card-title mb-3">{{ orderService.receivedOrders().length }}</h2>
-              <p class="card-text text-muted">Received</p>
-            </div>
-          </div>
+    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-green-600 transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Received</p>
+          <p class="text-4xl font-bold text-white mt-2">
+            {{ orderService.receivedOrders().length }}
+          </p>
         </div>
+        <div
+          class="w-12 h-12 bg-green-600 border border-green-500 flex items-center justify-center"
+        >
+          <span class="text-2xl">✅</span>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-3 mt-3">
+        <span class="text-green-500 text-sm font-semibold">Completed</span>
       </div>
     </div>
   </div>
 
   <!-- Filters Tabs -->
-  <div class="border-bottom py-3">
-    <ul class="nav nav-tabs" id="orderTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          [class.active]="filterStatus() === 'ALL'"
-          type="button"
-          (click)="filterStatus.set('ALL')"
-        >
-          All Orders ({{ orders().length }})
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          [class.active]="filterStatus() === OrderStatus.WAITING"
-          type="button"
-          (click)="setFilterStatus(OrderStatus.WAITING)"
-        >
-          Waiting ({{ orderService.waitingOrders().length }})
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          [class.active]="filterStatus() === OrderStatus.IN_PROGRESS"
-          type="button"
-          (click)="setFilterStatus(OrderStatus.IN_PROGRESS)"
-        >
-          In Progress ({{ orderService.inProgressOrders().length }})
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          [class.active]="filterStatus() === OrderStatus.RECEIVED"
-          type="button"
-          (click)="setFilterStatus(OrderStatus.RECEIVED)"
-        >
-          Received ({{ orderService.receivedOrders().length }})
-        </button>
-      </li>
-    </ul>
+  <div class="bg-gray-900 border-2 border-gray-700 mb-6">
+    <div class="flex border-b border-gray-800">
+      <button
+        [class.bg-blue-600]="filterStatus() === 'ALL'"
+        [class.text-white]="filterStatus() === 'ALL'"
+        [class.border-blue-500]="filterStatus() === 'ALL'"
+        [class.text-gray-400]="filterStatus() !== 'ALL'"
+        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        (click)="filterStatus.set('ALL')"
+      >
+        All Orders ({{ orders().length }})
+      </button>
+      <button
+        [class.bg-yellow-600]="filterStatus() === OrderStatus.WAITING"
+        [class.text-white]="filterStatus() === OrderStatus.WAITING"
+        [class.border-yellow-500]="filterStatus() === OrderStatus.WAITING"
+        [class.text-gray-400]="filterStatus() !== OrderStatus.WAITING"
+        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        (click)="setFilterStatus(OrderStatus.WAITING)"
+      >
+        Waiting ({{ orderService.waitingOrders().length }})
+      </button>
+      <button
+        [class.bg-blue-500]="filterStatus() === OrderStatus.IN_PROGRESS"
+        [class.text-white]="filterStatus() === OrderStatus.IN_PROGRESS"
+        [class.border-blue-400]="filterStatus() === OrderStatus.IN_PROGRESS"
+        [class.text-gray-400]="filterStatus() !== OrderStatus.IN_PROGRESS"
+        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        (click)="setFilterStatus(OrderStatus.IN_PROGRESS)"
+      >
+        In Progress ({{ orderService.inProgressOrders().length }})
+      </button>
+      <button
+        [class.bg-green-600]="filterStatus() === OrderStatus.RECEIVED"
+        [class.text-white]="filterStatus() === OrderStatus.RECEIVED"
+        [class.border-green-500]="filterStatus() === OrderStatus.RECEIVED"
+        [class.text-gray-400]="filterStatus() !== OrderStatus.RECEIVED"
+        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        (click)="setFilterStatus(OrderStatus.RECEIVED)"
+      >
+        Received ({{ orderService.receivedOrders().length }})
+      </button>
+    </div>
   </div>
 
-  <!-- Order list -->
+  <!-- Order List -->
   @if (isLoading()) {
-    <div class="text-center py-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading orders...</span>
-      </div>
-    </div>
+  <div class="bg-gray-900 border-2 border-gray-700 p-12 text-center">
+    <div class="text-gray-400 text-lg">Loading orders...</div>
+  </div>
   } @else {
-    <div class="mt-3">
-      <button [routerLink]="['/supply/orders/create']" class="btn btn-primary mb-3">
-        <i class="bi bi-plus-circle me-2"></i>Create New Order
-      </button>
-
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Supplier</th>
-          <th scope="col">Order Date</th>
-          <th scope="col">Status</th>
-          <th scope="col">Items</th>
-          <th scope="col">Total Value</th>
-          <th scope="col">Actions</th>
-        </tr>
+  <div class="bg-gray-900 border-2 border-gray-700 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-950 border-b-2 border-gray-700">
+          <tr>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              #
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Supplier
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Order Date
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Status
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Items
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Total Value
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Actions
+            </th>
+          </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-gray-800">
           @for (order of getFilteredOrders(); track order.id) {
-            <tr>
-              <th scope="row">{{ order.id }}</th>
-              <td>{{ order.supplierName }}</td>
-              <td>{{ order.orderDate }}</td>
-              <td>
-                @if (order.status === 'WAITING') {
-                  <span class="badge bg-warning">Waiting</span>
-                } @else if (order.status === 'IN_PROGRESS') {
-                  <span class="badge bg-info">In Progress</span>
-                } @else if (order.status === 'RECEIVED') {
-                  <span class="badge bg-success">Received</span>
-                }
-              </td>
-              <td>{{ order.items.length }} items</td>
-              <td>${{ orderService.calculateOrderTotal(order) | number : '1.2-2' }}</td>
-              <td class="d-flex gap-2">
-                <button type="button" class="btn btn-sm btn-info" [routerLink]="['/supply/orders', order.id]">
-                  <i class="bi bi-eye"></i> View
+          <tr class="hover:bg-gray-800 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-semibold">
+              {{ order.id }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-white font-semibold">
+              {{ order.supplierName }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ order.orderDate }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              @if (order.status === 'WAITING') {
+              <span
+                class="px-3 py-1 bg-yellow-900 border border-yellow-800 text-yellow-200 text-xs font-bold"
+                >Waiting</span
+              >
+              } @else if (order.status === 'IN_PROGRESS') {
+              <span
+                class="px-3 py-1 bg-blue-900 border border-blue-800 text-blue-200 text-xs font-bold"
+                >In Progress</span
+              >
+              } @else if (order.status === 'RECEIVED') {
+              <span
+                class="px-3 py-1 bg-green-900 border border-green-800 text-green-200 text-xs font-bold"
+                >Received</span
+              >
+              }
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+              {{ order.items.length }} items
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+              ${{ orderService.calculateOrderTotal(order) | number : '1.2-2' }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  [routerLink]="['/supply/orders', order.id]"
+                  class="px-3 py-2 bg-blue-600 border border-blue-500 text-white text-xs font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors"
+                >
+                  View
                 </button>
-                <button type="button" class="btn btn-sm btn-warning">
-                  <i class="bi bi-pencil"></i> Edit
+                <button
+                  type="button"
+                  class="px-3 py-2 bg-yellow-600 border border-yellow-500 text-white text-xs font-semibold hover:bg-yellow-700 hover:border-yellow-600 transition-colors"
+                >
+                  Edit
                 </button>
-                <button type="button" class="btn btn-sm btn-danger">
-                  <i class="bi bi-trash"></i> Delete
+                <button
+                  type="button"
+                  class="px-3 py-2 bg-red-600 border border-red-500 text-white text-xs font-semibold hover:bg-red-700 hover:border-red-600 transition-colors"
+                >
+                  Delete
                 </button>
-              </td>
-            </tr>
+              </div>
+            </td>
+          </tr>
           } @empty {
-            <tr>
-              <td colspan="7" class="text-center py-4 text-muted">
-                <i class="bi bi-inbox display-4"></i>
-                <p class="mt-2">No orders found</p>
-              </td>
-            </tr>
+          <tr>
+            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+              <div class="text-4xl mb-3">📥</div>
+              <p>No orders found</p>
+            </td>
+          </tr>
           }
         </tbody>
       </table>
     </div>
+  </div>
   }
 </div>

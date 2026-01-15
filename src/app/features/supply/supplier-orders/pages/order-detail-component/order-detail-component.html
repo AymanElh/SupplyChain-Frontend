@@ -1,100 +1,142 @@
-<div class="container mt-5">
+<div class="p-8">
   @if (isLoading()) {
-  <div class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading order details...</span>
-    </div>
-    <p class="mt-3 text-muted">Loading order details...</p>
+  <div class="bg-gray-900 border-2 border-gray-700 p-12 text-center">
+    <div class="text-gray-400 text-lg">Loading order details...</div>
   </div>
   } @else if (order()) {
-  <div class="card shadow-lg">
-    <!-- Header with gradient background -->
-    <div class="card-header bg-primary text-white p-4">
-      <div class="d-flex justify-content-between align-items-start">
-        <div>
-          <h1 class="h3 mb-2">Order #{{ order()!.id }}</h1>
-          <p class="mb-1 opacity-75">Supplier: {{ order()!.supplierName }}</p>
-          <p class="mb-0 opacity-75">Order Date: {{ formatDate(order()!.orderDate) }}</p>
-        </div>
+  <!-- Back Button -->
+  <div class="mb-6">
+    <button
+      [routerLink]="['/supply/orders']"
+      class="px-4 py-2 bg-gray-800 border border-gray-700 text-gray-300 font-semibold hover:bg-gray-700 hover:text-white hover:border-gray-600 transition-colors"
+    >
+      ← Back to Orders
+    </button>
+  </div>
 
-        <div>
-          @if (order()!.status === SupplierOrderStatus.WAITING) {
-          <span class="badge bg-warning text-dark px-3 py-2">Waiting</span>
-          } @else if (order()!.status === SupplierOrderStatus.IN_PROGRESS) {
-          <span class="badge bg-info px-3 py-2">In Progress</span>
-          } @else if (order()!.status === SupplierOrderStatus.RECEIVED) {
-          <span class="badge bg-success px-3 py-2">Received</span>
-          }
-        </div>
-      </div>
-    </div>
-
-    <!-- Order Details Body -->
-    <div class="card-body p-4">
-      <!-- Order Items Table -->
-      <div class="mb-4">
-        <h2 class="h5 mb-3">Order Items</h2>
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead class="table-light">
-              <tr>
-                <th>Material</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (item of order()!.items; track item.id) {
-              <tr>
-                <td>
-                  <span class="fw-medium">{{ item.rawMaterialName }}</span>
-                </td>
-                <td>{{ item.quantity }}</td>
-                <td>${{ item.unitPrice | number : '1.2-2' }}</td>
-                <td class="fw-semibold">${{ item.subTotal | number : '1.2-2' }}</td>
-              </tr>
-              }
-            </tbody>
-            <tfoot class="table-light">
-              <tr>
-                <td colspan="3" class="text-end fw-semibold">Total:</td>
-                <td class="fw-bold text-primary fs-5">
-                  ${{ calculateTotal() | number : '1.2-2' }}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+  <!-- Order Header -->
+  <div class="bg-gray-900 border-2 border-gray-700 p-8 mb-6">
+    <div class="flex justify-between items-start">
+      <div>
+        <h1 class="text-3xl font-bold text-white mb-4">Order #{{ order()!.id }}</h1>
+        <div class="space-y-2">
+          <p class="text-gray-400">
+            <span class="text-gray-500 font-semibold">Supplier:</span>
+            <span class="text-white ml-2">{{ order()!.supplierName }}</span>
+          </p>
+          <p class="text-gray-400">
+            <span class="text-gray-500 font-semibold">Order Date:</span>
+            <span class="text-white ml-2">{{ formatDate(order()!.orderDate) }}</span>
+          </p>
         </div>
       </div>
-
-      <!-- Action Buttons -->
-      <div class="d-flex justify-content-between align-items-center border-top pt-4">
-        <button [routerLink]="['/supply/orders']" class="btn btn-outline-secondary">
-          <i class="bi bi-arrow-left me-2"></i>Back to Orders
-        </button>
-
-        <div class="d-flex gap-2">
-          @if (order()!.status === SupplierOrderStatus.WAITING) {
-          <button (click)="onUpdateStatus(SupplierOrderStatus.IN_PROGRESS)" class="btn btn-primary">
-            <i class="bi bi-play-circle me-2"></i>Mark as In Progress
-          </button>
-          } @if (canMarkAsReceived()) {
-          <button (click)="onUpdateStatus(SupplierOrderStatus.RECEIVED)" class="btn btn-success">
-            <i class="bi bi-check-circle me-2"></i>Mark as Received
-          </button>
-          } @if (canCancel()) {
-          <button (click)="onDelete()" class="btn btn-danger">
-            <i class="bi bi-trash me-2"></i>Delete Order
-          </button>
-          }
-        </div>
+      <div>
+        @if (order()!.status === SupplierOrderStatus.WAITING) {
+        <span
+          class="px-4 py-2 bg-yellow-900 border-2 border-yellow-800 text-yellow-200 text-sm font-bold"
+          >Waiting</span
+        >
+        } @else if (order()!.status === SupplierOrderStatus.IN_PROGRESS) {
+        <span class="px-4 py-2 bg-blue-900 border-2 border-blue-800 text-blue-200 text-sm font-bold"
+          >In Progress</span
+        >
+        } @else if (order()!.status === SupplierOrderStatus.RECEIVED) {
+        <span
+          class="px-4 py-2 bg-green-900 border-2 border-green-800 text-green-200 text-sm font-bold"
+          >Received</span
+        >
+        }
       </div>
     </div>
   </div>
+
+  <!-- Order Items -->
+  <div class="bg-gray-900 border-2 border-gray-700 mb-6">
+    <div class="px-8 py-6 border-b-2 border-gray-800">
+      <h2 class="text-xl font-bold text-white">Order Items</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-950 border-b-2 border-gray-700">
+          <tr>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Material
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Quantity
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Unit Price
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Subtotal
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-800">
+          @for (item of order()!.items; track item.id) {
+          <tr class="hover:bg-gray-800 transition-colors">
+            <td class="px-6 py-4 text-sm text-white font-semibold">{{ item.rawMaterialName }}</td>
+            <td class="px-6 py-4 text-sm text-gray-400">{{ item.quantity }}</td>
+            <td class="px-6 py-4 text-sm text-gray-400">
+              ${{ item.unitPrice | number : '1.2-2' }}
+            </td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">
+              ${{ item.subTotal | number : '1.2-2' }}
+            </td>
+          </tr>
+          }
+        </tbody>
+        <tfoot class="bg-gray-950 border-t-2 border-gray-700">
+          <tr>
+            <td colspan="3" class="px-6 py-4 text-right text-sm font-bold text-gray-300 uppercase">
+              Total:
+            </td>
+            <td class="px-6 py-4 text-xl font-bold text-blue-500">
+              ${{ calculateTotal() | number : '1.2-2' }}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex justify-end gap-4">
+    @if (order()!.status === SupplierOrderStatus.WAITING) {
+    <button
+      (click)="onUpdateStatus(SupplierOrderStatus.IN_PROGRESS)"
+      class="px-6 py-3 bg-blue-600 border-2 border-blue-500 text-white font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors"
+    >
+      Mark as In Progress
+    </button>
+    } @if (canMarkAsReceived()) {
+    <button
+      (click)="onUpdateStatus(SupplierOrderStatus.RECEIVED)"
+      class="px-6 py-3 bg-green-600 border-2 border-green-500 text-white font-semibold hover:bg-green-700 hover:border-green-600 transition-colors"
+    >
+      Mark as Received
+    </button>
+    } @if (canCancel()) {
+    <button
+      (click)="onDelete()"
+      class="px-6 py-3 bg-red-600 border-2 border-red-500 text-white font-semibold hover:bg-red-700 hover:border-red-600 transition-colors"
+    >
+      Delete Order
+    </button>
+    }
+  </div>
   } @else {
-  <div class="alert alert-warning" role="alert">
-    <i class="bi bi-exclamation-triangle me-2"></i>
+  <div class="bg-yellow-900 border-2 border-yellow-800 p-6 text-yellow-200">
+    <span class="text-2xl mr-2">⚠️</span>
     Order not found
   </div>
   }
