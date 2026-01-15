@@ -1,176 +1,237 @@
-<div class="container mt-5">
-  <h1>Raw material list</h1>
-  <!-- Stats cards -->
-  <div class="py-2">
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
-    />
-    <div class="container py-5">
-      <div class="row row-cols-1 row-cols-md-4 g-4">
-        <div class="col">
-          <div class="card h-100 text-center shadow">
-            <div class="card-body">
-              <div class="display-4 text-primary mb-2">
-                <i class="bi bi-people"></i>
-              </div>
-              <h2 class="card-title mb-3">{{ materials().length }}</h2>
-              <p class="card-text text-muted">Total Materials</p>
-            </div>
-          </div>
-        </div>
+<div class="p-8">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-white mb-2">Raw Materials</h1>
+      <p class="text-gray-400">Manage your inventory and stock levels</p>
+    </div>
+    <button
+      [routerLink]="['/supply/materials/create']"
+      class="px-6 py-3 bg-blue-600 border-2 border-blue-500 text-white font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors"
+    >
+      + Add New Material
+    </button>
+  </div>
 
-        <div class="col">
-          <div class="card h-100 text-center shadow">
-            <div class="card-body">
-              <div class="display-4 text-success mb-2">
-                <i class="bi bi-graph-up"></i>
-              </div>
-              <h2 class="card-title mb-3">{{ criticalCount().length }}</h2>
-              <p class="card-text text-muted">Critical Materials</p>
-            </div>
-          </div>
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-blue-600 transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">
+            Total Materials
+          </p>
+          <p class="text-4xl font-bold text-white mt-2">{{ materials().length }}</p>
         </div>
+        <div class="w-12 h-12 bg-blue-600 border border-blue-500 flex items-center justify-center">
+          <span class="text-2xl">📦</span>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-3 mt-3">
+        <span class="text-gray-500 text-sm">In inventory</span>
+      </div>
+    </div>
 
-        <div class="col">
-          <div class="card h-100 text-center shadow">
-            <div class="card-body">
-              <div class="display-4 text-warning mb-2">
-                <i class="bi bi-star"></i>
-              </div>
-              <h2 class="card-title mb-3">{{ lowStockCount().length }}</h2>
-              <p class="card-text text-muted">Low Stock</p>
-            </div>
-          </div>
+    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-red-600 transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">
+            Critical Materials
+          </p>
+          <p class="text-4xl font-bold text-white mt-2">{{ criticalCount().length }}</p>
         </div>
+        <div class="w-12 h-12 bg-red-600 border border-red-500 flex items-center justify-center">
+          <span class="text-2xl">⚠️</span>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-3 mt-3">
+        <span class="text-red-500 text-sm font-semibold">Needs attention</span>
+      </div>
+    </div>
 
-        <div class="col">
-          <div class="card h-100 text-center shadow">
-            <div class="card-body">
-              <div class="display-4 text-danger mb-2">
-                <i class="bi bi-clock-history"></i>
-              </div>
-              <h2 class="card-title mb-3">${{ totalValue() | number : '1.2-2' }}</h2>
-              <p class="card-text text-muted">Total Inventory Value</p>
-            </div>
-          </div>
+    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-yellow-600 transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Low Stock</p>
+          <p class="text-4xl font-bold text-white mt-2">{{ lowStockCount().length }}</p>
         </div>
+        <div
+          class="w-12 h-12 bg-yellow-600 border border-yellow-500 flex items-center justify-center"
+        >
+          <span class="text-2xl">📊</span>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-3 mt-3">
+        <span class="text-yellow-500 text-sm font-semibold">Low inventory</span>
+      </div>
+    </div>
+
+    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-green-600 transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Value</p>
+          <p class="text-4xl font-bold text-white mt-2">${{ totalValue() | number : '1.0-0' }}</p>
+        </div>
+        <div
+          class="w-12 h-12 bg-green-600 border border-green-500 flex items-center justify-center"
+        >
+          <span class="text-2xl">💰</span>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-3 mt-3">
+        <span class="text-green-500 text-sm font-semibold">Inventory value</span>
       </div>
     </div>
   </div>
 
   <!-- Filters Tabs -->
-  <div class="border-bottom py-3">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          [class.active]="filterMode() == 'all'"
-          id="home-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#home"
-          type="button"
-          role="tab"
-          aria-controls="home"
-          aria-selected="true"
-          (click)="setFilter('all')"
-        >
-          All Materials ({{ materials().length }})
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          [class.active]="filterMode() == 'critical'"
-          id="profile-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#profile"
-          type="button"
-          role="tab"
-          aria-controls="profile"
-          aria-selected="false"
-          (click)="setFilter('critical')"
-        >
-          Critical Materials ({{ criticalCount().length }})
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          [class.active]="filterMode() == 'low'"
-          id="contact-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#contact"
-          type="button"
-          role="tab"
-          aria-controls="contact"
-          aria-selected="false"
-          (click)="setFilter('low')"
-        >
-          Low Stock ({{ lowStockCount().length }})
-        </button>
-      </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        ...
-      </div>
-      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-        ...
-      </div>
-      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-        ...
-      </div>
+  <div class="bg-gray-900 border-2 border-gray-700 mb-6">
+    <div class="flex border-b border-gray-800">
+      <button
+        [class.bg-blue-600]="filterMode() == 'all'"
+        [class.text-white]="filterMode() == 'all'"
+        [class.border-blue-500]="filterMode() == 'all'"
+        [class.text-gray-400]="filterMode() != 'all'"
+        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        (click)="setFilter('all')"
+      >
+        All Materials ({{ materials().length }})
+      </button>
+      <button
+        [class.bg-red-600]="filterMode() == 'critical'"
+        [class.text-white]="filterMode() == 'critical'"
+        [class.border-red-500]="filterMode() == 'critical'"
+        [class.text-gray-400]="filterMode() != 'critical'"
+        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        (click)="setFilter('critical')"
+      >
+        Critical Materials ({{ criticalCount().length }})
+      </button>
+      <button
+        [class.bg-yellow-600]="filterMode() == 'low'"
+        [class.text-white]="filterMode() == 'low'"
+        [class.border-yellow-500]="filterMode() == 'low'"
+        [class.text-gray-400]="filterMode() != 'low'"
+        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        (click)="setFilter('low')"
+      >
+        Low Stock ({{ lowStockCount().length }})
+      </button>
     </div>
   </div>
 
-  <!-- Material list -->
+  <!-- Material List -->
   @if (isLoading()) {
-  <div>Loading materials ...</div>
+  <div class="bg-gray-900 border-2 border-gray-700 p-12 text-center">
+    <div class="text-gray-400 text-lg">Loading materials...</div>
+  </div>
   } @else {
-  <div class="mt-3">
-    <button [routerLink]="['/supply/materials/create']" class="btn btn-primary">Add new material</button>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Stock</th>
-          <th scope="col">Stock Min</th>
-          <th scope="col">Unit</th>
-          <th scope="col">Unit Cost</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (material of getFilteredMaterials(); track material.id) {
-        <tr>
-          <th scope="row">{{ material.id }}</th>
-          <td>{{ material.name }}</td>
-          <td>{{ material.stock }}</td>
-          <td>{{ material.stockMin }}</td>
-          <td>{{ material.unit }}</td>
-          <td>{{ material.unitCost }}</td>
-          <td class="d-flex gap-2">
-            <button
-              type="button"
-              class="btn btn-warning"
-             >Edit</button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              (click)="onDelete(material)">Delete</button>
-          </td>
-        </tr>
-        } @empty {
+  <div class="bg-gray-900 border-2 border-gray-700 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-950 border-b-2 border-gray-700">
           <tr>
-            <td colspan="8" class="px-6 py-12 text-center text-gray-500">
-              No materials found
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              #
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Name
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Stock
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Stock Min
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Unit
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Unit Cost
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-800">
+          @for (material of getFilteredMaterials(); track material.id) {
+          <tr class="hover:bg-gray-800 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-semibold">
+              {{ material.id }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-white font-semibold">
+              {{ material.name }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <span
+                [class.bg-green-900]="material.stock > material.stockMin * 2"
+                [class.border-green-800]="material.stock > material.stockMin * 2"
+                [class.text-green-200]="material.stock > material.stockMin * 2"
+                [class.bg-yellow-900]="
+                  material.stock <= material.stockMin * 2 && material.stock > material.stockMin
+                "
+                [class.border-yellow-800]="
+                  material.stock <= material.stockMin * 2 && material.stock > material.stockMin
+                "
+                [class.text-yellow-200]="
+                  material.stock <= material.stockMin * 2 && material.stock > material.stockMin
+                "
+                [class.bg-red-900]="material.stock <= material.stockMin"
+                [class.border-red-800]="material.stock <= material.stockMin"
+                [class.text-red-200]="material.stock <= material.stockMin"
+                class="px-3 py-1 border text-xs font-bold"
+              >
+                {{ material.stock }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+              {{ material.stockMin }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ material.unit }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+              ${{ material.unitCost }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  class="px-3 py-2 bg-yellow-600 border border-yellow-500 text-white text-xs font-semibold hover:bg-yellow-700 hover:border-yellow-600 transition-colors"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  (click)="onDelete(material)"
+                  class="px-3 py-2 bg-red-600 border border-red-500 text-white text-xs font-semibold hover:bg-red-700 hover:border-red-600 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
             </td>
           </tr>
-        }
-      </tbody>
-    </table>
+          } @empty {
+          <tr>
+            <td colspan="7" class="px-6 py-12 text-center text-gray-500">No materials found</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
   }
 </div>

@@ -1,143 +1,201 @@
-<div class="container mt-3">
-  <button type="button" class="btn btn-outline-secondary" routerLink="../">
-    <i class="bi bi-arrow-left"></i> Back
-  </button>
-</div>
+<div class="p-8">
+  <!-- Back Button -->
+  <div class="mb-6">
+    <button
+      type="button"
+      class="px-4 py-2 bg-gray-800 border border-gray-700 text-gray-300 font-semibold hover:bg-gray-700 hover:text-white hover:border-gray-600 transition-colors"
+      routerLink="../"
+    >
+      ← Back
+    </button>
+  </div>
 
-<div class="container mt-5" style="height: 100vh">
-  <h2>{{ isEditMode ? 'Edit Material' : 'Add Material' }}</h2>
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">
+      {{ isEditMode ? 'Edit Material' : 'Add New Material' }}
+    </h1>
+    <p class="text-gray-400">
+      {{ isEditMode ? 'Update material information' : 'Create a new material entry' }}
+    </p>
+  </div>
 
-  <div>
-    <form [formGroup]="materialForm" (ngSubmit)="onSubmit()" class="row g-3 needs-validation" novalidate>
-      <div class="col-md-4">
-        <label
-          for="material-name"
-          class="form-label"
-        >Material name *</label>
-        <input
-          type="text"
-          class="form-control"
-          id="material-name"
-          formControlName="name"
-          [class.is-invalid]="isFieldInvalid('name')"
-          placeholder=""/>
-        @if (isFieldInvalid('name')) {
-          <div class="invalid-feedback">{{ getFieldError('name') }}</div>
-        }
-      </div>
-      <div class="col-md-4">
-        <label for="supplier-email" class="form-label">Stock</label>
-        <div class="input-group has-validation">
+  <!-- Form -->
+  <div class="bg-gray-900 border-2 border-gray-700 p-8">
+    <form [formGroup]="materialForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Material Name -->
+        <div>
+          <label for="material-name" class="block text-sm font-semibold text-gray-300 mb-2">
+            Material Name <span class="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('name')"
+            [class.border-red-600]="isFieldInvalid('name')"
+            id="material-name"
+            formControlName="name"
+            placeholder="Enter material name"
+          />
+          @if (isFieldInvalid('name')) {
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('name') }}</div>
+          }
+        </div>
+
+        <!-- Stock -->
+        <div>
+          <label for="material-stock" class="block text-sm font-semibold text-gray-300 mb-2">
+            Stock
+          </label>
           <input
             type="number"
-            class="form-control"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('stock')"
+            [class.border-red-600]="isFieldInvalid('stock')"
             id="material-stock"
-            aria-describedby="inputGroupPrepend"
             formControlName="stock"
-            [class.is-invalid]="isFieldInvalid('stock')"
+            placeholder="Enter stock quantity"
           />
           @if (isFieldInvalid('stock')) {
-            <div class="invalid-feedback">{{ getFieldError('stock') }}</div>
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('stock') }}</div>
+          }
+        </div>
+
+        <!-- Stock Min -->
+        <div>
+          <label for="material-stock-min" class="block text-sm font-semibold text-gray-300 mb-2">
+            Minimum Stock
+          </label>
+          <input
+            type="number"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('stockMin')"
+            [class.border-red-600]="isFieldInvalid('stockMin')"
+            id="material-stock-min"
+            formControlName="stockMin"
+            placeholder="Enter minimum stock"
+          />
+          @if (isFieldInvalid('stockMin')) {
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('stockMin') }}</div>
+          }
+        </div>
+
+        <!-- Unit Cost -->
+        <div>
+          <label for="material-unit-cost" class="block text-sm font-semibold text-gray-300 mb-2">
+            Unit Cost
+          </label>
+          <input
+            type="number"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('unitCost')"
+            [class.border-red-600]="isFieldInvalid('unitCost')"
+            id="material-unit-cost"
+            formControlName="unitCost"
+            placeholder="Enter unit cost"
+            step="0.01"
+          />
+          @if (isFieldInvalid('unitCost')) {
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('unitCost') }}</div>
+          }
+        </div>
+
+        <!-- Unit of Measure -->
+        <div class="md:col-span-2">
+          <label for="unit" class="block text-sm font-semibold text-gray-300 mb-2">
+            Unit of Measure <span class="text-red-500">*</span>
+          </label>
+          <select
+            id="unit"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('unit')"
+            [class.border-red-600]="isFieldInvalid('unit')"
+            formControlName="unit"
+          >
+            <option value="" class="text-gray-400">Select unit</option>
+            <option value="kg">Kilograms (kg)</option>
+            <option value="m">Meters (m)</option>
+            <option value="pcs">Pieces (pcs)</option>
+            <option value="liter">Liters (L)</option>
+            <option value="ton">Tons</option>
+            <option value="box">Boxes</option>
+          </select>
+          @if (isFieldInvalid('unit')) {
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('unit') }}</div>
           }
         </div>
       </div>
-      <div class="col-md-4">
-        <label for="material-stock-min" class="form-label">Stock Min</label>
-        <input
-          type="number"
-          class="form-control"
-          id="material-stock-min"
-          formControlName="stockMin"
-          [class.is-invalid]="isFieldInvalid('stockMin')"
-        />
-        @if (isFieldInvalid('stockMin')) {
-          <div class="invalid-feedback">{{ getFieldError('stockMin') }}</div>
-        }
-      </div>
 
-      <div class="col-md-6">
-        <label for="material-unit-cost" class="form-label">Unit Cost</label>
-        <input
-          type="number"
-          class="form-control"
-          id="material-unit-cost"
-          formControlName="unitCost"
-          [class.is-invalid]="isFieldInvalid('unitCost')"
-        />
-        @if (isFieldInvalid('unitCost')) {
-          <div class="invalid-feedback">{{ getFieldError('unitCost') }}</div>
-        }
-      </div>
-
-      <div>
-        <label for="unit" class="block text-sm font-medium text-gray-700 mb-2">
-          Unit of Measure *
-        </label>
-
-        <select id="unit"
-                class="form-select"
-                aria-label="Default select example"
-                formControlName="unit"
-                [class.is-invalid]="isFieldInvalid('unit')"
-        >
-          <option selected value="">Select unit</option>
-          <option value="kg">Kilograms (kg)</option>
-          <option value="m">Meters (m)</option>
-          <option value="pcs">Pieces (pcs)</option>
-          <option value="liter">Liters (L)</option>
-          <option value="ton">Tons</option>
-          <option value="box">Boxes</option>
-        </select>
-        @if (isFieldInvalid('unit')) {
-          <p class="invalid-feedback">{{ getFieldError('unit') }}</p>
-        }
-      </div>
-
-      <!-- Supplier selection-->
-      <div>
-        <label>Select Supplier</label>
+      <!-- Supplier Selection -->
+      <div class="border-t border-gray-800 pt-6">
+        <label class="block text-sm font-semibold text-gray-300 mb-4"> Select Suppliers </label>
         @if (suppliers().length == 0) {
-          <p>No Supplier available please add supplier first</p>
+        <div class="bg-yellow-900 border border-yellow-800 p-4 text-yellow-200 text-sm">
+          No suppliers available. Please add suppliers first.
+        </div>
         } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           @for (supplier of suppliers(); track supplier.id) {
-            <div class="form-check">
+          <div
+            class="bg-gray-950 border border-gray-800 p-4 hover:border-gray-700 transition-colors"
+          >
+            <label class="flex items-start gap-3 cursor-pointer">
               <input
-                class="form-check-input"
+                class="mt-1 w-4 h-4 bg-gray-950 border-2 border-gray-700 text-blue-600 focus:ring-blue-600 focus:ring-2"
                 type="checkbox"
                 [checked]="isSupplierSelected(supplier.id)"
                 (change)="onSupplierChange(supplier.id, $event)"
-              >
-              <span class="ml-3 text-sm text-gray-700">
-                    {{ supplier.name }}
+              />
+              <div class="flex-1">
+                <span class="text-white font-semibold">{{ supplier.name }}</span>
                 @if (supplier.rating) {
-                  <span class="text-xs text-yellow-600 ml-2">★ {{ supplier.rating }}</span>
+                <span
+                  class="ml-2 px-2 py-0.5 bg-yellow-900 border border-yellow-800 text-yellow-200 text-xs font-bold"
+                >
+                  ⭐ {{ supplier.rating }}
+                </span>
                 }
-              </span>
-            </div>
+              </div>
+            </label>
+          </div>
           }
-          @if (isFieldInvalid('suppliersIds')) {
-            <p class="invalid-feedback">{{ getFieldError('suppliersIds') }}</p>
-          }
-        }
-
+        </div>
+        @if (isFieldInvalid('suppliersIds')) {
+        <div class="text-red-400 text-sm mt-2">{{ getFieldError('suppliersIds') }}</div>
+        } }
       </div>
 
-      <div class="col-12">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required/>
-          <label class="form-check-label" for="invalidCheck"> Agree to terms and conditions </label>
-          <div class="invalid-feedback">You must agree before submitting.</div>
+      <!-- Terms and Conditions -->
+      <div class="border-t border-gray-800 pt-6">
+        <div class="flex items-start gap-3">
+          <input
+            class="mt-1 w-4 h-4 bg-gray-950 border-2 border-gray-700 text-blue-600 focus:ring-blue-600 focus:ring-2"
+            type="checkbox"
+            id="invalidCheck"
+            required
+          />
+          <label class="text-sm text-gray-300" for="invalidCheck">
+            I agree to the terms and conditions
+          </label>
         </div>
       </div>
-      <div class="col-12 d-flex gap-2">
-        <button class="btn btn-danger" type="button">Cancel</button>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-4 border-t border-gray-800 pt-6">
         <button
-          class="btn btn-primary"
-          type="submit" 
-          [disabled]="materialForm.invalid || isSubmitting"
-          [class.opacity-50]="materialForm.invalid || isSubmitting"
+          class="px-6 py-3 bg-gray-800 border-2 border-gray-700 text-gray-300 font-semibold hover:bg-gray-700 hover:text-white hover:border-gray-600 transition-colors"
+          type="button"
+          routerLink="../"
         >
-          {{ isSubmitting ? 'Saving ...' : (isEditMode ? 'Update' : 'Create') }}
+          Cancel
+        </button>
+        <button
+          class="px-6 py-3 bg-blue-600 border-2 border-blue-500 text-white font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          type="submit"
+          [disabled]="materialForm.invalid || isSubmitting"
+        >
+          {{ isSubmitting ? 'Saving...' : isEditMode ? 'Update Material' : 'Create Material' }}
         </button>
       </div>
     </form>
