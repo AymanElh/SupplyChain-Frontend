@@ -1,0 +1,5 @@
+/* Dashboard Content Component Styles */
+
+:host {
+  display: block;
+}

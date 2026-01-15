@@ -1,0 +1,43 @@
+/* Dashboard Component Styles - Classic Senior Developer Design */
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+/* Simple scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+  border: 1px solid #374151;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border: 1px solid #6b7280;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Simple fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+main {
+  animation: fadeIn 0.3s ease-in;
+}
+
+/* No fancy animations, just clean and professional */
+

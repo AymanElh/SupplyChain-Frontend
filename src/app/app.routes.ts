@@ -1,25 +1,34 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/supply/suppliers',
+    redirectTo: '/dashboard',
     pathMatch: "full"
   },
   {
-    path: "supply/suppliers",
+    path: '',
+    component: MainLayoutComponent,
     canActivate: [authGuard],
-    loadChildren: () => import('./features/supply/suppliers/supplier.routes')
-  },
-  {
-    path: 'supply/materials',
-    canActivate: [authGuard],
-    loadChildren: () => import('./features/supply/raw-materials/material.route')
-  },
-  {
-    path: 'supply/orders',
-    canActivate: [authGuard],
-    loadChildren: () => import('./features/supply/supplier-orders/supplier-orders-routes')
+    children: [
+      {
+        path: 'dashboard',
+        loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes)
+      },
+      {
+        path: "supply/suppliers",
+        loadChildren: () => import('./features/supply/suppliers/supplier.routes')
+      },
+      {
+        path: 'supply/materials',
+        loadChildren: () => import('./features/supply/raw-materials/material.route')
+      },
+      {
+        path: 'supply/orders',
+        loadChildren: () => import('./features/supply/supplier-orders/supplier-orders-routes')
+      }
+    ]
   }
 ];
