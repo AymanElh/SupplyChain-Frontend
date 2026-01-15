@@ -62,7 +62,7 @@ export class MaterialFormComponent implements OnInit{
     operation.subscribe({
       next: () => {
         this.isSubmitting = false;
-        this.router.navigate(['/materials']);
+        this.router.navigate(['/supply/materials']);
       }
     })
 
