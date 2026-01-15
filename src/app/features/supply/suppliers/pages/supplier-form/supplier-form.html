@@ -1,105 +1,159 @@
-<div class="container mt-3">
-  <button type="button" class="btn btn-outline-secondary" routerLink="../">
-    <i class="bi bi-arrow-left"></i> Back
-  </button>
-</div>
+<div class="p-8">
+  <!-- Back Button -->
+  <div class="mb-6">
+    <button
+      type="button"
+      class="px-4 py-2 bg-gray-800 border border-gray-700 text-gray-300 font-semibold hover:bg-gray-700 hover:text-white hover:border-gray-600 transition-colors"
+      routerLink="../"
+    >
+      ← Back
+    </button>
+  </div>
 
-<div class="container mt-5" style="height: 100vh">
-  <h2>{{ isEditMode ? 'Edit Supplier' : 'Add Supplier' }}</h2>
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">
+      {{ isEditMode ? 'Edit Supplier' : 'Add New Supplier' }}
+    </h1>
+    <p class="text-gray-400">
+      {{ isEditMode ? 'Update supplier information' : 'Create a new supplier entry' }}
+    </p>
+  </div>
 
-  <div>
-    <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()" class="row g-3 needs-validation" novalidate>
-      <div class="col-md-4">
-        <label 
-            for="supplier-name" 
-            class="form-label"
-            >Supplier name *</label>
-        <input 
-            type="text" 
-            class="form-control" 
-            id="supplier-name" 
-            formControlName="name"
-            [class.is-invalid]="isFieldInvalid('name')"
-            placeholder="Mark" />
-        @if(isFieldInvalid('name')) {
-            <div class="invalid-feedback">{{getFieldError('name')}}</div>
-        }
-      </div>
-      <div class="col-md-4">
-        <label for="supplier-email" class="form-label">Email</label>
-        <div class="input-group has-validation">
-          <span class="input-group-text" id="supplier-email">@</span>
+  <!-- Form -->
+  <div class="bg-gray-900 border-2 border-gray-700 p-8">
+    <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Supplier Name -->
+        <div>
+          <label for="supplier-name" class="block text-sm font-semibold text-gray-300 mb-2">
+            Supplier Name <span class="text-red-500">*</span>
+          </label>
           <input
             type="text"
-            class="form-control"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('name')"
+            [class.border-red-600]="isFieldInvalid('name')"
+            id="supplier-name"
+            formControlName="name"
+            placeholder="Enter supplier name"
+          />
+          @if(isFieldInvalid('name')) {
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('name') }}</div>
+          }
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="supplier-email" class="block text-sm font-semibold text-gray-300 mb-2">
+            Email
+          </label>
+          <input
+            type="email"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('email')"
+            [class.border-red-600]="isFieldInvalid('email')"
             id="supplier-email"
-            aria-describedby="inputGroupPrepend"
-            placeholder="supplier@example.com"
             formControlName="email"
-            [class.is-invalid]="isFieldInvalid('email')"
+            placeholder="supplier@example.com"
           />
           @if (isFieldInvalid('email')) {
-              <div class="invalid-feedback">{{getFieldError('email')}}</div>
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('email') }}</div>
+          }
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label for="supplier-phone" class="block text-sm font-semibold text-gray-300 mb-2">
+            Phone
+          </label>
+          <input
+            type="text"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('phone')"
+            [class.border-red-600]="isFieldInvalid('phone')"
+            id="supplier-phone"
+            formControlName="phone"
+            placeholder="0XXXXXXXX"
+          />
+          @if (isFieldInvalid('phone')) {
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('phone') }}</div>
+          }
+        </div>
+
+        <!-- Rating -->
+        <div>
+          <label for="supplier-rating" class="block text-sm font-semibold text-gray-300 mb-2">
+            Rating (0-5)
+          </label>
+          <input
+            type="number"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('rating')"
+            [class.border-red-600]="isFieldInvalid('rating')"
+            id="supplier-rating"
+            formControlName="rating"
+            placeholder="Enter rating (0-5)"
+            min="0"
+            max="5"
+            step="0.1"
+          />
+          @if (isFieldInvalid('rating')) {
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('rating') }}</div>
+          }
+        </div>
+
+        <!-- Lead Time -->
+        <div class="md:col-span-2">
+          <label for="supplier-leadTime" class="block text-sm font-semibold text-gray-300 mb-2">
+            Lead Time (days)
+          </label>
+          <input
+            type="number"
+            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
+            [class.border-gray-700]="!isFieldInvalid('leadTime')"
+            [class.border-red-600]="isFieldInvalid('leadTime')"
+            id="supplier-leadTime"
+            formControlName="leadTime"
+            placeholder="Enter lead time in days"
+          />
+          @if (isFieldInvalid('leadTime')) {
+          <div class="text-red-400 text-sm mt-1">{{ getFieldError('leadTime') }}</div>
           }
         </div>
       </div>
-      <div class="col-md-4">
-        <label for="supplier-phone" class="form-label">Phone</label>
-        <input 
-            type="text" 
-            class="form-control" 
-            id="supplier-phone" 
-            placeholder="0XXXXXXXX" 
-            formControlName="phone"
-            [class.border-red-500]="isFieldInvalid('phone')"
-        />
-        @if (isFieldInvalid('phone')) {
-            <div class="valid-feedback">Looks good!</div>
-        }
-      </div>
-    
-      <div class="col-md-6">
-        <label for="supplier-rating" class="form-label">Rating (0-5)</label>
-        <input 
-            type="number" 
-            class="form-control" 
-            id="supplier-rating" 
-            formControlName="rating"
-            [class.is-invalid]="isFieldInvalid('rating')"
-        />
-        @if (isFieldInvalid('rating')) {
-            <div class="invalid-feedback">{{getFieldError('rating')}}</div>
-        }
-      </div>
-      <div class="col-md-6">
-        <label for="supplier-leadTime" class="form-label">Lead time (days)</label>
-        <input 
-            class="form-control" 
-            id="supplier-leadTime" 
-            type="text"
-            formControlName="leadTime"
-            [class.is-invalid]="isFieldInvalid('leadTime')"
-        />
-        @if (isFieldInvalid('leadTime')) {
-            <div class="invalid-feedback">{{getFieldError('leadTime')}}</div>
-        }
-      </div>
-    
-      <div class="col-12">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required />
-          <label class="form-check-label" for="invalidCheck"> Agree to terms and conditions </label>
-          <div class="invalid-feedback">You must agree before submitting.</div>
+
+      <!-- Terms and Conditions -->
+      <div class="border-t border-gray-800 pt-6">
+        <div class="flex items-start gap-3">
+          <input
+            class="mt-1 w-4 h-4 bg-gray-950 border-2 border-gray-700 text-blue-600 focus:ring-blue-600 focus:ring-2"
+            type="checkbox"
+            id="invalidCheck"
+            required
+          />
+          <label class="text-sm text-gray-300" for="invalidCheck">
+            I agree to the terms and conditions
+          </label>
         </div>
       </div>
-      <div class="col-12 d-flex gap-2">
-        <button class="btn btn-danger" type="button">Cancel</button>
-        <button 
-            class="btn btn-primary"
-            type="submit"
-            [disabled]="supplierForm.invalid || isSubmitting"
-            [class.opacity-50]="supplierForm.invalid || isSubmitting"
-            >{{ isSubmitting ? 'Saving ...' : (isEditMode ? 'Update' : 'Create') }}</button>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-4 border-t border-gray-800 pt-6">
+        <button
+          class="px-6 py-3 bg-gray-800 border-2 border-gray-700 text-gray-300 font-semibold hover:bg-gray-700 hover:text-white hover:border-gray-600 transition-colors"
+          type="button"
+          routerLink="../"
+        >
+          Cancel
+        </button>
+        <button
+          class="px-6 py-3 bg-blue-600 border-2 border-blue-500 text-white font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          type="submit"
+          [disabled]="supplierForm.invalid || isSubmitting"
+        >
+          {{ isSubmitting ? 'Saving...' : isEditMode ? 'Update Supplier' : 'Create Supplier' }}
+        </button>
       </div>
     </form>
   </div>

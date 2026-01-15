@@ -1,0 +1,11 @@
+/* Supplier List Styles */
+
+:host {
+  display: block;
+}
+
+/* Table styling */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}

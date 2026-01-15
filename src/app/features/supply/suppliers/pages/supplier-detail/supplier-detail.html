@@ -1,54 +1,103 @@
-<div class="container mt-5">
-  <div>
-    <h1>Supplier {{ supplier()?.name }} Details</h1>
+<div class="p-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Supplier Details</h1>
+    <p class="text-gray-400">View supplier information and materials</p>
   </div>
 
   <div>
     @if (isLoading()) {
-    <div class="text-center">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <p class="mt-2">Loading supplier details ...</p>
+    <div class="bg-gray-900 border-2 border-gray-700 p-12 text-center">
+      <div class="text-gray-400 text-lg mb-2">Loading supplier details...</div>
+      <div class="text-gray-500 text-sm">Please wait</div>
     </div>
     } @else if (notFound()) {
-    <div class="alert alert-danger d-flex align-items-center" role="alert">
-      <i class="bi bi-exclamation-triangle-fill me-2"></i>
-      <div>
-        <h4 class="alert-heading">404 - Supplier Not Found</h4>
-        <p class="mb-0">The supplier you're looking for doesn't exist or has been removed.</p>
-        <hr />
-        <a routerLink="../" class="btn btn-outline-danger">
-          <i class="bi bi-arrow-left"></i> Back to Suppliers List
-        </a>
+    <div class="bg-red-900 border-2 border-red-700 p-8">
+      <div class="flex items-start gap-4">
+        <div class="text-4xl">⚠️</div>
+        <div class="flex-1">
+          <h4 class="text-xl font-bold text-white mb-2">404 - Supplier Not Found</h4>
+          <p class="text-red-200 mb-4">
+            The supplier you're looking for doesn't exist or has been removed.
+          </p>
+          <button
+            routerLink="../"
+            class="px-4 py-2 bg-red-600 border-2 border-red-500 text-white font-semibold hover:bg-red-700 hover:border-red-600 transition-colors"
+          >
+            ← Back to Suppliers List
+          </button>
+        </div>
       </div>
     </div>
     } @else if (supplier()) {
-    <h3>Supplier Informations</h3>
-    <ul class="list-group">
-      <li class="list-group-item"><strong>Email:</strong> {{ supplier()?.email }}</li>
-      <li class="list-group-item"><strong>Phone:</strong> {{ supplier()?.phone }}</li>
-      <li class="list-group-item"><strong>Rating:</strong> {{ supplier()?.rating }}</li>
-      <li class="list-group-item"><strong>Lead Time:</strong> {{ supplier()?.leadTime }}</li>
-    </ul>
-    }
-  </div>
-  <div class="mt-3 d-flex gap-2">
-    <button class="btn btn-warning" (click)="onEdit()">Edit</button>
-    <button class="btn btn-danger" (click)="onDelete()">Delete</button>
-  </div>
+    <!-- Supplier Information Card -->
+    <div class="bg-gray-900 border-2 border-gray-700 p-6 mb-6">
+      <div class="flex justify-between items-start mb-6">
+        <div>
+          <h3 class="text-2xl font-bold text-white mb-2">{{ supplier()?.name }}</h3>
+          <p class="text-gray-400">Supplier Information</p>
+        </div>
+        <div class="flex gap-3">
+          <button
+            class="px-4 py-2 bg-yellow-600 border-2 border-yellow-500 text-white font-semibold hover:bg-yellow-700 hover:border-yellow-600 transition-colors"
+            (click)="onEdit()"
+          >
+            Edit
+          </button>
+          <button
+            class="px-4 py-2 bg-red-600 border-2 border-red-500 text-white font-semibold hover:bg-red-700 hover:border-red-600 transition-colors"
+            (click)="onDelete()"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
 
-  @if (supplier()!.materials && supplier()!.materials!.length > 0) {
-  <div class="mt-3 border-top pt-3">
-    <h3>Supplier Materials</h3>
-    <ul class="list-group">
-      @for (material of supplier()?.materials; track material.id) {
-      <li class="list-group-item">
-        <strong>{{ material.name }}</strong>
-        <span class="badge bg-primary ms-2">{{ material.stock }}</span>
-      </li>
-      }
-    </ul>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-gray-950 border border-gray-800 p-4">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Email</p>
+          <p class="text-white font-semibold">{{ supplier()?.email }}</p>
+        </div>
+        <div class="bg-gray-950 border border-gray-800 p-4">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Phone</p>
+          <p class="text-white font-semibold">{{ supplier()?.phone }}</p>
+        </div>
+        <div class="bg-gray-950 border border-gray-800 p-4">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Rating</p>
+          <p class="text-white font-semibold">
+            <span
+              class="px-3 py-1 bg-yellow-900 border border-yellow-800 text-yellow-200 text-xs font-bold"
+            >
+              ⭐ {{ supplier()?.rating }}
+            </span>
+          </p>
+        </div>
+        <div class="bg-gray-950 border border-gray-800 p-4">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Lead Time</p>
+          <p class="text-white font-semibold">{{ supplier()?.leadTime }} days</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supplier Materials -->
+    @if (supplier()!.materials && supplier()!.materials!.length > 0) {
+    <div class="bg-gray-900 border-2 border-gray-700 p-6">
+      <h3 class="text-xl font-bold text-white mb-6">Supplier Materials</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (material of supplier()?.materials; track material.id) {
+        <div
+          class="bg-gray-950 border border-gray-800 p-4 hover:border-gray-700 hover:bg-gray-900 transition-colors"
+        >
+          <p class="text-white font-semibold mb-2">{{ material.name }}</p>
+          <span
+            class="px-3 py-1 bg-blue-900 border border-blue-800 text-blue-200 text-xs font-bold"
+          >
+            Stock: {{ material.stock }}
+          </span>
+        </div>
+        }
+      </div>
+    </div>
+    } }
   </div>
-  }
 </div>
