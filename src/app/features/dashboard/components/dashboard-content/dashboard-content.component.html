@@ -3,44 +3,16 @@
   <!-- Stats Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
     <!-- Stat Card 1 -->
-    <div class="bg-[#111111] rounded-xl p-6 border border-gray-800">
-      <div class="flex items-center justify-between mb-3">
-        <p class="text-sm text-gray-400">Total Orders</p>
-        <span class="text-2xl">📦</span>
-      </div>
-      <p class="text-3xl font-bold mb-2">1,234</p>
-      <p class="text-sm text-green-500">↑ 12% from last month</p>
-    </div>
-
-    <!-- Stat Card 2 -->
-    <div class="bg-[#111111] rounded-xl p-6 border border-gray-800">
-      <div class="flex items-center justify-between mb-3">
-        <p class="text-sm text-gray-400">Inventory Value</p>
-        <span class="text-2xl">💰</span>
-      </div>
-      <p class="text-3xl font-bold mb-2">$584K</p>
-      <p class="text-sm text-green-500">↑ 8% from last month</p>
-    </div>
-
-    <!-- Stat Card 3 -->
-    <div class="bg-[#111111] rounded-xl p-6 border border-gray-800">
-      <div class="flex items-center justify-between mb-3">
-        <p class="text-sm text-gray-400">Active Suppliers</p>
-        <span class="text-2xl">🏭</span>
-      </div>
-      <p class="text-3xl font-bold mb-2">42</p>
-      <p class="text-sm text-blue-500">→ No change</p>
-    </div>
-
-    <!-- Stat Card 4 -->
-    <div class="bg-[#111111] rounded-xl p-6 border border-gray-800">
-      <div class="flex items-center justify-between mb-3">
-        <p class="text-sm text-gray-400">Pending Orders</p>
-        <span class="text-2xl">⏳</span>
-      </div>
-      <p class="text-3xl font-bold mb-2">28</p>
-      <p class="text-sm text-yellow-500">↓ 3 from yesterday</p>
-    </div>
+    @for (card of statsCards; track $index) {
+    <app-stats-card
+      title="{{ card.title }}"
+      value="{{ card.value }}"
+      icon="{{ card.icon }}"
+      iconBgColor="{{ card.iconBgColor }}"
+      trend="{{ card.trend }}"
+      trendColor="{{ card.trendColor }}"
+    />
+    }
   </div>
 
   <!-- Two Column Layout -->

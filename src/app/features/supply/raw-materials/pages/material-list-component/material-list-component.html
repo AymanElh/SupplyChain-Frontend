@@ -16,69 +16,16 @@
 
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">
-            Total Materials
-          </p>
-          <p class="text-4xl font-bold text-white mt-2">{{ materials().length }}</p>
-        </div>
-        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">📦</span>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 pt-3 mt-3">
-        <span class="text-gray-500 text-sm">In inventory</span>
-      </div>
-    </div>
-
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">
-            Critical Materials
-          </p>
-          <p class="text-4xl font-bold text-white mt-2">{{ criticalCount().length }}</p>
-        </div>
-        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">⚠️</span>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 pt-3 mt-3">
-        <span class="text-red-500 text-sm font-semibold">Needs attention</span>
-      </div>
-    </div>
-
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Low Stock</p>
-          <p class="text-4xl font-bold text-white mt-2">{{ lowStockCount().length }}</p>
-        </div>
-        <div class="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">📊</span>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 pt-3 mt-3">
-        <span class="text-yellow-500 text-sm font-semibold">Low inventory</span>
-      </div>
-    </div>
-
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Total Value</p>
-          <p class="text-4xl font-bold text-white mt-2">${{ totalValue() | number : '1.0-0' }}</p>
-        </div>
-        <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">💰</span>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 pt-3 mt-3">
-        <span class="text-green-500 text-sm font-semibold">Inventory value</span>
-      </div>
-    </div>
+    @for (card of statsCards; track $index) {
+    <app-stats-card
+      [title]="card.title"
+      [value]="card.value"
+      [icon]="card.icon"
+      [iconBgColor]="card.iconBgColor"
+      [trend]="card.trend"
+      [trendColor]="card.trendColor"
+    />
+    }
   </div>
 
   <!-- Filters Tabs -->
