@@ -1,28 +1,28 @@
-<div class="p-8">
-  <!-- Back Button -->
-  <div class="mb-6">
+<!-- Material Form Page -->
+<div class="p-6">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-white">
+        {{ isEditMode ? 'Edit Material' : 'Add New Material' }}
+      </h1>
+      <p class="text-sm text-gray-400">
+        {{ isEditMode ? 'Update material information' : 'Create a new material entry' }}
+      </p>
+    </div>
     <button
       type="button"
-      class="px-4 py-2 bg-gray-800 border border-gray-700 text-gray-300 font-semibold hover:bg-gray-700 hover:text-white hover:border-gray-600 transition-colors"
       routerLink="../"
+      class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 font-medium transition-colors"
     >
       ← Back
     </button>
   </div>
 
-  <!-- Header -->
-  <div class="mb-8">
-    <h1 class="text-3xl font-bold text-white mb-2">
-      {{ isEditMode ? 'Edit Material' : 'Add New Material' }}
-    </h1>
-    <p class="text-gray-400">
-      {{ isEditMode ? 'Update material information' : 'Create a new material entry' }}
-    </p>
-  </div>
-
-  <!-- Form -->
-  <div class="bg-gray-900 border-2 border-gray-700 p-8">
+  <!-- Form Container -->
+  <div class="bg-[#111111] rounded-xl border border-gray-800 p-8">
     <form [formGroup]="materialForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Form Fields Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Material Name -->
         <div>
@@ -31,15 +31,15 @@
           </label>
           <input
             type="text"
-            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
-            [class.border-gray-700]="!isFieldInvalid('name')"
+            class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+            [class.border-gray-800]="!isFieldInvalid('name')"
             [class.border-red-600]="isFieldInvalid('name')"
             id="material-name"
             formControlName="name"
             placeholder="Enter material name"
           />
           @if (isFieldInvalid('name')) {
-          <div class="text-red-400 text-sm mt-1">{{ getFieldError('name') }}</div>
+          <div class="text-red-400 text-sm mt-2">{{ getFieldError('name') }}</div>
           }
         </div>
 
@@ -50,15 +50,15 @@
           </label>
           <input
             type="number"
-            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
-            [class.border-gray-700]="!isFieldInvalid('stock')"
+            class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+            [class.border-gray-800]="!isFieldInvalid('stock')"
             [class.border-red-600]="isFieldInvalid('stock')"
             id="material-stock"
             formControlName="stock"
             placeholder="Enter stock quantity"
           />
           @if (isFieldInvalid('stock')) {
-          <div class="text-red-400 text-sm mt-1">{{ getFieldError('stock') }}</div>
+          <div class="text-red-400 text-sm mt-2">{{ getFieldError('stock') }}</div>
           }
         </div>
 
@@ -69,15 +69,15 @@
           </label>
           <input
             type="number"
-            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
-            [class.border-gray-700]="!isFieldInvalid('stockMin')"
+            class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+            [class.border-gray-800]="!isFieldInvalid('stockMin')"
             [class.border-red-600]="isFieldInvalid('stockMin')"
             id="material-stock-min"
             formControlName="stockMin"
             placeholder="Enter minimum stock"
           />
           @if (isFieldInvalid('stockMin')) {
-          <div class="text-red-400 text-sm mt-1">{{ getFieldError('stockMin') }}</div>
+          <div class="text-red-400 text-sm mt-2">{{ getFieldError('stockMin') }}</div>
           }
         </div>
 
@@ -88,8 +88,8 @@
           </label>
           <input
             type="number"
-            class="w-full px-4 py-3 bg-gray-950 border-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
-            [class.border-gray-700]="!isFieldInvalid('unitCost')"
+            class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+            [class.border-gray-800]="!isFieldInvalid('unitCost')"
             [class.border-red-600]="isFieldInvalid('unitCost')"
             id="material-unit-cost"
             formControlName="unitCost"
@@ -97,7 +97,7 @@
             step="0.01"
           />
           @if (isFieldInvalid('unitCost')) {
-          <div class="text-red-400 text-sm mt-1">{{ getFieldError('unitCost') }}</div>
+          <div class="text-red-400 text-sm mt-2">{{ getFieldError('unitCost') }}</div>
           }
         </div>
 
@@ -108,8 +108,8 @@
           </label>
           <select
             id="unit"
-            class="w-full px-4 py-3 bg-gray-950 border-2 text-white focus:outline-none focus:border-blue-600 transition-colors"
-            [class.border-gray-700]="!isFieldInvalid('unit')"
+            class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+            [class.border-gray-800]="!isFieldInvalid('unit')"
             [class.border-red-600]="isFieldInvalid('unit')"
             formControlName="unit"
           >
@@ -122,27 +122,27 @@
             <option value="box">Boxes</option>
           </select>
           @if (isFieldInvalid('unit')) {
-          <div class="text-red-400 text-sm mt-1">{{ getFieldError('unit') }}</div>
+          <div class="text-red-400 text-sm mt-2">{{ getFieldError('unit') }}</div>
           }
         </div>
       </div>
 
       <!-- Supplier Selection -->
       <div class="border-t border-gray-800 pt-6">
-        <label class="block text-sm font-semibold text-gray-300 mb-4"> Select Suppliers </label>
+        <label class="block text-sm font-semibold text-gray-300 mb-4">Select Suppliers</label>
         @if (suppliers().length == 0) {
-        <div class="bg-yellow-900 border border-yellow-800 p-4 text-yellow-200 text-sm">
+        <div class="bg-yellow-900 border border-yellow-800 rounded-lg p-4 text-yellow-200 text-sm">
           No suppliers available. Please add suppliers first.
         </div>
         } @else {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           @for (supplier of suppliers(); track supplier.id) {
           <div
-            class="bg-gray-950 border border-gray-800 p-4 hover:border-gray-700 transition-colors"
+            class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-4 hover:border-gray-700 transition-colors"
           >
             <label class="flex items-start gap-3 cursor-pointer">
               <input
-                class="mt-1 w-4 h-4 bg-gray-950 border-2 border-gray-700 text-blue-600 focus:ring-blue-600 focus:ring-2"
+                class="mt-1 w-4 h-4 bg-[#0a0a0a] border-2 border-gray-700 rounded text-blue-600 focus:ring-blue-600 focus:ring-2"
                 type="checkbox"
                 [checked]="isSupplierSelected(supplier.id)"
                 (change)="onSupplierChange(supplier.id, $event)"
@@ -151,7 +151,7 @@
                 <span class="text-white font-semibold">{{ supplier.name }}</span>
                 @if (supplier.rating) {
                 <span
-                  class="ml-2 px-2 py-0.5 bg-yellow-900 border border-yellow-800 text-yellow-200 text-xs font-bold"
+                  class="ml-2 px-2 py-0.5 bg-yellow-900 text-yellow-200 text-xs font-medium rounded-full"
                 >
                   ⭐ {{ supplier.rating }}
                 </span>
@@ -170,7 +170,7 @@
       <div class="border-t border-gray-800 pt-6">
         <div class="flex items-start gap-3">
           <input
-            class="mt-1 w-4 h-4 bg-gray-950 border-2 border-gray-700 text-blue-600 focus:ring-blue-600 focus:ring-2"
+            class="mt-1 w-4 h-4 bg-[#0a0a0a] border-2 border-gray-700 rounded text-blue-600 focus:ring-blue-600 focus:ring-2"
             type="checkbox"
             id="invalidCheck"
             required
@@ -184,14 +184,14 @@
       <!-- Action Buttons -->
       <div class="flex gap-4 border-t border-gray-800 pt-6">
         <button
-          class="px-6 py-3 bg-gray-800 border-2 border-gray-700 text-gray-300 font-semibold hover:bg-gray-700 hover:text-white hover:border-gray-600 transition-colors"
+          class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 font-medium transition-colors"
           type="button"
           routerLink="../"
         >
           Cancel
         </button>
         <button
-          class="px-6 py-3 bg-blue-600 border-2 border-blue-500 text-white font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           [disabled]="materialForm.invalid || isSubmitting"
         >

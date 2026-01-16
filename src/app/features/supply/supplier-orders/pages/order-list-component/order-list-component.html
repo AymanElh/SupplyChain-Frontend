@@ -1,27 +1,28 @@
-<div class="p-8">
+<!-- Supplier Orders Page -->
+<div class="p-6">
   <!-- Header -->
-  <div class="flex justify-between items-center mb-8">
+  <div class="flex justify-between items-center mb-6">
     <div>
-      <h1 class="text-3xl font-bold text-white mb-2">Supplier Orders</h1>
-      <p class="text-gray-400">Manage orders from suppliers</p>
+      <h1 class="text-2xl font-bold text-white">Supplier Orders</h1>
+      <p class="text-sm text-gray-400">Manage orders from suppliers</p>
     </div>
     <button
       [routerLink]="['/supply/orders/create']"
-      class="px-6 py-3 bg-blue-600 border-2 border-blue-500 text-white font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors"
+      class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors"
     >
       + Create New Order
     </button>
   </div>
 
   <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-blue-600 transition-colors">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Orders</p>
+          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Total Orders</p>
           <p class="text-4xl font-bold text-white mt-2">{{ orders().length }}</p>
         </div>
-        <div class="w-12 h-12 bg-blue-600 border border-blue-500 flex items-center justify-center">
+        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
           <span class="text-2xl">🛒</span>
         </div>
       </div>
@@ -30,17 +31,15 @@
       </div>
     </div>
 
-    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-yellow-600 transition-colors">
+    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Waiting</p>
+          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Waiting</p>
           <p class="text-4xl font-bold text-white mt-2">
             {{ orderService.waitingOrders().length }}
           </p>
         </div>
-        <div
-          class="w-12 h-12 bg-yellow-600 border border-yellow-500 flex items-center justify-center"
-        >
+        <div class="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
           <span class="text-2xl">⏰</span>
         </div>
       </div>
@@ -49,15 +48,15 @@
       </div>
     </div>
 
-    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-blue-500 transition-colors">
+    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">In Progress</p>
+          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">In Progress</p>
           <p class="text-4xl font-bold text-white mt-2">
             {{ orderService.inProgressOrders().length }}
           </p>
         </div>
-        <div class="w-12 h-12 bg-blue-500 border border-blue-400 flex items-center justify-center">
+        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
           <span class="text-2xl">⏳</span>
         </div>
       </div>
@@ -66,17 +65,15 @@
       </div>
     </div>
 
-    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-green-600 transition-colors">
+    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Received</p>
+          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Received</p>
           <p class="text-4xl font-bold text-white mt-2">
             {{ orderService.receivedOrders().length }}
           </p>
         </div>
-        <div
-          class="w-12 h-12 bg-green-600 border border-green-500 flex items-center justify-center"
-        >
+        <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
           <span class="text-2xl">✅</span>
         </div>
       </div>
@@ -87,14 +84,13 @@
   </div>
 
   <!-- Filters Tabs -->
-  <div class="bg-gray-900 border-2 border-gray-700 mb-6">
+  <div class="bg-[#111111] rounded-xl border border-gray-800 mb-6 overflow-hidden">
     <div class="flex border-b border-gray-800">
       <button
         [class.bg-blue-600]="filterStatus() === 'ALL'"
         [class.text-white]="filterStatus() === 'ALL'"
-        [class.border-blue-500]="filterStatus() === 'ALL'"
         [class.text-gray-400]="filterStatus() !== 'ALL'"
-        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
         (click)="filterStatus.set('ALL')"
       >
         All Orders ({{ orders().length }})
@@ -102,9 +98,8 @@
       <button
         [class.bg-yellow-600]="filterStatus() === OrderStatus.WAITING"
         [class.text-white]="filterStatus() === OrderStatus.WAITING"
-        [class.border-yellow-500]="filterStatus() === OrderStatus.WAITING"
         [class.text-gray-400]="filterStatus() !== OrderStatus.WAITING"
-        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
         (click)="setFilterStatus(OrderStatus.WAITING)"
       >
         Waiting ({{ orderService.waitingOrders().length }})
@@ -112,9 +107,8 @@
       <button
         [class.bg-blue-500]="filterStatus() === OrderStatus.IN_PROGRESS"
         [class.text-white]="filterStatus() === OrderStatus.IN_PROGRESS"
-        [class.border-blue-400]="filterStatus() === OrderStatus.IN_PROGRESS"
         [class.text-gray-400]="filterStatus() !== OrderStatus.IN_PROGRESS"
-        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
         (click)="setFilterStatus(OrderStatus.IN_PROGRESS)"
       >
         In Progress ({{ orderService.inProgressOrders().length }})
@@ -122,9 +116,8 @@
       <button
         [class.bg-green-600]="filterStatus() === OrderStatus.RECEIVED"
         [class.text-white]="filterStatus() === OrderStatus.RECEIVED"
-        [class.border-green-500]="filterStatus() === OrderStatus.RECEIVED"
         [class.text-gray-400]="filterStatus() !== OrderStatus.RECEIVED"
-        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
         (click)="setFilterStatus(OrderStatus.RECEIVED)"
       >
         Received ({{ orderService.receivedOrders().length }})
@@ -134,47 +127,47 @@
 
   <!-- Order List -->
   @if (isLoading()) {
-  <div class="bg-gray-900 border-2 border-gray-700 p-12 text-center">
+  <div class="bg-[#111111] rounded-xl border border-gray-800 p-12 text-center">
     <div class="text-gray-400 text-lg">Loading orders...</div>
   </div>
   } @else {
-  <div class="bg-gray-900 border-2 border-gray-700 overflow-hidden">
+  <div class="bg-[#111111] rounded-xl border border-gray-800 overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full">
-        <thead class="bg-gray-950 border-b-2 border-gray-700">
+        <thead class="bg-[#0a0a0a] border-b border-gray-800">
           <tr>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               #
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Supplier
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Order Date
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Status
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Items
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Total Value
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Actions
             </th>
@@ -182,8 +175,8 @@
         </thead>
         <tbody class="divide-y divide-gray-800">
           @for (order of getFilteredOrders(); track order.id) {
-          <tr class="hover:bg-gray-800 transition-colors">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-semibold">
+          <tr class="hover:bg-[#0a0a0a] transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-medium">
               {{ order.id }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-white font-semibold">
@@ -192,18 +185,15 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ order.orderDate }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm">
               @if (order.status === 'WAITING') {
-              <span
-                class="px-3 py-1 bg-yellow-900 border border-yellow-800 text-yellow-200 text-xs font-bold"
+              <span class="px-3 py-1 bg-yellow-900 text-yellow-200 text-xs font-medium rounded-full"
                 >Waiting</span
               >
               } @else if (order.status === 'IN_PROGRESS') {
-              <span
-                class="px-3 py-1 bg-blue-900 border border-blue-800 text-blue-200 text-xs font-bold"
+              <span class="px-3 py-1 bg-blue-900 text-blue-200 text-xs font-medium rounded-full"
                 >In Progress</span
               >
               } @else if (order.status === 'RECEIVED') {
-              <span
-                class="px-3 py-1 bg-green-900 border border-green-800 text-green-200 text-xs font-bold"
+              <span class="px-3 py-1 bg-green-900 text-green-200 text-xs font-medium rounded-full"
                 >Received</span
               >
               }
@@ -219,19 +209,19 @@
                 <button
                   type="button"
                   [routerLink]="['/supply/orders', order.id]"
-                  class="px-3 py-2 bg-blue-600 border border-blue-500 text-white text-xs font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors"
+                  class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-xs font-medium transition-colors"
                 >
                   View
                 </button>
                 <button
                   type="button"
-                  class="px-3 py-2 bg-yellow-600 border border-yellow-500 text-white text-xs font-semibold hover:bg-yellow-700 hover:border-yellow-600 transition-colors"
+                  class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white text-xs font-medium transition-colors"
                 >
                   Edit
                 </button>
                 <button
                   type="button"
-                  class="px-3 py-2 bg-red-600 border border-red-500 text-white text-xs font-semibold hover:bg-red-700 hover:border-red-600 transition-colors"
+                  class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white text-xs font-medium transition-colors"
                 >
                   Delete
                 </button>

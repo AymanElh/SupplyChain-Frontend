@@ -1,29 +1,30 @@
-<div class="p-8">
+<!-- Raw Materials Page -->
+<div class="p-6">
   <!-- Header -->
-  <div class="flex justify-between items-center mb-8">
+  <div class="flex justify-between items-center mb-6">
     <div>
-      <h1 class="text-3xl font-bold text-white mb-2">Raw Materials</h1>
-      <p class="text-gray-400">Manage your inventory and stock levels</p>
+      <h1 class="text-2xl font-bold text-white">Raw Materials</h1>
+      <p class="text-sm text-gray-400">Manage your inventory and stock levels</p>
     </div>
     <button
       [routerLink]="['/supply/materials/create']"
-      class="px-6 py-3 bg-blue-600 border-2 border-blue-500 text-white font-semibold hover:bg-blue-700 hover:border-blue-600 transition-colors"
+      class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors"
     >
       + Add New Material
     </button>
   </div>
 
   <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-blue-600 transition-colors">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">
+          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">
             Total Materials
           </p>
           <p class="text-4xl font-bold text-white mt-2">{{ materials().length }}</p>
         </div>
-        <div class="w-12 h-12 bg-blue-600 border border-blue-500 flex items-center justify-center">
+        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
           <span class="text-2xl">📦</span>
         </div>
       </div>
@@ -32,15 +33,15 @@
       </div>
     </div>
 
-    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-red-600 transition-colors">
+    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">
+          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">
             Critical Materials
           </p>
           <p class="text-4xl font-bold text-white mt-2">{{ criticalCount().length }}</p>
         </div>
-        <div class="w-12 h-12 bg-red-600 border border-red-500 flex items-center justify-center">
+        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
           <span class="text-2xl">⚠️</span>
         </div>
       </div>
@@ -49,15 +50,13 @@
       </div>
     </div>
 
-    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-yellow-600 transition-colors">
+    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Low Stock</p>
+          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Low Stock</p>
           <p class="text-4xl font-bold text-white mt-2">{{ lowStockCount().length }}</p>
         </div>
-        <div
-          class="w-12 h-12 bg-yellow-600 border border-yellow-500 flex items-center justify-center"
-        >
+        <div class="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
           <span class="text-2xl">📊</span>
         </div>
       </div>
@@ -66,15 +65,13 @@
       </div>
     </div>
 
-    <div class="bg-gray-900 border-2 border-gray-700 p-6 hover:border-green-600 transition-colors">
+    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Value</p>
+          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Total Value</p>
           <p class="text-4xl font-bold text-white mt-2">${{ totalValue() | number : '1.0-0' }}</p>
         </div>
-        <div
-          class="w-12 h-12 bg-green-600 border border-green-500 flex items-center justify-center"
-        >
+        <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
           <span class="text-2xl">💰</span>
         </div>
       </div>
@@ -85,14 +82,13 @@
   </div>
 
   <!-- Filters Tabs -->
-  <div class="bg-gray-900 border-2 border-gray-700 mb-6">
+  <div class="bg-[#111111] rounded-xl border border-gray-800 mb-6 overflow-hidden">
     <div class="flex border-b border-gray-800">
       <button
         [class.bg-blue-600]="filterMode() == 'all'"
         [class.text-white]="filterMode() == 'all'"
-        [class.border-blue-500]="filterMode() == 'all'"
         [class.text-gray-400]="filterMode() != 'all'"
-        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
         (click)="setFilter('all')"
       >
         All Materials ({{ materials().length }})
@@ -100,9 +96,8 @@
       <button
         [class.bg-red-600]="filterMode() == 'critical'"
         [class.text-white]="filterMode() == 'critical'"
-        [class.border-red-500]="filterMode() == 'critical'"
         [class.text-gray-400]="filterMode() != 'critical'"
-        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
         (click)="setFilter('critical')"
       >
         Critical Materials ({{ criticalCount().length }})
@@ -110,9 +105,8 @@
       <button
         [class.bg-yellow-600]="filterMode() == 'low'"
         [class.text-white]="filterMode() == 'low'"
-        [class.border-yellow-500]="filterMode() == 'low'"
         [class.text-gray-400]="filterMode() != 'low'"
-        class="px-6 py-3 font-semibold border-b-2 border-transparent hover:text-white hover:bg-gray-800 transition-colors"
+        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
         (click)="setFilter('low')"
       >
         Low Stock ({{ lowStockCount().length }})
@@ -122,47 +116,47 @@
 
   <!-- Material List -->
   @if (isLoading()) {
-  <div class="bg-gray-900 border-2 border-gray-700 p-12 text-center">
+  <div class="bg-[#111111] rounded-xl border border-gray-800 p-12 text-center">
     <div class="text-gray-400 text-lg">Loading materials...</div>
   </div>
   } @else {
-  <div class="bg-gray-900 border-2 border-gray-700 overflow-hidden">
+  <div class="bg-[#111111] rounded-xl border border-gray-800 overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full">
-        <thead class="bg-gray-950 border-b-2 border-gray-700">
+        <thead class="bg-[#0a0a0a] border-b border-gray-800">
           <tr>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               #
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Name
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Stock
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Stock Min
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Unit
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Unit Cost
             </th>
             <th
-              class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
             >
               Actions
             </th>
@@ -170,8 +164,8 @@
         </thead>
         <tbody class="divide-y divide-gray-800">
           @for (material of getFilteredMaterials(); track material.id) {
-          <tr class="hover:bg-gray-800 transition-colors">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-semibold">
+          <tr class="hover:bg-[#0a0a0a] transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-medium">
               {{ material.id }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-white font-semibold">
@@ -180,21 +174,16 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm">
               <span
                 [class.bg-green-900]="material.stock > material.stockMin * 2"
-                [class.border-green-800]="material.stock > material.stockMin * 2"
                 [class.text-green-200]="material.stock > material.stockMin * 2"
                 [class.bg-yellow-900]="
-                  material.stock <= material.stockMin * 2 && material.stock > material.stockMin
-                "
-                [class.border-yellow-800]="
                   material.stock <= material.stockMin * 2 && material.stock > material.stockMin
                 "
                 [class.text-yellow-200]="
                   material.stock <= material.stockMin * 2 && material.stock > material.stockMin
                 "
                 [class.bg-red-900]="material.stock <= material.stockMin"
-                [class.border-red-800]="material.stock <= material.stockMin"
                 [class.text-red-200]="material.stock <= material.stockMin"
-                class="px-3 py-1 border text-xs font-bold"
+                class="px-3 py-1 text-xs font-medium rounded-full"
               >
                 {{ material.stock }}
               </span>
@@ -210,14 +199,14 @@
               <div class="flex gap-2">
                 <button
                   type="button"
-                  class="px-3 py-2 bg-yellow-600 border border-yellow-500 text-white text-xs font-semibold hover:bg-yellow-700 hover:border-yellow-600 transition-colors"
+                  class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white text-xs font-medium transition-colors"
                 >
                   Edit
                 </button>
                 <button
                   type="button"
                   (click)="onDelete(material)"
-                  class="px-3 py-2 bg-red-600 border border-red-500 text-white text-xs font-semibold hover:bg-red-700 hover:border-red-600 transition-colors"
+                  class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white text-xs font-medium transition-colors"
                 >
                   Delete
                 </button>

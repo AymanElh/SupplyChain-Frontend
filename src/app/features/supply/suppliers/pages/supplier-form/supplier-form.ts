@@ -28,7 +28,7 @@ export class SupplierForm implements OnInit{
   private initForm() {
     this.supplierForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      phone: ['', [Validators.pattern(/^[0-9+\-\s()]+$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9+\-\s()]+$/)]],
       email: ['', [Validators.email]],
       rating: ['', [Validators.min(0), Validators.max(5)]],
       leadTime: ['', [Validators.min(0)]]
@@ -68,7 +68,8 @@ export class SupplierForm implements OnInit{
 
     operation.subscribe({
       next: () => {
-        this.router.navigate(['/suppliers']);
+        this.router.navigate(['/supply/suppliers']);
+        this.isSubmitting = false;
       },
       error: () => {
         this.isSubmitting = false;
