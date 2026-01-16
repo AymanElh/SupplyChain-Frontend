@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { StatsCardComponent } from '../../../../shared/components/stats-card/stats-card.component/stats-card.component';
 
 @Component({
   selector: 'app-dashboard-content',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, StatsCardComponent],
   templateUrl: './dashboard-content.component.html',
   styleUrls: ['./dashboard-content.component.css']
 })
@@ -31,5 +32,41 @@ export class DashboardContentComponent {
     { name: 'Material 3', stock: 9 },
     { name: 'Material 4', stock: 7 },
     { name: 'Material 5', stock: 5 }
+  ];
+
+  statsCards = [
+    {
+      title: 'Total Orders',
+      value: '1,234',
+      icon: '📦',
+      iconBgColor: 'blue',
+      trend: '↑ 12% from last month',
+      trendColor: 'green'
+    },
+    {
+      title: 'Inventory Value',
+      value: '$584K',
+      icon: '💰',
+      iconBgColor: 'green',
+      trend: '↑ 8% from last month',
+      trendColor: 'green'
+    },
+    {
+      title: 'Active Suppliers',
+      value: '42',
+      icon: '🏭',
+      iconBgColor: 'purple',
+      trend: '→ No change',
+      trendColor: 'blue'
+    },
+    {
+      title: 'Pending Orders',
+      value: '28',
+      icon: '⏳',
+      iconBgColor: 'yellow',
+      trend: '↓ 3 from yesterday',
+      trendColor: 'yellow'
+    }
+    
   ];
 }

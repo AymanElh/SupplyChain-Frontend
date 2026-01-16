@@ -16,71 +16,16 @@
 
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Total Orders</p>
-          <p class="text-4xl font-bold text-white mt-2">{{ orders().length }}</p>
-        </div>
-        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">🛒</span>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 pt-3 mt-3">
-        <span class="text-gray-500 text-sm">All orders</span>
-      </div>
-    </div>
-
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Waiting</p>
-          <p class="text-4xl font-bold text-white mt-2">
-            {{ orderService.waitingOrders().length }}
-          </p>
-        </div>
-        <div class="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">⏰</span>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 pt-3 mt-3">
-        <span class="text-yellow-500 text-sm font-semibold">Pending orders</span>
-      </div>
-    </div>
-
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">In Progress</p>
-          <p class="text-4xl font-bold text-white mt-2">
-            {{ orderService.inProgressOrders().length }}
-          </p>
-        </div>
-        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">⏳</span>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 pt-3 mt-3">
-        <span class="text-blue-500 text-sm font-semibold">Active orders</span>
-      </div>
-    </div>
-
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Received</p>
-          <p class="text-4xl font-bold text-white mt-2">
-            {{ orderService.receivedOrders().length }}
-          </p>
-        </div>
-        <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-          <span class="text-2xl">✅</span>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 pt-3 mt-3">
-        <span class="text-green-500 text-sm font-semibold">Completed</span>
-      </div>
-    </div>
+    @for (card of statsCards; track $index) {
+    <app-stats-card
+      [title]="card.title"
+      [value]="card.value"
+      [icon]="card.icon"
+      [iconBgColor]="card.iconBgColor"
+      [trend]="card.trend"
+      [trendColor]="card.trendColor"
+    />
+    }
   </div>
 
   <!-- Filters Tabs -->
