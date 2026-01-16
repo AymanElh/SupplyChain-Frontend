@@ -21,9 +21,19 @@ export class KeycloakService {
   async getUserProfile() {
     try {
       this._profile = await this.keycloak.loadUserProfile();
-      console.log("Profile: ", this._profile);
+      console.log("User profile from Keycloak server: ", this._profile);
+      
+      // Create fullName by combining firstName and lastName
+      if (this._profile) {
+        const firstName = this._profile.firstName || '';
+        const lastName = this._profile.lastName || '';
+        (this._profile as any).fullName = `${firstName} ${lastName}`.trim();
+      }
+      
+      return this._profile;
     } catch (error) {
       console.error("Failed to load user profile", error);
+      return undefined;
     }
   }
 
@@ -46,7 +56,6 @@ export class KeycloakService {
   }
 
   getToken(): string | undefined {
-    console.log("Token: ", this.keycloak.token);
     return this.keycloak.token;
   }
 
@@ -64,6 +73,12 @@ export class KeycloakService {
     this.keycloak.login({
       redirectUri: window.location.origin
     })
+  }
+
+  logout() {
+    this.keycloak.logout({
+      redirectUri: window.location.origin
+    });
   }
 
   isLoggedIn(): boolean {

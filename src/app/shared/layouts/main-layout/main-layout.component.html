@@ -1,102 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Supply Chain Dashboard</title>
-  </head>
-  <body class="bg-[#0a0a0a] text-gray-100">
-    <!-- Main Container -->
-    <div class="flex h-screen overflow-hidden">
-      <!-- Sidebar -->
-      <aside class="w-64 bg-[#111111] border-r border-gray-800 flex flex-col">
-        <!-- Logo -->
-        <div class="h-16 flex items-center px-6 border-b border-gray-800">
-          <h1 class="text-xl font-bold">SupplyChainX</h1>
-        </div>
-
-        <!-- Navigation -->
-        <nav class="flex-1 px-3 py-4 space-y-1">
-          <a
-            routerLink="/dashboard"
-            class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg bg-blue-600 text-white"
-          >
-            <span class="mr-3">📊</span>
-            Dashboard
-          </a>
-          <a
-            routerLink="/supply/suppliers"
-            class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white"
-          >
-            <span class="mr-3">📦</span>
-            Suppliers
-          </a>
-          <a
-            routerLink="/supply/materials"
-            class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white"
-          >
-            <span class="mr-3">🏭</span>
-            Raw Materials
-          </a>
-          <a
-            routerLink="/supply/orders"
-            class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white"
-          >
-            <span class="mr-3">📋</span>
-            Orders
-          </a>
-          <a
-            href="#"
-            class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white"
-          >
-            <span class="mr-3">🏗️</span>
-            Production
-          </a>
-          <a
-            href="#"
-            class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white"
-          >
-            <span class="mr-3">🚚</span>
-            Deliveries
-          </a>
-        </nav>
-
-        <!-- User -->
-        <div class="p-4 border-t border-gray-800">
-          <div class="flex items-center">
-            <div
-              class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold"
-            >
-              A
-            </div>
-            <div class="ml-3">
-              <p class="text-sm font-medium">Admin User</p>
-              <p class="text-xs text-gray-500">admin@supply.com</p>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Main Content -->
-      <main class="flex-1 overflow-y-auto">
-        <!-- Header -->
-        <header
-          class="h-16 bg-[#111111] border-b border-gray-800 flex items-center justify-between px-6"
-        >
-          <div>
-            <h2 class="text-xl font-semibold">Dashboard</h2>
-            <p class="text-sm text-gray-500">Welcome back, Admin</p>
-          </div>
-          <div class="flex items-center gap-4">
-            <button class="px-4 py-2 bg-gray-800 rounded-lg text-sm hover:bg-gray-700">
-              Last 30 days
-            </button>
-            <button class="p-2 hover:bg-gray-800 rounded-lg">🔔</button>
-          </div>
-        </header>
-
-        <router-outlet></router-outlet>
-      </main>
+<!-- Main Container -->
+<div class="flex h-screen overflow-hidden bg-[#0a0a0a] text-gray-100">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-[#111111] border-r border-gray-800 flex flex-col">
+    <!-- Logo -->
+    <div class="h-16 flex items-center px-6 border-b border-gray-800">
+      <h1 class="text-xl font-bold">SupplyChainX</h1>
     </div>
-  </body>
-</html>
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-3 py-4 space-y-1">
+      @for (item of navigationItems; track $index) {
+      <a
+        routerLink="{{ item.path }}"
+        routerLinkActive="bg-blue-600 text-white"
+        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
+      >
+        <span class="mr-3">{{ item.icon }}</span>
+        {{ item.label }}
+      </a>
+      }
+    </nav>
+
+    <!-- User -->
+    <div class="p-4 border-t border-gray-800">
+      <div class="flex items-center">
+        <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold">
+          {{ getUserInitials() }}
+        </div>
+        <div class="ml-3">
+          <p class="text-sm font-medium">{{ userProfile()?.fullName || 'Guest user' }}</p>
+          <p class="text-xs text-gray-500">{{ userProfile()?.email }}</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto bg-[#0a0a0a]">
+    <!-- Header -->
+    <header
+      class="h-16 bg-[#111111] border-b border-gray-800 flex items-center justify-between px-6"
+    >
+      <div>
+        <h2 class="text-xl font-semibold">Supply Chain Management</h2>
+        <p class="text-sm text-gray-500">Welcome back, {{ userProfile()?.firstName || 'Guest' }}</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="p-2 hover:bg-gray-800 rounded-lg">🔔</button>
+        <button (click)="logout()" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Router Outlet - Your components will render here -->
+    <router-outlet></router-outlet>
+  </main>
+</div>
