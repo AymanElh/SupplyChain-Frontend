@@ -29,8 +29,8 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styleUrl: './stats-card.component.css',
 })
+
 export class StatsCardComponent {
   @Input({ required: true }) title!: string;
   @Input({ required: true }) value!: string | number;
