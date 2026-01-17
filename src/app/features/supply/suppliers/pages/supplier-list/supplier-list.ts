@@ -2,12 +2,11 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 import {SupplierService} from '../../services/supplier.service';
 import {SupplierResponse} from '../../models/supplier.model';
 import {RouterLink} from '@angular/router';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-supplier-list',
-  imports: [
-    RouterLink
-  ],
+  imports: [RouterLink, PageHeaderComponent],
   templateUrl: './supplier-list.html',
   styleUrl: './supplier-list.css',
 })

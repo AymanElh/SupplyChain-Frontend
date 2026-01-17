@@ -1,18 +1,12 @@
 <!-- Supplier Orders Page -->
 <div class="p-6">
   <!-- Header -->
-  <div class="flex justify-between items-center mb-6">
-    <div>
-      <h1 class="text-2xl font-bold text-white">Supplier Orders</h1>
-      <p class="text-sm text-gray-400">Manage orders from suppliers</p>
-    </div>
-    <button
-      [routerLink]="['/supply/orders/create']"
-      class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors"
-    >
-      + Create New Order
-    </button>
-  </div>
+  <app-page-header
+    title="Supplier Orders"
+    description="Manage orders from suppliers"
+    buttonText="+ Create New Order"
+    buttonLink="/supply/orders/create"
+  />
 
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -29,46 +23,11 @@
   </div>
 
   <!-- Filters Tabs -->
-  <div class="bg-[#111111] rounded-xl border border-gray-800 mb-6 overflow-hidden">
-    <div class="flex border-b border-gray-800">
-      <button
-        [class.bg-blue-600]="filterStatus() === 'ALL'"
-        [class.text-white]="filterStatus() === 'ALL'"
-        [class.text-gray-400]="filterStatus() !== 'ALL'"
-        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
-        (click)="filterStatus.set('ALL')"
-      >
-        All Orders ({{ orders().length }})
-      </button>
-      <button
-        [class.bg-yellow-600]="filterStatus() === OrderStatus.WAITING"
-        [class.text-white]="filterStatus() === OrderStatus.WAITING"
-        [class.text-gray-400]="filterStatus() !== OrderStatus.WAITING"
-        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
-        (click)="setFilterStatus(OrderStatus.WAITING)"
-      >
-        Waiting ({{ orderService.waitingOrders().length }})
-      </button>
-      <button
-        [class.bg-blue-500]="filterStatus() === OrderStatus.IN_PROGRESS"
-        [class.text-white]="filterStatus() === OrderStatus.IN_PROGRESS"
-        [class.text-gray-400]="filterStatus() !== OrderStatus.IN_PROGRESS"
-        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
-        (click)="setFilterStatus(OrderStatus.IN_PROGRESS)"
-      >
-        In Progress ({{ orderService.inProgressOrders().length }})
-      </button>
-      <button
-        [class.bg-green-600]="filterStatus() === OrderStatus.RECEIVED"
-        [class.text-white]="filterStatus() === OrderStatus.RECEIVED"
-        [class.text-gray-400]="filterStatus() !== OrderStatus.RECEIVED"
-        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
-        (click)="setFilterStatus(OrderStatus.RECEIVED)"
-      >
-        Received ({{ orderService.receivedOrders().length }})
-      </button>
-    </div>
-  </div>
+  <app-filter-tabs
+    [tabs]="filterTabs"
+    [activeTab]="filterStatus()"
+    (tabChange)="setFilterStatus($event)"
+  />
 
   <!-- Order List -->
   @if (isLoading()) {

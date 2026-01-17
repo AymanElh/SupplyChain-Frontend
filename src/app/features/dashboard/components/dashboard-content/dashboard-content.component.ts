@@ -6,7 +6,7 @@ import { StatsCardComponent } from '../../../../shared/components/stats-card/sta
 @Component({
   selector: 'app-dashboard-content',
   standalone: true,
-  imports: [CommonModule, RouterLink, StatsCardComponent],
+  imports: [CommonModule, StatsCardComponent],
   templateUrl: './dashboard-content.component.html',
   styleUrls: ['./dashboard-content.component.css']
 })

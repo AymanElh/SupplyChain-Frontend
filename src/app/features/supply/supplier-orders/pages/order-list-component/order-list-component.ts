@@ -4,10 +4,12 @@ import { OrderStatus, SupplierOrderResponse } from '../../models/supplier-order-
 import { DecimalPipe } from '@angular/common';
 import { RouterLink } from "@angular/router";
 import { StatsCardComponent } from '../../../../../shared/components/stats-card/stats-card.component/stats-card.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
+import { FilterTabsComponent } from '../../../../../shared/components/filter-tabs/filter-tabs.component';
 
 @Component({
   selector: 'app-order-list-component',
-  imports: [DecimalPipe, RouterLink, StatsCardComponent],
+  imports: [DecimalPipe, RouterLink, StatsCardComponent, PageHeaderComponent, FilterTabsComponent],
   templateUrl: './order-list-component.html',
   styleUrl: './order-list-component.css',
 })
@@ -22,6 +24,36 @@ export class OrderListComponent implements OnInit {
   currentPage = this.orderService.currentPage;
   totalPages = this.orderService.totalPages;
   totalElements = this.orderService.totalElements;
+
+  // Filter tabs configuration
+  get filterTabs() {
+    return [
+      {
+        label: 'All Orders',
+        value: 'ALL',
+        count: this.orders().length,
+        color: 'blue'
+      },
+      {
+        label: 'Waiting',
+        value: OrderStatus.WAITING,
+        count: this.orderService.waitingOrders().length,
+        color: 'yellow'
+      },
+      {
+        label: 'In Progress',
+        value: OrderStatus.IN_PROGRESS,
+        count: this.orderService.inProgressOrders().length,
+        color: 'blue'
+      },
+      {
+        label: 'Received',
+        value: OrderStatus.RECEIVED,
+        count: this.orderService.receivedOrders().length,
+        color: 'green'
+      }
+    ];
+  }
 
   // Stats cards configuration
   get statsCards() {
@@ -80,8 +112,8 @@ export class OrderListComponent implements OnInit {
     return this.orders().filter(order => order.status === this.filterStatus());
   }
 
-  setFilterStatus(status: OrderStatus): void {
-    this.filterStatus.set(status)
+  setFilterStatus(status: string): void {
+    this.filterStatus.set(status as OrderStatus | 'ALL');
   }
 
   protected readonly OrderStatus = OrderStatus;

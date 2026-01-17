@@ -1,13 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { RawMaterialService } from '../../services/raw-material-service';
-import { DecimalPipe } from '@angular/common';
 import { RawMaterialResponse } from '../../models/raw-material.model';
-import {RouterLink} from '@angular/router';
 import { StatsCardComponent } from '../../../../../shared/components/stats-card/stats-card.component/stats-card.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
+import { FilterTabsComponent } from '../../../../../shared/components/filter-tabs/filter-tabs.component';
 
 @Component({
   selector: 'app-material-list-component',
-  imports: [DecimalPipe, RouterLink, StatsCardComponent],
+  imports: [StatsCardComponent, PageHeaderComponent, FilterTabsComponent],
   templateUrl: './material-list-component.html',
   styleUrl: './material-list-component.css',
 })
@@ -25,6 +25,30 @@ export class MaterialListComponent {
   criticalCount = this.rawMaterialService.criticalMaterials;
   lowStockCount = this.rawMaterialService.lowStockMaterials;
   totalValue = this.rawMaterialService.totalInventoryValue;
+
+  // Filter tabs configuration
+  get filterTabs() {
+    return [
+      {
+        label: 'All Materials',
+        value: 'all',
+        count: this.materials().length,
+        color: 'blue'
+      },
+      {
+        label: 'Critical Materials',
+        value: 'critical',
+        count: this.criticalCount().length,
+        color: 'red'
+      },
+      {
+        label: 'Low Stock',
+        value: 'low',
+        count: this.lowStockCount().length,
+        color: 'yellow'
+      }
+    ];
+  }
 
   // Stats cards configuration
   get statsCards() {
@@ -89,8 +113,8 @@ export class MaterialListComponent {
     }
   }
 
-  setFilter(mode: 'all' | 'critical' | 'low'): void {
-    this.filterMode.set(mode);
+  setFilter(mode: string): void {
+    this.filterMode.set(mode as 'all' | 'critical' | 'low');
   }
 
   onDelete(material: RawMaterialResponse) {

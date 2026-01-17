@@ -1,18 +1,12 @@
 <!-- Raw Materials Page -->
 <div class="p-6">
   <!-- Header -->
-  <div class="flex justify-between items-center mb-6">
-    <div>
-      <h1 class="text-2xl font-bold text-white">Raw Materials</h1>
-      <p class="text-sm text-gray-400">Manage your inventory and stock levels</p>
-    </div>
-    <button
-      [routerLink]="['/supply/materials/create']"
-      class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors"
-    >
-      + Add New Material
-    </button>
-  </div>
+  <app-page-header
+    title="Raw Materials"
+    description="Manage your inventory and stock levels"
+    buttonText="+ Add New Material"
+    buttonLink="/supply/materials/create"
+  />
 
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -29,37 +23,7 @@
   </div>
 
   <!-- Filters Tabs -->
-  <div class="bg-[#111111] rounded-xl border border-gray-800 mb-6 overflow-hidden">
-    <div class="flex border-b border-gray-800">
-      <button
-        [class.bg-blue-600]="filterMode() == 'all'"
-        [class.text-white]="filterMode() == 'all'"
-        [class.text-gray-400]="filterMode() != 'all'"
-        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
-        (click)="setFilter('all')"
-      >
-        All Materials ({{ materials().length }})
-      </button>
-      <button
-        [class.bg-red-600]="filterMode() == 'critical'"
-        [class.text-white]="filterMode() == 'critical'"
-        [class.text-gray-400]="filterMode() != 'critical'"
-        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
-        (click)="setFilter('critical')"
-      >
-        Critical Materials ({{ criticalCount().length }})
-      </button>
-      <button
-        [class.bg-yellow-600]="filterMode() == 'low'"
-        [class.text-white]="filterMode() == 'low'"
-        [class.text-gray-400]="filterMode() != 'low'"
-        class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
-        (click)="setFilter('low')"
-      >
-        Low Stock ({{ lowStockCount().length }})
-      </button>
-    </div>
-  </div>
+  <app-filter-tabs [tabs]="filterTabs" [activeTab]="filterMode()" (tabChange)="setFilter($event)" />
 
   <!-- Material List -->
   @if (isLoading()) {
