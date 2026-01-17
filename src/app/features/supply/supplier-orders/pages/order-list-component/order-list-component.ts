@@ -6,10 +6,11 @@ import { RouterLink } from "@angular/router";
 import { StatsCardComponent } from '../../../../../shared/components/stats-card/stats-card.component/stats-card.component';
 import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 import { FilterTabsComponent } from '../../../../../shared/components/filter-tabs/filter-tabs.component';
+import { StatusBadgeComponent } from '../../../../../shared/components/status-badge/status-badge.component';
 
 @Component({
   selector: 'app-order-list-component',
-  imports: [DecimalPipe, RouterLink, StatsCardComponent, PageHeaderComponent, FilterTabsComponent],
+  imports: [DecimalPipe, RouterLink, StatsCardComponent, PageHeaderComponent, FilterTabsComponent, StatusBadgeComponent],
   templateUrl: './order-list-component.html',
   styleUrl: './order-list-component.css',
 })

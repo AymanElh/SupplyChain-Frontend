@@ -37,19 +37,7 @@
         </div>
       </div>
       <div>
-        @if (order()!.status === SupplierOrderStatus.WAITING) {
-        <span class="px-4 py-2 bg-yellow-900 text-yellow-200 text-sm font-medium rounded-full"
-          >Waiting</span
-        >
-        } @else if (order()!.status === SupplierOrderStatus.IN_PROGRESS) {
-        <span class="px-4 py-2 bg-blue-900 text-blue-200 text-sm font-medium rounded-full"
-          >In Progress</span
-        >
-        } @else if (order()!.status === SupplierOrderStatus.RECEIVED) {
-        <span class="px-4 py-2 bg-green-900 text-green-200 text-sm font-medium rounded-full"
-          >Received</span
-        >
-        }
+        <app-status-badge [status]="order()!.status" type="order" />
       </div>
     </div>
   </div>

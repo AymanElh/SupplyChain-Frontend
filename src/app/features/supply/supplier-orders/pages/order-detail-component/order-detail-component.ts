@@ -1,12 +1,13 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SupplierOrderService } from '../../services/supplier-order-service';
-import { OrderStatus, SupplierOrderResponse } from '../../models/supplier-order-model';
+import { SupplierOrderResponse, OrderStatus } from '../../models/supplier-order-model';
 import { DecimalPipe } from '@angular/common';
+import { StatusBadgeComponent } from '../../../../../shared/components/status-badge/status-badge.component';
 
 @Component({
   selector: 'app-order-detail-component',
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, StatusBadgeComponent],
   templateUrl: './order-detail-component.html',
   styleUrl: './order-detail-component.css',
 })
