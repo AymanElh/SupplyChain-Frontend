@@ -5,6 +5,7 @@ import { RawMaterialService } from '../../../raw-materials/services/raw-material
 import { SupplierOrderService } from '../../services/supplier-order-service';
 import { Router } from '@angular/router';
 import { OrderStatus } from '../../models/supplier-order-model';
+import { NotificationService } from '../../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-order-form-component',
@@ -19,6 +20,7 @@ export class OrderFormComponent implements OnInit {
   private supplierService = inject(SupplierService);
   private materialService = inject(RawMaterialService);
   private router = inject(Router);
+  private notification = inject(NotificationService);
 
   orderForm!: FormGroup;
   isSubmitting = signal<boolean>(false);
@@ -102,11 +104,17 @@ export class OrderFormComponent implements OnInit {
     this.orderService.createOrder(orderData).subscribe({
       next: (response) => {
         console.log("Order created successfully ", response);
-        this.router.navigate(['/supply/orders'])
+        this.isSubmitting.set(false);
+        this.notification.success("Order Created", "Order created successfully");
+        this.router.navigate(['/supply/orders']);
       },
       error: (error) => {
-        console.error("Error creating the order: " + error);
+        console.error("Error creating the order: ", error);
         this.isSubmitting.set(false);
+        
+        // Extract error message from HttpErrorResponse
+        const errorMessage = error.error?.message || error.message || 'Failed to create order';
+        this.notification.error("Order Creation Failed", errorMessage);
       }
     })
   }

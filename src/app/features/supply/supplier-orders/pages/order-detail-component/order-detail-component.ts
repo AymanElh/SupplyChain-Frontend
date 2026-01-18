@@ -4,6 +4,7 @@ import { SupplierOrderService } from '../../services/supplier-order-service';
 import { SupplierOrderResponse, OrderStatus } from '../../models/supplier-order-model';
 import { DecimalPipe } from '@angular/common';
 import { StatusBadgeComponent } from '../../../../../shared/components/status-badge/status-badge.component';
+import { NotificationService } from '../../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-order-detail-component',
@@ -12,9 +13,10 @@ import { StatusBadgeComponent } from '../../../../../shared/components/status-ba
   styleUrl: './order-detail-component.css',
 })
 export class OrderDetailComponent implements OnInit {
-    private route = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private orderService = inject(SupplierOrderService);
+  private notification = inject(NotificationService);
 
   order = signal<SupplierOrderResponse | null>(null);
   isLoading = signal<boolean>(true);
@@ -52,6 +54,7 @@ export class OrderDetailComponent implements OnInit {
     this.orderService.updateOrderStatus(order.id, newStatus).subscribe({
       next: (updated) => {
         this.order.set(updated);
+        this.notification.success("success", "Order status updated successfully");
       }
     });
   }
@@ -64,6 +67,9 @@ export class OrderDetailComponent implements OnInit {
       this.orderService.deleteOrder(order.id).subscribe({
         next: () => {
           this.router.navigate(['/supplier-orders']);
+        },
+        error: () => {
+          this.notification.error("error", "Failed to delete order");
         }
       });
     }

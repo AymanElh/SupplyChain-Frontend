@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SupplierService } from '../../services/supplier.service';
 import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
+import { NotificationService } from '../../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-supplier-form',
@@ -15,6 +16,7 @@ export class SupplierForm implements OnInit{
   private supplierService = inject(SupplierService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private notificationService = inject(NotificationService);
 
   supplierForm!: FormGroup;
   isEditMode = false;
@@ -50,8 +52,10 @@ export class SupplierForm implements OnInit{
       next: (supplier) => {
         this.supplierForm.patchValue(supplier);
       },
-      error: () => {
-        this.router.navigate(['/suppliers']);
+      error: (error) => {
+        const errorMessage = error.error?.message || error.message || 'Failed to load supplier';
+        this.notificationService.error('Load Failed', errorMessage);
+        this.router.navigate(['/supply/suppliers']);
       }
     })
   }
@@ -59,6 +63,7 @@ export class SupplierForm implements OnInit{
   onSubmit() {
     if (this.supplierForm.invalid) {
       this.supplierForm.markAllAsTouched();
+      this.notificationService.warning('Invalid Form', 'Please fill in all required fields correctly');
       return;
     }
 
@@ -69,11 +74,15 @@ export class SupplierForm implements OnInit{
 
     operation.subscribe({
       next: () => {
+        this.isSubmitting = false;
+        const action = this.isEditMode ? 'updated' : 'created';
+        this.notificationService.success('Success', `Supplier ${action} successfully`);
         this.router.navigate(['/supply/suppliers']);
-        this.isSubmitting = false;
       },
-      error: () => {
+      error: (error) => {
         this.isSubmitting = false;
+        const errorMessage = error.error?.message || error.message || 'Failed to save supplier';
+        this.notificationService.error('Save Failed', errorMessage);
       }
     })
   }

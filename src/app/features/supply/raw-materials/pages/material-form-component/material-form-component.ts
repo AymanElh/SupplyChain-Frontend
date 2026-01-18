@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {RawMaterialService} from '../../services/raw-material-service';
 import {SupplierService} from '../../../suppliers/services/supplier.service';
 import {Router, RouterLink} from '@angular/router';
+import { NotificationService } from '../../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-material-form-component',
@@ -18,6 +19,7 @@ export class MaterialFormComponent implements OnInit{
   private materialService = inject(RawMaterialService);
   private supplierService = inject(SupplierService);
   private router = inject(Router);
+  private notification = inject(NotificationService);
 
   materialForm!: FormGroup
   isEditMode = false;
@@ -63,6 +65,10 @@ export class MaterialFormComponent implements OnInit{
       next: () => {
         this.isSubmitting = false;
         this.router.navigate(['/supply/materials']);
+        this.notification.success("success", "Material saved successfully")
+      },
+      error: () => {
+        this.isSubmitting = false;
       }
     })
 
