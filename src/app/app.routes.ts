@@ -28,6 +28,10 @@ export const routes: Routes = [
       {
         path: 'supply/orders',
         loadChildren: () => import('./features/supply/supplier-orders/supplier-orders-routes')
+      },
+      {
+        path: 'production/products',
+        loadChildren: () => import('./features/production/products/product.routes')
       }
     ]
   }

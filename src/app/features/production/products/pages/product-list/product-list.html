@@ -1,0 +1,35 @@
+<!-- Products Page -->
+<div class="p-6">
+    <!-- Header -->
+    <app-page-header title="Products" description="Manage your products" buttonText="+ Add New Product"
+        buttonLink="/production/products/create" />
+
+    <!-- Products Table -->
+    <app-data-table [columns]="columns" [data]="products()" [actions]="actions" [loading]="isLoading()"
+        loadingMessage="Loading products..." emptyMessage="No products found. Add your first product to get started."
+        emptyIcon="📦" [trackBy]="trackByProduct" />
+
+    <!-- Pagination -->
+    @if (totalPages() > 0) {
+    <div class="flex justify-between items-center mt-6 bg-[#111111] rounded-xl border border-gray-800 px-6 py-4">
+        <div class="text-sm text-gray-400 font-medium">
+            Page {{ currentPage() + 1 }} of {{ totalPages() }}
+        </div>
+
+        <div class="flex gap-3">
+            <button (click)="previousPage()" [disabled]="currentPage() === 0" [class.opacity-50]="currentPage() === 0"
+                [class.cursor-not-allowed]="currentPage() === 0"
+                class="px-5 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 font-medium transition-colors disabled:hover:bg-gray-800">
+                ← Previous
+            </button>
+
+            <button (click)="nextPage()" [disabled]="currentPage() >= totalPages() - 1"
+                [class.opacity-50]="currentPage() >= totalPages() - 1"
+                [class.cursor-not-allowed]="currentPage() >= totalPages() - 1"
+                class="px-5 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 font-medium transition-colors disabled:hover:bg-gray-800">
+                Next →
+            </button>
+        </div>
+    </div>
+    }
+</div>

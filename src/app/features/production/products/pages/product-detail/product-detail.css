@@ -1,0 +1,105 @@
+.detail-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.detail-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.detail-header {
+    padding: 1.5rem 2rem;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.detail-value {
+    font-size: 1rem;
+    color: #111827;
+    font-weight: 500;
+}
+
+.badge-yes {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.badge-no {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: #fee2e2;
+    color: #991b1b;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 1rem;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: #6b7280;
+    font-size: 1.125rem;
+}
