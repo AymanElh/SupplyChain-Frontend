@@ -24,7 +24,7 @@ export class MainLayoutComponent implements OnInit {
   constructor(
     private keycloakService: KeycloakService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadUserProfile();
@@ -39,7 +39,7 @@ export class MainLayoutComponent implements OnInit {
     { label: 'Suppliers', icon: '🏭', path: '/supply/suppliers' },
     { label: 'Materials', icon: '📋', path: '/supply/materials' },
     { label: 'Orders', icon: '📦', path: '/supply/orders' },
-    { label: 'Production', icon: '🏗️', path: '/production' },
+    { label: 'Products', icon: '🏗️', path: '/production/products' },
     { label: 'Deliveries', icon: '🚚', path: '/deliveries' }
   ];
 

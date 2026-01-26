@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
-import { ProductRequest, ProductResponse } from '../models/product.model';
+import { BomItem, BomRequest, ProductBom, ProductDetailResponse, ProductRequest, ProductResponse } from '../models/product.model';
 import { Observable } from 'rxjs';
 import { PageResponse } from '../../../../core/models/page-response.model';
 
@@ -37,8 +37,8 @@ export class ProductApiService {
      * Get Product by id
      * @param id
      */
-    getById(id: number): Observable<ProductResponse> {
-        return this.http.get<ProductResponse>(`${this.apiUrl}/${id}`);
+    getById(id: number): Observable<ProductDetailResponse> {
+        return this.http.get<ProductDetailResponse>(`${this.apiUrl}/${id}`);
     }
 
     /**
@@ -65,5 +65,37 @@ export class ProductApiService {
      */
     delete(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
+
+    /**
+     * Get BOM for a product
+     * GET /products/{productId}/bom
+     * Returns an array of BillOfMaterialResponseDTO
+     * @param productId 
+     * @returns 
+     */
+    getBom(productId: number): Observable<BomItem[]> {
+        return this.http.get<BomItem[]>(`${this.apiUrl}/${productId}/bills`);
+    }
+
+    /**
+     * Save BOM for a product
+     * POST /products/{productId}/bom
+     * @param productId 
+     * @param bom 
+     * @returns 
+     */
+    saveBom(productId: number, bom: BomRequest): Observable<ProductBom> {
+        return this.http.post<ProductBom>(`${this.apiUrl}/${productId}/bills`, bom);
+    }
+
+    /**
+     * Delete BOM for a product
+     * DELETE /products/{productId}/bom
+     * @param productId 
+     * @returns 
+     */
+    deleteBom(productId: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${productId}/bills`);
     }
 }
