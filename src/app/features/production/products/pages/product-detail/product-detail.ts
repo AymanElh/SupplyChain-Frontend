@@ -1,13 +1,12 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
-import { ProductResponse } from '../../models/product.model';
-import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
+import {ProductDetailResponse, ProductResponse} from '../../models/product.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-product-detail',
-    imports: [PageHeaderComponent, CommonModule, RouterLink],
+    imports: [CommonModule, RouterLink],
     templateUrl: './product-detail.html',
     styleUrl: './product-detail.css',
 })
@@ -16,8 +15,17 @@ export class ProductDetail implements OnInit {
     private router: Router = inject(Router);
     private productService: ProductService = inject(ProductService);
 
-    product = signal<ProductResponse | null>(null);
+    product = signal<ProductDetailResponse | null>(null);
     isLoading = signal<boolean>(true);
+    productId = signal<number>(0);
+    isBomLoading = signal<boolean>(false);
+
+    currentBom = this.productService.currentBom;
+
+    hasBomData = computed(() => {
+        const bom = this.currentBom();
+        return bom !== null && bom.items && bom.items.length > 0;
+    });
 
     ngOnInit(): void {
         const id = this.route.snapshot.paramMap.get('id');
@@ -32,6 +40,11 @@ export class ProductDetail implements OnInit {
             next: (product) => {
                 this.product.set(product);
                 this.isLoading.set(false);
+                if (product.hasBom) {
+                    this.loadBom(product.id);
+                } else {
+                    this.productService.currentBom.set(null);
+                }
             },
             error: (error) => {
                 console.error('Error loading product:', error);
@@ -39,6 +52,20 @@ export class ProductDetail implements OnInit {
                 this.router.navigate(['/production/products']);
             }
         });
+    }
+
+    loadBom(productId: number): void {
+        this.isBomLoading.set(true);
+        this.productService.loadBom(productId).subscribe({
+            next: () => {
+                console.log("Bom loaded successfully: ", this.productService.currentBom());
+                this.isBomLoading.set(false);
+            },
+            error: (error) => {
+                console.error('Error loading BOM:', error);
+                this.isBomLoading.set(false);
+            }
+        })
     }
 
     onEdit(): void {

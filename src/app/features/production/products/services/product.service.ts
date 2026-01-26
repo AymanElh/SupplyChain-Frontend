@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { ProductApiService } from './product-api.service';
 import { Observable, tap } from 'rxjs';
-import { BomRequest, ProductBom, ProductRequest, ProductResponse } from '../models/product.model';
+import { BomItem, BomRequest, ProductBom, ProductRequest, ProductResponse } from '../models/product.model';
 
 @Injectable({
     providedIn: 'root',
@@ -71,7 +71,7 @@ export class ProductService {
         );
     }
 
-    loadBom(productId: number) {
+    loadBom(productId: number): Observable<BomItem[]> {
         return this.api.getBom(productId).pipe(
             tap({
                 next: (bomItems) => {
