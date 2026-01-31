@@ -40,7 +40,7 @@ export class MainLayoutComponent implements OnInit {
     { label: 'Materials', icon: '📋', path: '/supply/materials' },
     { label: 'Orders', icon: '📦', path: '/supply/orders' },
     { label: 'Products', icon: '🏗️', path: '/production/products' },
-    { label: 'Deliveries', icon: '🚚', path: '/deliveries' }
+    { label: 'Customers', icon: '🚚', path: '/delivery/customers' }
   ];
 
   private async loadUserProfile(): Promise<void> {

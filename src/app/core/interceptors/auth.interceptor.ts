@@ -22,6 +22,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                         Authorization: `Bearer ${token}`
                     }
                 });
+                console.log("✅ Token added to request headers", req.headers.get('Authorization'));
             } else {
                 console.warn("⚠️ No token available - user might not be authenticated!");
             }
