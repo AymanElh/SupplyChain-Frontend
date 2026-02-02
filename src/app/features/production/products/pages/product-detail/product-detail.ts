@@ -3,10 +3,11 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import {ProductDetailResponse, ProductResponse} from '../../models/product.model';
 import { CommonModule } from '@angular/common';
+import { BomFormComponent } from '../../components/bom-form/bom-form.component';
 
 @Component({
     selector: 'app-product-detail',
-    imports: [CommonModule, RouterLink],
+    imports: [CommonModule, RouterLink, BomFormComponent],
     templateUrl: './product-detail.html',
     styleUrl: './product-detail.css',
 })
@@ -18,6 +19,7 @@ export class ProductDetail implements OnInit {
     product = signal<ProductDetailResponse | null>(null);
     isLoading = signal<boolean>(true);
     productId = signal<number>(0);
+    showBomForm = signal<boolean>(false);
     isBomLoading = signal<boolean>(false);
 
     currentBom = this.productService.currentBom;
@@ -25,6 +27,11 @@ export class ProductDetail implements OnInit {
     hasBomData = computed(() => {
         const bom = this.currentBom();
         return bom !== null && bom.items && bom.items.length > 0;
+    });
+
+    existingMaterialIds = computed(() => {
+        const bom = this.currentBom();
+        return bom?.items?.map(item => item.materialId) || [];
     });
 
     ngOnInit(): void {
@@ -85,5 +92,25 @@ export class ProductDetail implements OnInit {
                 }
             });
         }
+    }
+
+    // BOM Management Methods
+    onShowBomForm(): void {
+        this.showBomForm.set(true);
+    }
+
+    onHideBomForm(): void {
+        this.showBomForm.set(false);
+    }
+
+    onBomSubmitted(): void {
+        this.showBomForm.set(false);
+        // Reload BOM data
+        const productId = this.product()?.id;
+        if (productId) {
+            this.loadBom(productId);
+        }
+        // Update product hasBom flag
+        this.product.update(p => p ? { ...p, hasBom: true } : p);
     }
 }

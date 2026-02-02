@@ -123,6 +123,10 @@ export class OrderFormComponent implements OnInit {
     this.items.push(this.createItemFormGroup());
   }
 
+  removeItem(index: number) {
+    this.items.removeAt(index);
+  }
+
   calculateSubTotal(index: number): number {
     const item = this.items.at(index);
     const quantity = item?.get('quantity')?.value || 0;

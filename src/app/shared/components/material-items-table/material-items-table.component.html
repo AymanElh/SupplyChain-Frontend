@@ -1,0 +1,144 @@
+<!-- Material Items Table Component -->
+@if (hasItems()) {
+  <div class="overflow-x-auto mb-6">
+    <table class="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg overflow-hidden">
+      <thead class="bg-black border-b border-gray-800">
+        <tr>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">#</th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+            Material *
+          </th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+            Quantity *
+          </th>
+          @if (!showUnitPriceInput) {
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">Unit</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+              Unit Cost ($)
+            </th>
+          }
+          @if (showUnitPriceInput) {
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+              Unit Price ($) *
+            </th>
+          }
+          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+            Subtotal
+          </th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-800">
+        @for (item of items.controls; track $index; let i = $index) {
+          <tr [formGroup]="$any(item)" class="hover:bg-gray-900 transition-colors">
+            <td class="px-4 py-3 text-sm text-gray-400">{{ $index + 1 }}</td>
+
+            <!-- Material Selection -->
+            <td class="px-4 py-3">
+              <select
+                class="px-3 py-2 bg-gray-900 border rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                [class.border-gray-700]="!isItemFieldInvalid(i, materialIdFieldName)"
+                [class.border-red-600]="isItemFieldInvalid(i, materialIdFieldName)"
+                [formControlName]="materialIdFieldName"
+              >
+                <option value="" class="text-gray-400">Select material</option>
+                @for (material of materials(); track material.id) {
+                  @if (!isMaterialExcluded(material.id)) {
+                    <option [value]="material.id">{{ material.name }}</option>
+                  }
+                }
+              </select>
+              @if (isItemFieldInvalid(i, materialIdFieldName)) {
+                <div class="text-red-400 text-xs mt-1">
+                  {{ getItemFieldError(i, materialIdFieldName) }}
+                </div>
+              }
+            </td>
+
+            <!-- Quantity Input -->
+            <td class="px-4 py-3">
+              <input
+                type="number"
+                class="w-24 px-3 py-2 bg-gray-900 border rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                [class.border-gray-700]="!isItemFieldInvalid(i, 'quantity')"
+                [class.border-red-600]="isItemFieldInvalid(i, 'quantity')"
+                min="1"
+                formControlName="quantity"
+              />
+              @if (isItemFieldInvalid(i, 'quantity')) {
+                <div class="text-red-400 text-xs mt-1">
+                  {{ getItemFieldError(i, 'quantity') }}
+                </div>
+              }
+            </td>
+
+            <!-- Unit (BOM mode only) -->
+            @if (!showUnitPriceInput) {
+              <td class="px-4 py-3 text-sm text-gray-300">
+                {{ getMaterialUnit(i) || '-' }}
+              </td>
+              <td class="px-4 py-3 text-sm text-gray-300">
+                ${{ getMaterialUnitCost(i) | number: '1.2-2' }}
+              </td>
+            }
+
+            <!-- Unit Price Input (Order mode only) -->
+            @if (showUnitPriceInput) {
+              <td class="px-4 py-3">
+                <input
+                  type="number"
+                  class="w-28 px-3 py-2 bg-gray-900 border rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  [class.border-gray-700]="!isItemFieldInvalid(i, 'unitPrice')"
+                  [class.border-red-600]="isItemFieldInvalid(i, 'unitPrice')"
+                  min="0"
+                  step="0.01"
+                  formControlName="unitPrice"
+                />
+                @if (isItemFieldInvalid(i, 'unitPrice')) {
+                  <div class="text-red-400 text-xs mt-1">
+                    {{ getItemFieldError(i, 'unitPrice') }}
+                  </div>
+                }
+              </td>
+            }
+
+            <!-- Subtotal (Calculated) -->
+            <td class="px-4 py-3 text-sm text-white font-bold">
+              ${{ calculateSubTotal($index) | number: '1.2-2' }}
+            </td>
+
+            <!-- Remove Button -->
+            <td class="px-4 py-3">
+              <button
+                type="button"
+                (click)="onRemoveItem($index)"
+                class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-white text-xs font-medium transition-colors"
+                [disabled]="items.length === 1"
+                [class.opacity-50]="items.length === 1"
+                [class.cursor-not-allowed]="items.length === 1"
+              >
+                Remove
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+
+      <!-- Total Footer -->
+      <tfoot class="bg-black border-t border-gray-800">
+        <tr>
+          <td [attr.colspan]="showUnitPriceInput ? 4 : 5" class="px-4 py-4 text-right">
+            <p class="text-xs text-gray-500 mb-1">{{ totalLabel }}:</p>
+          </td>
+          <td colspan="2" class="px-4 py-4">
+            <p class="text-2xl font-bold text-green-400">${{ totalCost() | number: '1.2-2' }}</p>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+} @else {
+  <div class="text-center py-8 text-gray-400">
+    <p>No items added yet. Click "{{ addButtonText }}" to get started.</p>
+  </div>
+}
