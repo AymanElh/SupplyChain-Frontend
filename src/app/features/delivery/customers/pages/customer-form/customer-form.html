@@ -1,0 +1,192 @@
+<!-- Customer Form Page -->
+<div class="p-6 max-w-4xl mx-auto">
+  <!-- Header -->
+  <app-page-header
+    [title]="isEditMode() ? 'Edit Customer' : 'Add New Customer'"
+    [description]="isEditMode() ? 'Update customer information' : 'Create a new delivery customer'"
+    buttonText="← Back"
+    buttonLink="../"
+    buttonClass="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700"
+  />
+
+  <!-- Form Container -->
+  <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-8 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Customer Fields -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="customer-name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            Customer Name <span class="text-rose-500">*</span>
+          </label>
+          <input
+            id="customer-name"
+            type="text"
+            formControlName="name"
+            placeholder="Enter customer name"
+            [class.border-slate-200]="!isFieldInvalid('name')"
+            [class.dark:border-slate-700]="!isFieldInvalid('name')"
+            [class.border-rose-500]="isFieldInvalid('name')"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+          />
+          @if (isFieldInvalid('name')) {
+            <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('name') }}</div>
+          }
+        </div>
+
+        <div>
+          <label for="customer-phone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            Phone <span class="text-rose-500">*</span>
+          </label>
+          <input
+            id="customer-phone"
+            type="text"
+            formControlName="phone"
+            placeholder="06XXXXXXXX"
+            [class.border-slate-200]="!isFieldInvalid('phone')"
+            [class.dark:border-slate-700]="!isFieldInvalid('phone')"
+            [class.border-rose-500]="isFieldInvalid('phone')"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+          />
+          @if (isFieldInvalid('phone')) {
+            <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('phone') }}</div>
+          }
+        </div>
+
+        <div class="md:col-span-2">
+          <label for="customer-email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            Email
+          </label>
+          <input
+            id="customer-email"
+            type="email"
+            formControlName="email"
+            placeholder="customer@example.com"
+            [class.border-slate-200]="!isFieldInvalid('email')"
+            [class.dark:border-slate-700]="!isFieldInvalid('email')"
+            [class.border-rose-500]="isFieldInvalid('email')"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+          />
+          @if (isFieldInvalid('email')) {
+            <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('email') }}</div>
+          }
+        </div>
+      </div>
+
+      <!-- Addresses -->
+      <div class="border-t border-slate-100 dark:border-slate-800 pt-6">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h3 class="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Shipping Addresses</h3>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500">At least one address is used for order delivery</p>
+          </div>
+          <button
+            type="button"
+            (click)="addAddress()"
+            class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
+          >
+            + Add Address
+          </button>
+        </div>
+
+        <div formArrayName="addresses" class="space-y-4">
+          @for (group of addresses.controls; track $index; let i = $index) {
+            <div [formGroupName]="i" class="p-4 rounded-lg bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Address {{ i + 1 }}</span>
+                @if (addresses.length > 1) {
+                  <button
+                    type="button"
+                    (click)="removeAddress(i)"
+                    class="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors"
+                  >
+                    Remove
+                  </button>
+                }
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Street *</label>
+                  <input
+                    type="text"
+                    formControlName="street"
+                    placeholder="Street and number"
+                    [class.border-rose-500]="isAddressFieldInvalid(i, 'street')"
+                    [class.border-slate-200]="!isAddressFieldInvalid(i, 'street')"
+                    [class.dark:border-slate-700]="!isAddressFieldInvalid(i, 'street')"
+                    class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">City *</label>
+                  <input
+                    type="text"
+                    formControlName="city"
+                    placeholder="City"
+                    [class.border-rose-500]="isAddressFieldInvalid(i, 'city')"
+                    [class.border-slate-200]="!isAddressFieldInvalid(i, 'city')"
+                    [class.dark:border-slate-700]="!isAddressFieldInvalid(i, 'city')"
+                    class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Region *</label>
+                  <input
+                    type="text"
+                    formControlName="region"
+                    placeholder="Region"
+                    [class.border-rose-500]="isAddressFieldInvalid(i, 'region')"
+                    [class.border-slate-200]="!isAddressFieldInvalid(i, 'region')"
+                    [class.dark:border-slate-700]="!isAddressFieldInvalid(i, 'region')"
+                    class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Postal Code *</label>
+                  <input
+                    type="text"
+                    formControlName="postalCode"
+                    placeholder="Postal code"
+                    [class.border-rose-500]="isAddressFieldInvalid(i, 'postalCode')"
+                    [class.border-slate-200]="!isAddressFieldInvalid(i, 'postalCode')"
+                    [class.dark:border-slate-700]="!isAddressFieldInvalid(i, 'postalCode')"
+                    class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+                  />
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Country *</label>
+                  <input
+                    type="text"
+                    formControlName="country"
+                    placeholder="Country"
+                    [class.border-rose-500]="isAddressFieldInvalid(i, 'country')"
+                    [class.border-slate-200]="!isAddressFieldInvalid(i, 'country')"
+                    [class.dark:border-slate-700]="!isAddressFieldInvalid(i, 'country')"
+                    class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-6">
+        <button
+          type="button"
+          routerLink="../"
+          class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="customerForm.invalid || isSubmitting()"
+          class="px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+        >
+          {{ isSubmitting() ? 'Saving...' : isEditMode() ? 'Update Customer' : 'Create Customer' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

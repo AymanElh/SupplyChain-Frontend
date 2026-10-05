@@ -1,0 +1,158 @@
+<!-- Customer Detail Page -->
+<div class="p-6 max-w-5xl mx-auto">
+  <app-page-header
+    title="Customer Details"
+    description="Contact information and shipping addresses"
+    buttonText="← Back"
+    buttonLink="../"
+    buttonClass="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700"
+  />
+
+  @if (isLoading()) {
+    <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-12 text-center shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div class="text-slate-500 dark:text-slate-400 text-sm font-medium">Loading customer...</div>
+    </div>
+  } @else if (customer(); as current) {
+    <!-- Info + Actions -->
+    <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-6 mb-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">{{ current.name }}</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ current.email || 'No email' }} • {{ current.phone }}</p>
+          @if (current.createdAt) {
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Customer since {{ current.createdAt | date: 'mediumDate' }}</p>
+          }
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <button
+            type="button"
+            *appHasRole="UserRole.GESTIONNAIRE_COMMERCIAL"
+            [routerLink]="['/delivery/customers', current.id, 'edit']"
+            class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            *appHasRole="UserRole.GESTIONNAIRE_COMMERCIAL"
+            (click)="onDelete()"
+            class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 rounded-lg text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 text-xs font-semibold transition-colors"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mt-4">
+        <a
+          [routerLink]="['/delivery/customer-orders']"
+          [queryParams]="{ customerId: current.id }"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors"
+        >
+          <span>View Customer Orders →</span>
+        </a>
+        <a
+          [routerLink]="['/delivery/deliveries']"
+          [queryParams]="{ customerId: current.id }"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors"
+        >
+          <span>View Deliveries →</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Addresses -->
+    <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">Shipping Addresses</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ current.addresses.length }} address(es) on file</p>
+        </div>
+        <button
+          type="button"
+          *appHasRole="UserRole.GESTIONNAIRE_COMMERCIAL"
+          (click)="showAddressForm.set(!showAddressForm())"
+          class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors shadow-xs"
+        >
+          {{ showAddressForm() ? 'Cancel' : '+ Add Address' }}
+        </button>
+      </div>
+
+      @if (showAddressForm()) {
+        <form [formGroup]="addressForm" (ngSubmit)="onAddAddress()" class="mb-4 p-4 rounded-lg bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Street *</label>
+              <input
+                type="text"
+                formControlName="street"
+                placeholder="Street and number"
+                class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">City *</label>
+              <input
+                type="text"
+                formControlName="city"
+                placeholder="City"
+                class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Region *</label>
+              <input
+                type="text"
+                formControlName="region"
+                placeholder="Region"
+                class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Postal Code *</label>
+              <input
+                type="text"
+                formControlName="postalCode"
+                placeholder="Postal code"
+                class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Country *</label>
+              <input
+                type="text"
+                formControlName="country"
+                placeholder="Country"
+                class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+              />
+            </div>
+          </div>
+          <div class="flex justify-end mt-4">
+            <button
+              type="submit"
+              [disabled]="addressForm.invalid || isAddingAddress()"
+              class="px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+            >
+              {{ isAddingAddress() ? 'Saving...' : 'Save Address' }}
+            </button>
+          </div>
+        </form>
+      }
+
+      @if (current.addresses.length === 0) {
+        <p class="text-xs text-slate-500 dark:text-slate-400 py-4 text-center">No addresses yet. Add the first shipping address above.</p>
+      } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          @for (address of current.addresses; track address.id) {
+            <div class="p-4 rounded-lg bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60">
+              <p class="text-xs font-semibold text-slate-900 dark:text-slate-100">{{ address.street }}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ address.city }}, {{ address.region }} {{ address.postalCode }}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">{{ address.country }}</p>
+              <p class="text-[10px] font-mono text-slate-400 dark:text-slate-500 mt-1.5">Address #{{ address.id }}</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
