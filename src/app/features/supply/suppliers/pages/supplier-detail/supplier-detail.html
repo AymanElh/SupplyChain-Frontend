@@ -1,14 +1,14 @@
 <!-- Supplier Detail Page -->
-<div class="p-6">
+<div class="p-6 max-w-5xl mx-auto">
   <!-- Header -->
   <div class="flex justify-between items-center mb-6">
     <div>
-      <h1 class="text-2xl font-bold text-white">Supplier Details</h1>
-      <p class="text-sm text-gray-400">View supplier information and materials</p>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Supplier Details</h1>
+      <p class="text-sm text-slate-500 dark:text-slate-400">View supplier information and catalog materials</p>
     </div>
     <button
       routerLink="../"
-      class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 font-medium transition-colors"
+      class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
     >
       ← Back
     </button>
@@ -17,25 +17,24 @@
   <div>
     <!-- Loading State -->
     @if (isLoading()) {
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-12 text-center">
-      <div class="text-gray-400 text-lg mb-2">Loading supplier details...</div>
-      <div class="text-gray-500 text-sm">Please wait</div>
+    <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-12 text-center shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div class="text-slate-500 dark:text-slate-400 text-sm font-medium">Loading supplier details...</div>
     </div>
     }
 
     <!-- Not Found State -->
     @else if (notFound()) {
-    <div class="bg-red-900 border border-red-800 rounded-xl p-8">
+    <div class="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl p-8">
       <div class="flex items-start gap-4">
-        <div class="text-4xl">⚠️</div>
+        <div class="text-3xl">⚠️</div>
         <div class="flex-1">
-          <h4 class="text-xl font-bold text-white mb-2">404 - Supplier Not Found</h4>
-          <p class="text-red-200 mb-4">
+          <h4 class="text-lg font-bold text-rose-900 dark:text-rose-100 mb-1">Supplier Not Found</h4>
+          <p class="text-sm text-rose-700 dark:text-rose-300 mb-4">
             The supplier you're looking for doesn't exist or has been removed.
           </p>
           <button
             routerLink="../"
-            class="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg text-white font-medium transition-colors"
+            class="px-4 py-2 bg-rose-600 hover:bg-rose-700 rounded-lg text-white text-xs font-semibold transition-colors shadow-xs"
           >
             ← Back to Suppliers List
           </button>
@@ -47,21 +46,21 @@
     <!-- Supplier Details -->
     @else if (supplier()) {
     <!-- Supplier Information Card -->
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6 mb-6">
+    <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-6 mb-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
       <div class="flex justify-between items-start mb-6">
         <div>
-          <h3 class="text-2xl font-bold text-white mb-2">{{ supplier()?.name }}</h3>
-          <p class="text-gray-400">Supplier Information</p>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">{{ supplier()?.name }}</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Supplier Profile & Performance</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex gap-2">
           <button
-            class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-colors"
+            class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
             (click)="onEdit()"
           >
             Edit
           </button>
           <button
-            class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white font-medium transition-colors"
+            class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-300 rounded-lg text-xs font-semibold transition-colors border border-rose-200 dark:border-rose-900/60"
             (click)="onDelete()"
           >
             Delete
@@ -70,40 +69,40 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-4">
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Email</p>
-          <p class="text-white font-semibold">{{ supplier()?.email }}</p>
+        <div class="bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 rounded-lg p-4">
+          <p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Email</p>
+          <p class="text-slate-900 dark:text-slate-100 font-semibold text-sm">{{ supplier()?.email || 'N/A' }}</p>
         </div>
-        <div class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-4">
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Phone</p>
-          <p class="text-white font-semibold">{{ supplier()?.phone }}</p>
+        <div class="bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 rounded-lg p-4">
+          <p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Phone</p>
+          <p class="text-slate-900 dark:text-slate-100 font-semibold text-sm">{{ supplier()?.phone || 'N/A' }}</p>
         </div>
-        <div class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-4">
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Rating</p>
-          <p class="text-white font-semibold">
-            <span class="px-3 py-1 bg-yellow-900 text-yellow-200 text-xs font-medium rounded-full">
-              ⭐ {{ supplier()?.rating }}
+        <div class="bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 rounded-lg p-4">
+          <p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Rating</p>
+          <p class="text-slate-900 dark:text-slate-100 font-semibold text-sm">
+            <span class="px-2.5 py-0.5 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 text-xs font-semibold rounded-full inline-block">
+              ★ {{ supplier()?.rating }}
             </span>
           </p>
         </div>
-        <div class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-4">
-          <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Lead Time</p>
-          <p class="text-white font-semibold">{{ supplier()?.leadTime }} days</p>
+        <div class="bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 rounded-lg p-4">
+          <p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Lead Time</p>
+          <p class="text-slate-900 dark:text-slate-100 font-semibold text-sm">{{ supplier()?.leadTime }} days</p>
         </div>
       </div>
     </div>
 
     <!-- Supplier Materials -->
     @if (supplier()!.materials && supplier()!.materials!.length > 0) {
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-6">
-      <h3 class="text-xl font-bold text-white mb-6">Supplier Materials</h3>
+    <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight mb-4">Supplied Raw Materials</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @for (material of supplier()?.materials; track material.id) {
         <div
-          class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-4 hover:border-gray-700 hover:bg-gray-900 transition-colors"
+          class="bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 rounded-lg p-4 hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
         >
-          <p class="text-white font-semibold mb-2">{{ material.name }}</p>
-          <span class="px-3 py-1 bg-blue-900 text-blue-200 text-xs font-medium rounded-full">
+          <p class="text-slate-900 dark:text-slate-100 font-semibold text-sm mb-2">{{ material.name }}</p>
+          <span class="px-2.5 py-0.5 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200/70 dark:border-blue-800/60 text-xs font-semibold rounded-full inline-block">
             Stock: {{ material.stock }}
           </span>
         </div>
