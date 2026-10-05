@@ -56,6 +56,14 @@ export const routes: Routes = [
       {
         path: 'delivery/deliveries',
         loadChildren: () => import('./features/delivery/deliveries/delivery.routes').then(m => m.default)
+      },
+      {
+        path: 'admin/users',
+        loadChildren: () => import('./features/admin/users/user.routes').then(m => m.default)
+      },
+      {
+        path: 'admin/roles',
+        loadChildren: () => import('./features/admin/roles/role.routes').then(m => m.default)
       }
     ]
   }

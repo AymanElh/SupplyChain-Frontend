@@ -118,6 +118,21 @@ export class MainLayoutComponent implements OnInit {
           iconType: 'materials'
         }
       ]
+    },
+    {
+      label: 'Administration',
+      items: [
+        {
+          label: 'Users',
+          path: '/admin/users',
+          iconType: 'suppliers'
+        },
+        {
+          label: 'Roles',
+          path: '/admin/roles',
+          iconType: 'dashboard'
+        }
+      ]
     }
   ];
 

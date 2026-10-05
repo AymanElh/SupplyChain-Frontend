@@ -1,0 +1,22 @@
+<!-- Users Page -->
+<div class="p-6">
+  <!-- Header -->
+  <app-page-header
+    title="Users"
+    description="Manage system users and their access roles"
+    buttonText="+ Add New User"
+    buttonLink="/admin/users/create"
+  />
+
+  <!-- Users Table -->
+  <app-data-table
+    [columns]="columns"
+    [data]="users()"
+    [actions]="actions"
+    [loading]="isLoading()"
+    loadingMessage="Loading users..."
+    emptyMessage="No users found. Add your first user to get started."
+    emptyIcon="👥"
+    [trackBy]="trackByUser"
+  />
+</div>

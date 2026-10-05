@@ -1,0 +1,42 @@
+<!-- Roles Page -->
+<div class="p-6">
+  <!-- Header -->
+  <app-page-header
+    title="Roles"
+    description="Access roles enforced across the API"
+    buttonText="+ New Role"
+    buttonLink="/admin/roles/create"
+  />
+
+  <!-- Quick create -->
+  <div class="flex flex-col sm:flex-row gap-3 mb-6 bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 px-4 py-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <input
+      type="text"
+      [ngModel]="roleName()"
+      (ngModelChange)="roleName.set($event)"
+      (keyup.enter)="onCreateQuick()"
+      placeholder="ROLE_NAME (e.g. MAGASINIER)"
+      class="flex-1 px-4 py-2 text-sm uppercase bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 transition-all"
+    />
+    <button
+      type="button"
+      (click)="onCreateQuick()"
+      [disabled]="!roleName().trim()"
+      class="px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors disabled:opacity-40 shadow-xs shrink-0"
+    >
+      Quick Add
+    </button>
+  </div>
+
+  <!-- Roles Table -->
+  <app-data-table
+    [columns]="columns"
+    [data]="roles()"
+    [actions]="actions"
+    [loading]="isLoading()"
+    loadingMessage="Loading roles..."
+    emptyMessage="No roles defined."
+    emptyIcon="🔑"
+    [trackBy]="trackByRole"
+  />
+</div>
