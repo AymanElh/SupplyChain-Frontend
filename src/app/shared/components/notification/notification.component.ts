@@ -41,9 +41,9 @@ import { NotificationService, Notification, NotificationType } from '../../../co
 
           <!-- Progress bar (optional) -->
           @if (notification.duration && notification.duration > 0) {
-            <div class="mt-3 h-1 bg-black bg-opacity-20 rounded-full overflow-hidden">
+            <div class="mt-3 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
               <div 
-                class="h-full bg-current opacity-50 animate-progress"
+                class="h-full bg-slate-900 dark:bg-slate-100 opacity-60 animate-progress"
                 [style.animation-duration.ms]="notification.duration"
               ></div>
             </div>
@@ -86,13 +86,13 @@ export class NotificationComponent {
   notificationService = inject(NotificationService);
 
   getNotificationClasses(type: NotificationType): string {
-    const baseClasses = 'border-l-4';
+    const baseClasses = 'border-l-4 shadow-[0_4px_12px_rgba(0,0,0,0.06)]';
     
     const typeClasses: { [key in NotificationType]: string } = {
-      'success': 'bg-green-900 bg-opacity-95 border-green-500 text-green-100',
-      'error': 'bg-red-900 bg-opacity-95 border-red-500 text-red-100',
-      'warning': 'bg-yellow-900 bg-opacity-95 border-yellow-500 text-yellow-100',
-      'info': 'bg-blue-900 bg-opacity-95 border-blue-500 text-blue-100'
+      'success': 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 border-l-emerald-600 text-slate-800 dark:text-slate-100',
+      'error': 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 border-l-rose-600 text-slate-800 dark:text-slate-100',
+      'warning': 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 border-l-amber-500 text-slate-800 dark:text-slate-100',
+      'info': 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 border-l-blue-600 text-slate-800 dark:text-slate-100'
     };
 
     return `${baseClasses} ${typeClasses[type]}`;

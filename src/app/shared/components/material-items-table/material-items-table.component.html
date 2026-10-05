@@ -1,47 +1,48 @@
 <!-- Material Items Table Component -->
 @if (hasItems()) {
-  <div class="overflow-x-auto mb-6">
-    <table class="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg overflow-hidden">
-      <thead class="bg-black border-b border-gray-800">
+  <div class="overflow-x-auto mb-6 rounded-lg border border-slate-200/90 dark:border-slate-800">
+    <table class="w-full bg-white dark:bg-[#111827] text-left border-collapse">
+      <thead class="bg-slate-50/80 dark:bg-slate-800/70 border-b border-slate-200/90 dark:border-slate-700/80">
         <tr>
-          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">#</th>
-          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+          <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">#</th>
+          <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Material *
           </th>
-          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+          <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Quantity *
           </th>
           @if (!showUnitPriceInput) {
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">Unit</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+            <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Unit</th>
+            <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Unit Cost ($)
             </th>
           }
           @if (showUnitPriceInput) {
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+            <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Unit Price ($) *
             </th>
           }
-          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+          <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Subtotal
           </th>
-          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">Actions</th>
+          <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Actions</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-gray-800">
+      <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 text-sm">
         @for (item of items.controls; track $index; let i = $index) {
-          <tr [formGroup]="$any(item)" class="hover:bg-gray-900 transition-colors">
-            <td class="px-4 py-3 text-sm text-gray-400">{{ $index + 1 }}</td>
+          <tr [formGroup]="$any(item)" class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors">
+            <td class="px-4 py-3 text-xs text-slate-400 font-mono">{{ $index + 1 }}</td>
 
             <!-- Material Selection -->
             <td class="px-4 py-3">
               <select
-                class="px-3 py-2 bg-gray-900 border rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                [class.border-gray-700]="!isItemFieldInvalid(i, materialIdFieldName)"
-                [class.border-red-600]="isItemFieldInvalid(i, materialIdFieldName)"
+                class="px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25"
+                [class.border-slate-200]="!isItemFieldInvalid(i, materialIdFieldName)"
+                [class.dark:border-slate-700]="!isItemFieldInvalid(i, materialIdFieldName)"
+                [class.border-rose-500]="isItemFieldInvalid(i, materialIdFieldName)"
                 [formControlName]="materialIdFieldName"
               >
-                <option value="" class="text-gray-400">Select material</option>
+                <option value="" class="text-slate-400">Select material</option>
                 @for (material of materials(); track material.id) {
                   @if (!isMaterialExcluded(material.id)) {
                     <option [value]="material.id">{{ material.name }}</option>
@@ -49,7 +50,7 @@
                 }
               </select>
               @if (isItemFieldInvalid(i, materialIdFieldName)) {
-                <div class="text-red-400 text-xs mt-1">
+                <div class="text-rose-500 text-xs mt-1">
                   {{ getItemFieldError(i, materialIdFieldName) }}
                 </div>
               }
@@ -59,14 +60,15 @@
             <td class="px-4 py-3">
               <input
                 type="number"
-                class="w-24 px-3 py-2 bg-gray-900 border rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                [class.border-gray-700]="!isItemFieldInvalid(i, 'quantity')"
-                [class.border-red-600]="isItemFieldInvalid(i, 'quantity')"
+                class="w-24 px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25"
+                [class.border-slate-200]="!isItemFieldInvalid(i, 'quantity')"
+                [class.dark:border-slate-700]="!isItemFieldInvalid(i, 'quantity')"
+                [class.border-rose-500]="isItemFieldInvalid(i, 'quantity')"
                 min="1"
                 formControlName="quantity"
               />
               @if (isItemFieldInvalid(i, 'quantity')) {
-                <div class="text-red-400 text-xs mt-1">
+                <div class="text-rose-500 text-xs mt-1">
                   {{ getItemFieldError(i, 'quantity') }}
                 </div>
               }
@@ -74,10 +76,10 @@
 
             <!-- Unit (BOM mode only) -->
             @if (!showUnitPriceInput) {
-              <td class="px-4 py-3 text-sm text-gray-300">
+              <td class="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">
                 {{ getMaterialUnit(i) || '-' }}
               </td>
-              <td class="px-4 py-3 text-sm text-gray-300">
+              <td class="px-4 py-3 text-xs font-mono text-slate-600 dark:text-slate-300">
                 ${{ getMaterialUnitCost(i) | number: '1.2-2' }}
               </td>
             }
@@ -87,15 +89,16 @@
               <td class="px-4 py-3">
                 <input
                   type="number"
-                  class="w-28 px-3 py-2 bg-gray-900 border rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                  [class.border-gray-700]="!isItemFieldInvalid(i, 'unitPrice')"
-                  [class.border-red-600]="isItemFieldInvalid(i, 'unitPrice')"
+                  class="w-28 px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25"
+                  [class.border-slate-200]="!isItemFieldInvalid(i, 'unitPrice')"
+                  [class.dark:border-slate-700]="!isItemFieldInvalid(i, 'unitPrice')"
+                  [class.border-rose-500]="isItemFieldInvalid(i, 'unitPrice')"
                   min="0"
                   step="0.01"
                   formControlName="unitPrice"
                 />
                 @if (isItemFieldInvalid(i, 'unitPrice')) {
-                  <div class="text-red-400 text-xs mt-1">
+                  <div class="text-rose-500 text-xs mt-1">
                     {{ getItemFieldError(i, 'unitPrice') }}
                   </div>
                 }
@@ -103,19 +106,17 @@
             }
 
             <!-- Subtotal (Calculated) -->
-            <td class="px-4 py-3 text-sm text-white font-bold">
+            <td class="px-4 py-3 text-xs font-mono font-bold text-slate-900 dark:text-slate-100">
               ${{ calculateSubTotal($index) | number: '1.2-2' }}
             </td>
 
             <!-- Remove Button -->
-            <td class="px-4 py-3">
+            <td class="px-4 py-3 text-right">
               <button
                 type="button"
                 (click)="onRemoveItem($index)"
-                class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-white text-xs font-medium transition-colors"
+                class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 rounded-md text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 [disabled]="items.length === 1"
-                [class.opacity-50]="items.length === 1"
-                [class.cursor-not-allowed]="items.length === 1"
               >
                 Remove
               </button>
@@ -125,20 +126,20 @@
       </tbody>
 
       <!-- Total Footer -->
-      <tfoot class="bg-black border-t border-gray-800">
+      <tfoot class="bg-slate-50/80 dark:bg-slate-800/50 border-t border-slate-200/90 dark:border-slate-700/80">
         <tr>
-          <td [attr.colspan]="showUnitPriceInput ? 4 : 5" class="px-4 py-4 text-right">
-            <p class="text-xs text-gray-500 mb-1">{{ totalLabel }}:</p>
+          <td [attr.colspan]="showUnitPriceInput ? 4 : 5" class="px-4 py-3.5 text-right">
+            <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">{{ totalLabel }}:</span>
           </td>
-          <td colspan="2" class="px-4 py-4">
-            <p class="text-2xl font-bold text-green-400">${{ totalCost() | number: '1.2-2' }}</p>
+          <td colspan="2" class="px-4 py-3.5">
+            <span class="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">${{ totalCost() | number: '1.2-2' }}</span>
           </td>
         </tr>
       </tfoot>
     </table>
   </div>
 } @else {
-  <div class="text-center py-8 text-gray-400">
+  <div class="text-center py-8 text-slate-400 dark:text-slate-500 text-xs">
     <p>No items added yet. Click "{{ addButtonText }}" to get started.</p>
   </div>
 }

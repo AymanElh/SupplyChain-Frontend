@@ -1,97 +1,101 @@
 <!-- Product Form Page -->
-<div class="p-6">
+<div class="p-6 max-w-4xl mx-auto">
     <!-- Header -->
     <app-page-header [title]="isEditMode() ? 'Edit Product' : 'Add New Product'"
-        [description]="isEditMode() ? 'Update product information' : 'Create a new product entry'" buttonText="← Back"
-        buttonLink="../" buttonClass="bg-gray-800 hover:bg-gray-700 text-gray-300" />
+        [description]="isEditMode() ? 'Update product specification' : 'Create a new manufactured product SKU'" buttonText="← Back"
+        buttonLink="../" buttonClass="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700" />
 
     <!-- Form Container -->
-    <div class="bg-[#111111] rounded-xl border border-gray-800 p-8">
+    <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-8 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-6">
             <!-- Form Fields Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Product Name -->
                 <div>
-                    <label for="product-name" class="block text-sm font-semibold text-gray-300 mb-2">
-                        Product Name <span class="text-red-500">*</span>
+                    <label for="product-name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                        Product Name <span class="text-rose-500">*</span>
                     </label>
                     <input type="text"
-                        class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-                        [class.border-gray-800]="!name?.invalid || !name?.touched"
-                        [class.border-red-600]="name?.invalid && name?.touched" id="product-name" formControlName="name"
+                        class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+                        [class.border-slate-200]="!name?.invalid || !name?.touched"
+                        [class.dark:border-slate-700]="!name?.invalid || !name?.touched"
+                        [class.border-rose-500]="name?.invalid && name?.touched" id="product-name" formControlName="name"
                         placeholder="Enter product name" />
                     @if (name?.invalid && name?.touched) {
-                    <div class="text-red-400 text-sm mt-2">Product name is required</div>
+                    <div class="text-rose-500 text-xs mt-1.5">Product name is required</div>
                     }
                 </div>
 
                 <!-- Production Time -->
                 <div>
-                    <label for="production-time" class="block text-sm font-semibold text-gray-300 mb-2">
-                        Production Time (hours) <span class="text-red-500">*</span>
+                    <label for="production-time" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                        Production Time (hours) <span class="text-rose-500">*</span>
                     </label>
                     <input type="number"
-                        class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-                        [class.border-gray-800]="!productionTime?.invalid || !productionTime?.touched"
-                        [class.border-red-600]="productionTime?.invalid && productionTime?.touched" id="production-time"
+                        class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+                        [class.border-slate-200]="!productionTime?.invalid || !productionTime?.touched"
+                        [class.dark:border-slate-700]="!productionTime?.invalid || !productionTime?.touched"
+                        [class.border-rose-500]="productionTime?.invalid && productionTime?.touched" id="production-time"
                         formControlName="productionTime" placeholder="Enter production time" min="0" />
                     @if (productionTime?.invalid && productionTime?.touched) {
-                    <div class="text-red-400 text-sm mt-2">Production time must be >= 0</div>
+                    <div class="text-rose-500 text-xs mt-1.5">Production time must be >= 0</div>
                     }
                 </div>
 
                 <!-- Cost -->
                 <div>
-                    <label for="product-cost" class="block text-sm font-semibold text-gray-300 mb-2">
-                        Cost <span class="text-red-500">*</span>
+                    <label for="product-cost" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                        Cost ($) <span class="text-rose-500">*</span>
                     </label>
                     <input type="number"
-                        class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-                        [class.border-gray-800]="!cost?.invalid || !cost?.touched"
-                        [class.border-red-600]="cost?.invalid && cost?.touched" id="product-cost" formControlName="cost"
+                        class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+                        [class.border-slate-200]="!cost?.invalid || !cost?.touched"
+                        [class.dark:border-slate-700]="!cost?.invalid || !cost?.touched"
+                        [class.border-rose-500]="cost?.invalid && cost?.touched" id="product-cost" formControlName="cost"
                         placeholder="Enter cost" min="0" step="0.01" />
                     @if (cost?.invalid && cost?.touched) {
-                    <div class="text-red-400 text-sm mt-2">Cost must be >= 0</div>
+                    <div class="text-rose-500 text-xs mt-1.5">Cost must be >= 0</div>
                     }
                 </div>
 
                 <!-- Stock -->
                 <div>
-                    <label for="product-stock" class="block text-sm font-semibold text-gray-300 mb-2">
-                        Stock <span class="text-red-500">*</span>
+                    <label for="product-stock" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                        Initial Finished Stock <span class="text-rose-500">*</span>
                     </label>
                     <input type="number"
-                        class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-                        [class.border-gray-800]="!stock?.invalid || !stock?.touched"
-                        [class.border-red-600]="stock?.invalid && stock?.touched" id="product-stock"
+                        class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+                        [class.border-slate-200]="!stock?.invalid || !stock?.touched"
+                        [class.dark:border-slate-700]="!stock?.invalid || !stock?.touched"
+                        [class.border-rose-500]="stock?.invalid && stock?.touched" id="product-stock"
                         formControlName="stock" placeholder="Enter stock quantity" min="0" />
                     @if (stock?.invalid && stock?.touched) {
-                    <div class="text-red-400 text-sm mt-2">Stock must be >= 0</div>
+                    <div class="text-rose-500 text-xs mt-1.5">Stock must be >= 0</div>
                     }
                 </div>
             </div>
 
             <!-- Terms and Conditions -->
-            <div class="border-t border-gray-800 pt-6">
+            <div class="border-t border-slate-100 dark:border-slate-800 pt-6">
                 <div class="flex items-start gap-3">
                     <input
-                        class="mt-1 w-4 h-4 bg-[#0a0a0a] border-2 border-gray-700 rounded text-blue-600 focus:ring-blue-600 focus:ring-2"
+                        class="mt-1 w-4 h-4 rounded accent-slate-900 dark:accent-slate-100 bg-slate-50 dark:bg-slate-900"
                         type="checkbox" id="invalidCheck" required />
-                    <label class="text-sm text-gray-300" for="invalidCheck">
-                        I agree to the terms and conditions
+                    <label class="text-xs text-slate-600 dark:text-slate-400" for="invalidCheck">
+                        I confirm that the bill of materials and standard production time are approved
                     </label>
                 </div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex gap-4 border-t border-gray-800 pt-6">
+            <div class="flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-6">
                 <button
-                    class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 font-medium transition-colors"
+                    class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
                     type="button" (click)="onCancel()">
                     Cancel
                 </button>
                 <button
-                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
                     type="submit" [disabled]="productForm.invalid || isLoading()">
                     {{ isLoading() ? 'Saving...' : isEditMode() ? 'Update Product' : 'Create Product' }}
                 </button>

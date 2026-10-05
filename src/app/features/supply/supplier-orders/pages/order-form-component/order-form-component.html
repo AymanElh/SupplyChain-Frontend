@@ -1,45 +1,46 @@
 <!-- Create Supplier Order Page -->
-<div class="p-6">
+<div class="p-6 max-w-5xl mx-auto">
   <!-- Header -->
   <div class="flex justify-between items-center mb-6">
     <div>
-      <h1 class="text-2xl font-bold text-white">Create Supplier Order</h1>
-      <p class="text-sm text-gray-400">
-        Fill in the order details and add materials to create a new supplier order
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Create Supplier Order</h1>
+      <p class="text-sm text-slate-500 dark:text-slate-400">
+        Fill in order requirements and line items for procurement
       </p>
     </div>
     <button
       type="button"
       routerLink="../"
-      class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 font-medium transition-colors"
+      class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
     >
       ← Back
     </button>
   </div>
 
   <!-- Form Container -->
-  <div class="bg-[#111111] rounded-xl border border-gray-800 p-8">
+  <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-8 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
     <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
       <!-- Order Information Section -->
       <div class="mb-8">
-        <h2 class="text-xl font-bold text-white mb-6 pb-3 border-b border-gray-800">
+        <h2 class="text-base font-bold text-slate-900 dark:text-slate-100 mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">
           Order Information
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Supplier Selection -->
           <div>
-            <label for="supplierId" class="block text-sm font-semibold text-gray-300 mb-2">
-              Select Supplier <span class="text-red-500">*</span>
+            <label for="supplierId" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+              Select Supplier <span class="text-rose-500">*</span>
             </label>
             <select
               id="supplierId"
-              class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-              [class.border-gray-800]="!isFieldInvalid('supplierId')"
-              [class.border-red-600]="isFieldInvalid('supplierId')"
+              class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+              [class.border-slate-200]="!isFieldInvalid('supplierId')"
+              [class.dark:border-slate-700]="!isFieldInvalid('supplierId')"
+              [class.border-rose-500]="isFieldInvalid('supplierId')"
               formControlName="supplierId"
             >
-              <option value="" class="text-gray-400">-- Choose a supplier --</option>
+              <option value="" class="text-slate-400">-- Choose a supplier --</option>
               @for (suppplier of suppliers(); track $index) {
               <option [value]="suppplier.id">
                 {{ suppplier.name }}
@@ -49,9 +50,9 @@
               }
             </select>
             @if(isFieldInvalid('supplierId')) {
-            <div class="text-red-400 text-sm mt-2">{{ getFieldError('supplierId') }}</div>
+            <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('supplierId') }}</div>
             } @if(suppliers().length === 0) {
-            <div class="text-yellow-400 text-sm mt-2">
+            <div class="text-amber-600 dark:text-amber-400 text-xs mt-1.5">
               No Suppliers available. Please add supplier first
             </div>
             }
@@ -59,19 +60,20 @@
 
           <!-- Order Date -->
           <div>
-            <label for="orderDate" class="block text-sm font-semibold text-gray-300 mb-2">
-              Order Date <span class="text-red-500">*</span>
+            <label for="orderDate" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+              Order Date <span class="text-rose-500">*</span>
             </label>
             <input
               type="date"
               id="orderDate"
-              class="w-full px-4 py-3 bg-[#0a0a0a] border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-              [class.border-gray-800]="!isFieldInvalid('orderDate')"
-              [class.border-red-600]="isFieldInvalid('orderDate')"
+              class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+              [class.border-slate-200]="!isFieldInvalid('orderDate')"
+              [class.dark:border-slate-700]="!isFieldInvalid('orderDate')"
+              [class.border-rose-500]="isFieldInvalid('orderDate')"
               formControlName="orderDate"
             />
             @if(isFieldInvalid('orderDate')) {
-            <div class="text-red-400 text-sm mt-2">{{ getFieldError('orderDate') }}</div>
+            <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('orderDate') }}</div>
             }
           </div>
         </div>
@@ -79,62 +81,63 @@
 
       <!-- Order Items Section -->
       <div class="mb-8">
-        <div class="flex justify-between items-center mb-6 pb-3 border-b border-gray-800">
+        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <h2 class="text-xl font-bold text-white">Order Items</h2>
-            <p class="text-gray-400 text-sm mt-1">Add materials to this order</p>
+            <h2 class="text-base font-bold text-slate-900 dark:text-slate-100">Order Items</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Add materials to this procurement order</p>
           </div>
           <button
             type="button"
             (click)="addItem()"
-            class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white font-medium transition-colors"
+            class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 text-white rounded-lg text-xs font-semibold transition-colors shadow-xs"
           >
-            + Add Item
+            + Add Line Item
           </button>
         </div>
 
         <!-- Items Table -->
         @if (hasItems()) {
-        <div class="overflow-x-auto mb-6">
-          <table class="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg overflow-hidden">
-            <thead class="bg-black border-b border-gray-800">
+        <div class="overflow-x-auto mb-6 rounded-lg border border-slate-200/90 dark:border-slate-800">
+          <table class="w-full bg-white dark:bg-[#111827] text-left border-collapse">
+            <thead class="bg-slate-50/80 dark:bg-slate-800/70 border-b border-slate-200/90 dark:border-slate-700/80">
               <tr>
-                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">#</th>
-                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+                <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">#</th>
+                <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Material *
                 </th>
-                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+                <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Quantity *
                 </th>
-                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+                <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Unit Price ($) *
                 </th>
-                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+                <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Subtotal
                 </th>
-                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">
+                <th class="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody formArrayName="items" class="divide-y divide-gray-800">
+            <tbody formArrayName="items" class="divide-y divide-slate-100 dark:divide-slate-800/80 text-sm">
               @for (item of items.controls; track $index; let i = $index) {
-              <tr [formGroupName]="$index" class="hover:bg-gray-900 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-400">{{ $index + 1 }}</td>
+              <tr [formGroupName]="$index" class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors">
+                <td class="px-4 py-3 text-xs text-slate-400 font-mono">{{ $index + 1 }}</td>
                 <td class="px-4 py-3">
                   <select
-                    class="px-3 py-2 bg-gray-900 border rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    [class.border-gray-700]="!isItemFieldInvalid(i, 'materialId')"
-                    [class.border-red-600]="isItemFieldInvalid(i, 'materialId')"
+                    class="px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25"
+                    [class.border-slate-200]="!isItemFieldInvalid(i, 'materialId')"
+                    [class.dark:border-slate-700]="!isItemFieldInvalid(i, 'materialId')"
+                    [class.border-rose-500]="isItemFieldInvalid(i, 'materialId')"
                     formControlName="materialId"
                   >
-                    <option value="" class="text-gray-400">Select material</option>
+                    <option value="" class="text-slate-400">Select material</option>
                     @for (material of materials(); track $index) {
                     <option [value]="material.id">{{ material.name }}</option>
                     }
                   </select>
                   @if(isItemFieldInvalid(i, 'materialId')) {
-                  <div class="text-red-400 text-xs mt-1">
+                  <div class="text-rose-500 text-xs mt-1">
                     {{ getItemFieldError(i, 'materialId') }}
                   </div>
                   }
@@ -142,14 +145,15 @@
                 <td class="px-4 py-3">
                   <input
                     type="number"
-                    class="w-24 px-3 py-2 bg-gray-900 border rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    [class.border-gray-700]="!isItemFieldInvalid(i, 'quantity')"
-                    [class.border-red-600]="isItemFieldInvalid(i, 'quantity')"
+                    class="w-24 px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25"
+                    [class.border-slate-200]="!isItemFieldInvalid(i, 'quantity')"
+                    [class.dark:border-slate-700]="!isItemFieldInvalid(i, 'quantity')"
+                    [class.border-rose-500]="isItemFieldInvalid(i, 'quantity')"
                     min="1"
                     formControlName="quantity"
                   />
                   @if(isItemFieldInvalid(i, 'quantity')) {
-                  <div class="text-red-400 text-xs mt-1">
+                  <div class="text-rose-500 text-xs mt-1">
                     {{ getItemFieldError(i, 'quantity') }}
                   </div>
                   }
@@ -157,27 +161,28 @@
                 <td class="px-4 py-3">
                   <input
                     type="number"
-                    class="w-28 px-3 py-2 bg-gray-900 border rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    [class.border-gray-700]="!isItemFieldInvalid(i, 'unitPrice')"
-                    [class.border-red-600]="isItemFieldInvalid(i, 'unitPrice')"
+                    class="w-28 px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25"
+                    [class.border-slate-200]="!isItemFieldInvalid(i, 'unitPrice')"
+                    [class.dark:border-slate-700]="!isItemFieldInvalid(i, 'unitPrice')"
+                    [class.border-rose-500]="isItemFieldInvalid(i, 'unitPrice')"
                     min="0"
                     step="0.01"
                     formControlName="unitPrice"
                   />
                   @if(isItemFieldInvalid(i, 'unitPrice')) {
-                  <div class="text-red-400 text-xs mt-1">
+                  <div class="text-rose-500 text-xs mt-1">
                     {{ getItemFieldError(i, 'unitPrice') }}
                   </div>
                   }
                 </td>
-                <td class="px-4 py-3 text-sm text-white font-bold">
+                <td class="px-4 py-3 text-xs font-mono font-bold text-slate-900 dark:text-slate-100">
                   ${{ calculateSubTotal($index) }}
                 </td>
-                <td class="px-4 py-3">
+                <td class="px-4 py-3 text-right">
                   <button
                     type="button"
                     (click)="removeItem($index)"
-                    class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-white text-xs font-medium transition-colors"
+                    class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 rounded-md text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 text-xs font-semibold transition-colors"
                   >
                     Remove
                   </button>
@@ -185,65 +190,62 @@
               </tr>
               }
             </tbody>
-            <tfoot class="bg-black border-t border-gray-800">
+            <tfoot class="bg-slate-50/80 dark:bg-slate-800/50 border-t border-slate-200/90 dark:border-slate-700/80">
               <tr>
-                <td colspan="4" class="px-4 py-4 text-right">
-                  <div class="text-sm text-gray-400 space-y-1">
-                    <div>Items: <span class="font-semibold text-white">2</span></div>
-                    <div>Total Quantity: <span class="font-semibold text-white">150</span></div>
-                  </div>
+                <td colspan="4" class="px-4 py-3.5 text-right">
+                  <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Estimated Total Order Value:</span>
                 </td>
-                <td colspan="2" class="px-4 py-4">
-                  <p class="text-xs text-gray-500 mb-1">Total Amount:</p>
-                  <p class="text-2xl font-bold text-blue-500">${{ orderTotal() }}</p>
+                <td colspan="2" class="px-4 py-3.5">
+                  <span class="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">${{ orderTotal() }}</span>
                 </td>
               </tr>
             </tfoot>
           </table>
         </div>
         } @else {
-        <p class="text-center text-gray-500 py-8">No items added to the order.</p>
+        <p class="text-center text-slate-400 dark:text-slate-500 py-8 text-xs">No items added to the order. Click "+ Add Line Item" above.</p>
         }
       </div>
 
-      <!-- Order Summary -->
-      <div class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-6 mb-8">
-        <h3 class="text-lg font-bold text-white mb-4">Order Summary</h3>
+      <!-- Order Summary Card -->
+      <div class="bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 rounded-xl p-5 mb-8">
+        <h3 class="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-3">Order Summary</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <p class="text-xs text-gray-400 mb-1">Supplier</p>
-            <p class="text-white font-semibold">
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-0.5">Supplier</p>
+            <p class="text-slate-900 dark:text-slate-100 font-semibold text-sm">
               @if (orderForm.get('supplierId')?.value) {
               {{ getSupplierName(orderForm.get('supplierId')?.value) }}
               } @else {
-              <span class="text-gray-500">Not selected</span>
+              <span class="text-slate-400 italic">Not selected</span>
               }
             </p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 mb-1">Total Items</p>
-            <p class="text-white font-semibold">
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-0.5">Total Quantity</p>
+            <p class="text-slate-900 dark:text-slate-100 font-semibold text-sm">
               {{ getUniqueItemsCount() }} types ({{ getTotalQuantity() }} units)
             </p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 mb-1">Total Amount</p>
-            <p class="text-2xl font-bold text-blue-500">${{ orderTotal() }}</p>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-0.5">Total Amount</p>
+            <p class="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">${{ orderTotal() }}</p>
           </div>
         </div>
       </div>
 
       <!-- Form Actions -->
-      <div class="flex gap-4 justify-end pt-6 border-t border-gray-800">
+      <div class="flex gap-3 justify-end pt-6 border-t border-slate-100 dark:border-slate-800">
         <button
           type="button"
-          class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 font-medium transition-colors"
+          routerLink="../"
+          class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
         >
           Cancel
         </button>
         <button
           type="submit"
-          class="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
           [disabled]="orderForm.invalid"
         >
           Create Order
@@ -253,16 +255,14 @@
   </div>
 
   <!-- Instructions -->
-  <div class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-6 mt-6">
-    <h4 class="text-sm font-bold text-white mb-3">📝 Instructions:</h4>
-    <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside">
-      <li>Select the supplier from whom you want to order materials</li>
-      <li>Add items by clicking "Add Item" button</li>
-      <li>Select a material from the dropdown - the unit price will be auto-filled</li>
-      <li>Enter the quantity you want to order</li>
-      <li>The subtotal and total will be calculated automatically</li>
-      <li>You can add multiple items to the same order</li>
-      <li>Remove items using the "Remove" button (minimum 1 item required)</li>
+  <div class="bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 rounded-xl p-5 mt-6">
+    <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-2">Operational Guidelines:</h4>
+    <ul class="text-xs text-slate-500 dark:text-slate-400 space-y-1.5 list-disc list-inside">
+      <li>Select the approved supplier from whom you are ordering materials</li>
+      <li>Add line items by clicking the "+ Add Line Item" button</li>
+      <li>Select the required SKU; the unit purchase price will fill automatically</li>
+      <li>Enter required shipment quantities; subtotals calculate in real-time</li>
+      <li>Minimum 1 item is required to issue purchase requisitions</li>
     </ul>
   </div>
 </div>

@@ -1,29 +1,29 @@
 <!-- BOM Form Component -->
-<div class="bg-[#111111] rounded-xl border border-gray-800 p-8">
+<div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
   <form [formGroup]="bomForm" (ngSubmit)="onSubmit()">
     <!-- Form Header -->
-    <div class="mb-6 pb-4 border-b border-gray-800">
-      <h2 class="text-2xl font-bold text-white">Create Bill of Materials</h2>
-      <p class="text-sm text-gray-400 mt-1">Add materials required to manufacture this product</p>
+    <div class="mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+      <h2 class="text-base font-bold text-slate-900 dark:text-slate-100">Create Bill of Materials</h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Specify required raw materials to produce 1 unit of this product</p>
     </div>
 
     <!-- Loading State -->
     @if (isLoadingData()) {
       <div class="text-center py-8">
-        <div class="text-gray-400">Loading materials...</div>
+        <div class="text-slate-500 dark:text-slate-400 text-xs">Loading available raw materials...</div>
       </div>
     } @else {
       <!-- Materials Section -->
-      <div class="mb-8">
-        <div class="flex justify-between items-center mb-6 pb-3 border-b border-gray-800">
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <h3 class="text-xl font-bold text-white">Materials</h3>
-            <p class="text-gray-400 text-sm mt-1">Select materials and quantities</p>
+            <h3 class="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Materials Composition</h3>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500">Add materials and required ratios</p>
           </div>
           <button
             type="button"
             (click)="addItem()"
-            class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white font-medium transition-colors"
+            class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 text-white rounded-lg text-xs font-semibold transition-colors shadow-xs"
           >
             + Add Material
           </button>
@@ -45,24 +45,24 @@
       </div>
 
       <!-- Form Actions -->
-      <div class="flex gap-4 justify-end pt-6 border-t border-gray-800">
+      <div class="flex gap-3 justify-end pt-4 border-t border-slate-100 dark:border-slate-800">
         <button
           type="button"
           (click)="onCancel()"
-          class="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-colors"
+          class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
           [disabled]="isSubmitting()"
         >
           Cancel
         </button>
         <button
           type="submit"
-          class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors disabled:bg-gray-700 disabled:cursor-not-allowed"
+          class="px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
           [disabled]="isSubmitting() || bomForm.invalid"
         >
           @if (isSubmitting()) {
-            <span>Creating BOM...</span>
+            <span>Saving BOM...</span>
           } @else {
-            <span>Create BOM</span>
+            <span>Save Bill of Materials</span>
           }
         </button>
       </div>

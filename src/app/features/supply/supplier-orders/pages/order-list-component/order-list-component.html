@@ -31,83 +31,55 @@
 
   <!-- Order List -->
   @if (isLoading()) {
-  <div class="bg-[#111111] rounded-xl border border-gray-800 p-12 text-center">
-    <div class="text-gray-400 text-lg">Loading orders...</div>
+  <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-12 text-center shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <div class="text-slate-500 dark:text-slate-400 text-sm font-medium">Loading orders...</div>
   </div>
   } @else {
-  <div class="bg-[#111111] rounded-xl border border-gray-800 overflow-hidden">
+  <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-[#0a0a0a] border-b border-gray-800">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-slate-50/80 dark:bg-slate-800/70 border-b border-slate-200/90 dark:border-slate-700/80">
           <tr>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
-            >
-              #
-            </th>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
-            >
-              Supplier
-            </th>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
-            >
-              Order Date
-            </th>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
-            >
-              Status
-            </th>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
-            >
-              Items
-            </th>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
-            >
-              Total Value
-            </th>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
-            >
-              Actions
-            </th>
+            <th class="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">#</th>
+            <th class="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Supplier</th>
+            <th class="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Order Date</th>
+            <th class="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Items</th>
+            <th class="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Value</th>
+            <th class="px-6 py-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-800">
+        <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 text-sm">
           @for (order of getFilteredOrders(); track order.id) {
-          <tr class="hover:bg-[#0a0a0a] transition-colors">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-medium">
+          <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono text-xs">
               {{ order.id }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white font-semibold">
+            <td class="px-6 py-4 whitespace-nowrap font-semibold text-slate-900 dark:text-slate-100">
               {{ order.supplierName }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ order.orderDate }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <td class="px-6 py-4 whitespace-nowrap text-slate-500 dark:text-slate-400 text-xs">{{ order.orderDate }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
               <app-status-badge [status]="order.status" type="order" />
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+            <td class="px-6 py-4 whitespace-nowrap text-slate-600 dark:text-slate-400 text-xs">
               {{ order.items.length }} items
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+            <td class="px-6 py-4 whitespace-nowrap font-mono font-bold text-slate-900 dark:text-slate-100">
               ${{ orderService.calculateOrderTotal(order) | number : '1.2-2' }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <td class="px-6 py-4 whitespace-nowrap">
               <div class="flex gap-2">
                 <button
                   type="button"
                   [routerLink]="['/supply/orders', order.id]"
-                  class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-xs font-medium transition-colors"
+                  class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 text-white rounded-lg text-xs font-semibold transition-colors shadow-xs"
                 >
                   View
                 </button>
                 <button
                   type="button"
-                  class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white text-xs font-medium transition-colors"
+                  class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 rounded-lg text-xs font-semibold transition-colors"
                 >
                   Delete
                 </button>
@@ -116,9 +88,9 @@
           </tr>
           } @empty {
           <tr>
-            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
-              <div class="text-4xl mb-3">📥</div>
-              <p>No orders found</p>
+            <td colspan="7" class="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
+              <div class="text-3xl mb-2 text-slate-400 dark:text-slate-500">📥</div>
+              <p class="text-sm">No orders found</p>
             </td>
           </tr>
           }
