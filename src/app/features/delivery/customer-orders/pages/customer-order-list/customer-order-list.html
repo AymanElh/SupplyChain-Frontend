@@ -1,0 +1,85 @@
+<!-- Customer Orders Page -->
+<div class="p-6">
+  <!-- Header -->
+  <app-page-header
+    title="Customer Orders"
+    description="Track sales orders from placement to delivery"
+    buttonText="+ New Customer Order"
+    buttonLink="/delivery/customer-orders/create"
+  />
+
+  <!-- Customer scope banner -->
+  @if (customerIdFilter() !== null) {
+    <div class="flex items-center justify-between gap-3 mb-6 px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700">
+      <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">
+        Showing orders for customer #{{ customerIdFilter() }}
+      </p>
+      <button
+        type="button"
+        (click)="clearCustomerFilter()"
+        class="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+      >
+        Clear filter ✕
+      </button>
+    </div>
+  }
+
+  <!-- Status Filters -->
+  <app-filter-tabs [tabs]="filterTabs" [activeTab]="filterStatus()" (tabChange)="setFilter($event)" />
+
+  <!-- Orders Table -->
+  <app-data-table
+    [columns]="columns"
+    [data]="orders()"
+    [actions]="actions"
+    [loading]="isLoading()"
+    loadingMessage="Loading customer orders..."
+    emptyMessage="No customer orders found for this filter."
+    emptyIcon="🧾"
+    [rowClickable]="true"
+    (rowClick)="onRowClick($event)"
+    [trackBy]="trackByOrder"
+  />
+
+  <ng-template #customerTpl let-order>
+    <div class="font-medium text-slate-800 dark:text-slate-200">{{ order.customer.name }}</div>
+    <div class="text-[11px] text-slate-400 dark:text-slate-500">{{ order.customer.phone }}</div>
+  </ng-template>
+
+  <ng-template #statusTpl let-order>
+    <app-status-badge [status]="order.status" type="order" />
+  </ng-template>
+
+  <!-- Pagination (server-driven; hidden for customer-scoped lists) -->
+  @if (totalPages() > 1 && customerIdFilter() === null) {
+  <div
+    class="flex justify-between items-center mt-6 bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.02)] px-6 py-4"
+  >
+    <div class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">
+      Page {{ currentPage() + 1 }} of {{ totalPages() }}
+    </div>
+
+    <div class="flex gap-2">
+      <button
+        (click)="previousPage()"
+        [disabled]="currentPage() === 0"
+        [class.opacity-40]="currentPage() === 0"
+        [class.cursor-not-allowed]="currentPage() === 0"
+        class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+      >
+        ← Previous
+      </button>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="currentPage() >= totalPages() - 1"
+        [class.opacity-40]="currentPage() >= totalPages() - 1"
+        [class.cursor-not-allowed]="currentPage() >= totalPages() - 1"
+        class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+      >
+        Next →
+      </button>
+    </div>
+  </div>
+  }
+</div>
