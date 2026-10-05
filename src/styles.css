@@ -1,8 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
-/* @import 'bootstrap/dist/css/bootstrap.min.css'; */
+@custom-variant dark (&:where(.dark, .dark *));
 
-body {
-    font-family: 'Roboto', sans-serif;
+@layer base {
+  :root {
+    --paper-bg: #F8F9FA;
+    --paper-surface: #FFFFFF;
+    --paper-border: #E2E8F0;
+    --paper-ink: #0F172A;
+    --paper-slate: #334155;
+    --paper-muted: #64748B;
+  }
+
+  .dark {
+    --paper-bg: #0F172A;
+    --paper-surface: #1E293B;
+    --paper-border: #334155;
+    --paper-ink: #F8FAFC;
+    --paper-slate: #CBD5E1;
+    --paper-muted: #94A3B8;
+    color-scheme: dark;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--paper-bg);
+    color: var(--paper-slate);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'tnum';
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+/* Custom crisp technical scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748B;
 }

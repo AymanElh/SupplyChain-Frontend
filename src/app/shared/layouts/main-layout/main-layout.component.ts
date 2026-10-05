@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { KeycloakService } from '../../../core/services/keycloak-service';
 import { UserProfile } from '../../../core/models/user-profile';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -23,7 +24,8 @@ export class MainLayoutComponent implements OnInit {
 
   constructor(
     private keycloakService: KeycloakService,
-    private router: Router
+    private router: Router,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit(): void {
@@ -34,13 +36,39 @@ export class MainLayoutComponent implements OnInit {
     this.isSidebarOpen.update(value => !value);
   }
 
+  todayDate = signal<string>(new Date().toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }));
+
   navigationItems = [
-    { label: 'Dashboard', icon: '📊', path: '/dashboard' },
-    { label: 'Suppliers', icon: '🏭', path: '/supply/suppliers' },
-    { label: 'Materials', icon: '📋', path: '/supply/materials' },
-    { label: 'Orders', icon: '📦', path: '/supply/orders' },
-    { label: 'Products', icon: '🏗️', path: '/production/products' },
-    { label: 'Deliveries', icon: '🚚', path: '/deliveries' }
+    { 
+      label: 'Dashboard', 
+      path: '/dashboard',
+      iconType: 'dashboard'
+    },
+    { 
+      label: 'Suppliers', 
+      path: '/supply/suppliers',
+      iconType: 'suppliers'
+    },
+    { 
+      label: 'Materials', 
+      path: '/supply/materials',
+      iconType: 'materials'
+    },
+    { 
+      label: 'Purchase Orders', 
+      path: '/supply/orders',
+      iconType: 'orders'
+    },
+    { 
+      label: 'Production & Products', 
+      path: '/production/products',
+      iconType: 'products'
+    }
   ];
 
   private async loadUserProfile(): Promise<void> {
