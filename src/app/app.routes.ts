@@ -19,19 +19,23 @@ export const routes: Routes = [
       },
       {
         path: "supply/suppliers",
-        loadChildren: () => import('./features/supply/suppliers/supplier.routes')
+        loadChildren: () => import('./features/supply/suppliers/supplier.routes').then(m => m.default)
       },
       {
         path: 'supply/materials',
-        loadChildren: () => import('./features/supply/raw-materials/material.route')
+        loadChildren: () => import('./features/supply/raw-materials/material.route').then(m => m.default)
       },
       {
         path: 'supply/orders',
-        loadChildren: () => import('./features/supply/supplier-orders/supplier-orders-routes')
+        loadChildren: () => import('./features/supply/supplier-orders/supplier-orders-routes').then(m => m.default)
       },
       {
         path: 'production/products',
-        loadChildren: () => import('./features/production/products/product.routes')
+        loadChildren: () => import('./features/production/products/product.routes').then(m => m.default)
+      },
+      {
+        path: 'production/orders',
+        loadChildren: () => import('./features/production/production-orders/production-order.routes').then(m => m.default)
       }
     ]
   }

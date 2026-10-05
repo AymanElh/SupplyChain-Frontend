@@ -1,0 +1,115 @@
+<!-- Production Order Form Page -->
+<div class="p-6 max-w-4xl mx-auto">
+  <!-- Header -->
+  <app-page-header
+    title="New Production Order"
+    description="Queue a manufacturing work order for the shop floor"
+    buttonText="← Back"
+    buttonLink="../"
+    buttonClass="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700"
+  />
+
+  <!-- Form Container -->
+  <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-8 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Product -->
+        <div class="md:col-span-2">
+          <label for="order-product" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            Product <span class="text-rose-500">*</span>
+          </label>
+          <select
+            id="order-product"
+            formControlName="productId"
+            [class.border-slate-200]="!isFieldInvalid('productId')"
+            [class.dark:border-slate-700]="!isFieldInvalid('productId')"
+            [class.border-rose-500]="isFieldInvalid('productId')"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+          >
+            <option [ngValue]="null" class="text-slate-400">-- Choose a product --</option>
+            @for (product of products(); track product.id) {
+              <option [ngValue]="product.id">{{ product.name }}</option>
+            }
+          </select>
+          @if (isFieldInvalid('productId')) {
+            <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('productId') }}</div>
+          }
+        </div>
+
+        <!-- Quantity -->
+        <div>
+          <label for="order-quantity" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            Quantity <span class="text-rose-500">*</span>
+          </label>
+          <input
+            id="order-quantity"
+            type="number"
+            min="1"
+            formControlName="quantity"
+            placeholder="Units to manufacture"
+            [class.border-slate-200]="!isFieldInvalid('quantity')"
+            [class.dark:border-slate-700]="!isFieldInvalid('quantity')"
+            [class.border-rose-500]="isFieldInvalid('quantity')"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+          />
+          @if (isFieldInvalid('quantity')) {
+            <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('quantity') }}</div>
+          }
+        </div>
+
+        <!-- Priority -->
+        <div>
+          <label for="order-priority" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            Priority (1-5) <span class="text-rose-500">*</span>
+          </label>
+          <select
+            id="order-priority"
+            formControlName="priority"
+            [class.border-slate-200]="!isFieldInvalid('priority')"
+            [class.dark:border-slate-700]="!isFieldInvalid('priority')"
+            [class.border-rose-500]="isFieldInvalid('priority')"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+          >
+            @for (level of priorities; track level) {
+              <option [ngValue]="level">{{ level }}{{ level === 5 ? ' — Urgent' : level === 1 ? ' — Low' : '' }}</option>
+            }
+          </select>
+          @if (isFieldInvalid('priority')) {
+            <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('priority') }}</div>
+          }
+        </div>
+
+        <!-- Planned start -->
+        <div class="md:col-span-2">
+          <label for="order-start" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            Planned Start (optional)
+          </label>
+          <input
+            id="order-start"
+            type="datetime-local"
+            formControlName="startDate"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+          />
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-6">
+        <button
+          type="button"
+          routerLink="../"
+          class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="orderForm.invalid || isSubmitting()"
+          class="px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+        >
+          {{ isSubmitting() ? 'Creating...' : 'Create Order' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

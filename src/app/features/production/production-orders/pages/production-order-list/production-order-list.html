@@ -1,0 +1,64 @@
+<!-- Production Orders Page -->
+<div class="p-6">
+  <!-- Header -->
+  <app-page-header
+    title="Production Orders"
+    description="Plan, launch and track manufacturing work orders"
+    buttonText="+ New Production Order"
+    buttonLink="/production/orders/create"
+  />
+
+  <!-- Status Filters -->
+  <app-filter-tabs [tabs]="filterTabs" [activeTab]="filterStatus()" (tabChange)="setFilter($event)" />
+
+  <!-- Orders Table -->
+  <app-data-table
+    [columns]="columns"
+    [data]="orders()"
+    [actions]="actions"
+    [loading]="isLoading()"
+    loadingMessage="Loading production orders..."
+    emptyMessage="No production orders found. Create your first work order to get started."
+    emptyIcon="🏭"
+    [rowClickable]="true"
+    (rowClick)="onRowClick($event)"
+    [trackBy]="trackByOrder"
+  />
+
+  <ng-template #statusTpl let-order>
+    <app-status-badge [status]="order.status" type="order" />
+  </ng-template>
+
+  <!-- Pagination -->
+  @if (totalPages() > 0) {
+  <div
+    class="flex justify-between items-center mt-6 bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.02)] px-6 py-4"
+  >
+    <div class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">
+      Page {{ currentPage() + 1 }} of {{ totalPages() }}
+    </div>
+
+    <div class="flex gap-2">
+      <button
+        (click)="previousPage()"
+        [disabled]="currentPage() === 0"
+        [class.opacity-40]="currentPage() === 0"
+        [class.cursor-not-allowed]="currentPage() === 0"
+        class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+      >
+        ← Previous
+      </button>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="currentPage() >= totalPages() - 1"
+        [class.opacity-40]="currentPage() >= totalPages() - 1"
+        [class.cursor-not-allowed]="currentPage() >= totalPages() - 1"
+        class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+      >
+        Next →
+      </button>
+    </div>
+  </div>
+  }
+</div>

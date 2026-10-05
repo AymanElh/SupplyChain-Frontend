@@ -64,10 +64,15 @@ export class MainLayoutComponent implements OnInit {
       path: '/supply/orders',
       iconType: 'orders'
     },
-    { 
-      label: 'Production & Products', 
+    {
+      label: 'Production & Products',
       path: '/production/products',
       iconType: 'products'
+    },
+    {
+      label: 'Production Orders',
+      path: '/production/orders',
+      iconType: 'orders'
     }
   ];
 
