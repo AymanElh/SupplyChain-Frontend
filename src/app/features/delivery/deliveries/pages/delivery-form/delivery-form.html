@@ -1,0 +1,118 @@
+<!-- Delivery Form Page -->
+<div class="p-6 max-w-4xl mx-auto">
+  <!-- Header -->
+  <app-page-header
+    title="Schedule Delivery"
+    description="Assign a READY order to a driver and vehicle"
+    buttonText="← Back"
+    buttonLink="../"
+    buttonClass="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700"
+  />
+
+  <!-- Form Container -->
+  <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-8 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    @if (isLoadingOptions()) {
+      <div class="text-center py-8">
+        <div class="text-slate-500 dark:text-slate-400 text-xs">Loading orders, drivers and vehicles...</div>
+      </div>
+    } @else {
+      <form [formGroup]="deliveryForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Customer order -->
+          <div class="md:col-span-2">
+            <label for="delivery-order" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+              Customer Order (READY only) <span class="text-rose-500">*</span>
+            </label>
+            <select
+              id="delivery-order"
+              formControlName="orderId"
+              class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+            >
+              <option [ngValue]="null" class="text-slate-400">-- Choose a READY order --</option>
+              @for (order of readyOrders(); track order.id) {
+                <option [ngValue]="order.id">#{{ order.id }} — {{ order.customer.name }} (${{ order.totalAmount | number: '1.2-2' }})</option>
+              } @empty {
+                <option disabled>No READY orders available</option>
+              }
+            </select>
+          </div>
+
+          <!-- Driver -->
+          <div>
+            <label for="delivery-driver" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+              Driver <span class="text-rose-500">*</span>
+            </label>
+            <select
+              id="delivery-driver"
+              formControlName="driverId"
+              class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+            >
+              <option [ngValue]="null" class="text-slate-400">-- Choose a driver --</option>
+              @for (driver of drivers(); track driver.licenseNumber) {
+                <option [ngValue]="driverOptionId(driver)" [disabled]="driverOptionId(driver) === null">
+                  {{ driver.name }} ({{ driver.licenseNumber }}){{ driverOptionId(driver) === null ? ' — ID unavailable' : '' }}
+                </option>
+              } @empty {
+                <option disabled>No drivers available</option>
+              }
+            </select>
+            <p class="text-[11px] text-amber-600 dark:text-amber-400 mt-1.5">
+              Drivers without an ID can't be selected yet — the backend driver API does not expose driver IDs.
+            </p>
+          </div>
+
+          <!-- Vehicle -->
+          <div>
+            <label for="delivery-vehicle" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+              Vehicle <span class="text-rose-500">*</span>
+            </label>
+            <select
+              id="delivery-vehicle"
+              formControlName="vehicleId"
+              class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+            >
+              <option [ngValue]="null" class="text-slate-400">-- Choose a vehicle --</option>
+              @for (vehicle of vehicles(); track vehicle.id) {
+                <option [ngValue]="vehicle.id">{{ vehicle.licensePlate }}{{ vehicle.model ? ' — ' + vehicle.model : '' }}</option>
+              } @empty {
+                <option disabled>No vehicles available</option>
+              }
+            </select>
+          </div>
+
+          <!-- Delivery date -->
+          <div class="md:col-span-2">
+            <label for="delivery-date" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+              Delivery Date (must be in the future) <span class="text-rose-500">*</span>
+            </label>
+            <input
+              id="delivery-date"
+              type="date"
+              formControlName="deliveryDate"
+              [min]="minDeliveryDate()"
+              class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-6">
+          <button
+            type="button"
+            routerLink="../"
+            class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="deliveryForm.invalid || isSubmitting()"
+            class="px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+          >
+            {{ isSubmitting() ? 'Scheduling...' : 'Schedule Delivery' }}
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

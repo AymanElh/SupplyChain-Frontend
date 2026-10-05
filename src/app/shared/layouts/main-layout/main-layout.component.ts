@@ -43,38 +43,86 @@ export class MainLayoutComponent implements OnInit {
     year: 'numeric'
   }));
 
-  navigationItems = [
-    { 
-      label: 'Dashboard', 
-      path: '/dashboard',
-      iconType: 'dashboard'
-    },
-    { 
-      label: 'Suppliers', 
-      path: '/supply/suppliers',
-      iconType: 'suppliers'
-    },
-    { 
-      label: 'Materials', 
-      path: '/supply/materials',
-      iconType: 'materials'
-    },
-    { 
-      label: 'Purchase Orders', 
-      path: '/supply/orders',
-      iconType: 'orders'
+  navigationSections = [
+    {
+      label: 'Overview',
+      items: [
+        {
+          label: 'Dashboard',
+          path: '/dashboard',
+          iconType: 'dashboard'
+        }
+      ]
     },
     {
-      label: 'Production & Products',
-      path: '/production/products',
-      iconType: 'products'
+      label: 'Supply',
+      items: [
+        {
+          label: 'Suppliers',
+          path: '/supply/suppliers',
+          iconType: 'suppliers'
+        },
+        {
+          label: 'Materials',
+          path: '/supply/materials',
+          iconType: 'materials'
+        },
+        {
+          label: 'Purchase Orders',
+          path: '/supply/orders',
+          iconType: 'orders'
+        }
+      ]
     },
     {
-      label: 'Production Orders',
-      path: '/production/orders',
-      iconType: 'orders'
+      label: 'Production',
+      items: [
+        {
+          label: 'Production & Products',
+          path: '/production/products',
+          iconType: 'products'
+        },
+        {
+          label: 'Production Orders',
+          path: '/production/orders',
+          iconType: 'orders'
+        }
+      ]
+    },
+    {
+      label: 'Delivery',
+      items: [
+        {
+          label: 'Customers',
+          path: '/delivery/customers',
+          iconType: 'suppliers'
+        },
+        {
+          label: 'Customer Orders',
+          path: '/delivery/customer-orders',
+          iconType: 'orders'
+        },
+        {
+          label: 'Deliveries',
+          path: '/delivery/deliveries',
+          iconType: 'materials'
+        },
+        {
+          label: 'Drivers',
+          path: '/delivery/drivers',
+          iconType: 'dashboard'
+        },
+        {
+          label: 'Vehicles',
+          path: '/delivery/vehicles',
+          iconType: 'materials'
+        }
+      ]
     }
   ];
+
+  /** Flat list kept for backwards-compatible lookups */
+  navigationItems = this.navigationSections.flatMap(section => section.items);
 
   private async loadUserProfile(): Promise<void> {
     try {
