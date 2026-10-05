@@ -8,6 +8,42 @@
     buttonLink="/supply/suppliers/create"
   />
 
+  <!-- Search -->
+  <div class="flex flex-col sm:flex-row gap-3 mb-6">
+    <div class="relative flex-1">
+      <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input
+        type="text"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        (keyup.enter)="onSearch()"
+        placeholder="Search supplier by exact name..."
+        class="w-full pl-9 pr-4 py-2.5 text-sm bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 shadow-[0_1px_3px_rgba(0,0,0,0.02)] transition-all"
+      />
+    </div>
+    <div class="flex gap-2 shrink-0">
+      <button
+        type="button"
+        (click)="onSearch()"
+        [disabled]="isSearching()"
+        class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-xl text-white text-xs font-semibold transition-colors disabled:opacity-40 shadow-xs"
+      >
+        {{ isSearching() ? 'Searching...' : 'Search' }}
+      </button>
+      @if (searchQuery()) {
+        <button
+          type="button"
+          (click)="clearSearch()"
+          class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-xl text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
+        >
+          Clear ✕
+        </button>
+      }
+    </div>
+  </div>
+
   <!-- Suppliers Table -->
   <app-data-table
     [columns]="columns"
@@ -21,7 +57,7 @@
   />
 
   <!-- Pagination -->
-  @if (totalPages() > 0) {
+  @if (totalPages() > 0 && !searchQuery()) {
   <div
     class="flex justify-between items-center mt-6 bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.02)] px-6 py-4"
   >

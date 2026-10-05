@@ -60,6 +60,15 @@ export class SupplierApiService {
 
 
   /**
+   * Search a supplier by exact name
+   * @param name
+   */
+  searchByName(name: string): Observable<SupplierResponse> {
+    const params = new HttpParams().set('name', name);
+    return this.http.get<SupplierResponse>(`${this.apiUrl}/search`, { params });
+  }
+
+  /**
    * Delete a supplier by id
    * @param id
    */

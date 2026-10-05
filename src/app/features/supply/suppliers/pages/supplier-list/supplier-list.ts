@@ -1,22 +1,30 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {SupplierService} from '../../services/supplier.service';
+import {SupplierApiService} from '../../services/supplier-api.service';
 import {SupplierResponse} from '../../models/supplier.model';
 import {Router} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 import { DataTableComponent, TableColumn, TableAction } from '../../../../../shared/components/data-table/data-table.component';
+import { NotificationService } from '../../../../../core/services/notification.service';
+import { ErrorHandler } from '../../../../../core/utils/error-handler';
 
 @Component({
   selector: 'app-supplier-list',
-  imports: [PageHeaderComponent, DataTableComponent],
+  imports: [CommonModule, FormsModule, PageHeaderComponent, DataTableComponent],
   templateUrl: './supplier-list.html',
   styleUrl: './supplier-list.css',
 })
 export class SupplierList implements OnInit {
 
   private supplierService: SupplierService = inject(SupplierService);
+  private supplierApi: SupplierApiService = inject(SupplierApiService);
+  private notification = inject(NotificationService);
   private router: Router = inject(Router);
 
   searchQuery = signal<string>('');
+  isSearching = signal<boolean>(false);
   pageSize = signal<number>(10);
   sortBy = signal<string>('id');
 
@@ -71,14 +79,39 @@ export class SupplierList implements OnInit {
     console.log("Data fetched: ", this.suppliers);
   }
 
-  onDelete(supplier: SupplierResponse) {
-    if (confirm(`Are you sure you want to delete this supplier ${supplier.name}?`)) {
+  onDelete(supplier: SupplierResponse) {    if (confirm(`Are you sure you want to delete this supplier ${supplier.name}?`)) {
       this.supplierService.deleteSupplier(supplier.id).subscribe({
         next: () => {
           this.loadSuppliers();
         }
       });
     }
+  }
+
+  onSearch(): void {
+    const query = this.searchQuery().trim();
+    if (!query) {
+      this.clearSearch();
+      return;
+    }
+    this.isSearching.set(true);
+    this.supplierApi.searchByName(query).subscribe({
+      next: (supplier) => {
+        this.supplierService.suppliers.set(supplier ? [supplier] : []);
+        this.isSearching.set(false);
+      },
+      error: (error) => {
+        console.error('Supplier search failed:', error);
+        this.notification.error('No match', ErrorHandler.getCompleteErrorMessage(error));
+        this.supplierService.suppliers.set([]);
+        this.isSearching.set(false);
+      }
+    });
+  }
+
+  clearSearch(): void {
+    this.searchQuery.set('');
+    this.loadSuppliers();
   }
 
   nextPage() {
