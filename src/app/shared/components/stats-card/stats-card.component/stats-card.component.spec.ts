@@ -14,6 +14,9 @@ describe('StatsCardComponent', () => {
 
     fixture = TestBed.createComponent(StatsCardComponent);
     component = fixture.componentInstance;
+    component.title = 'Total Orders';
+    component.value = '1,234';
+    component.icon = '📦';
     await fixture.whenStable();
   });
 

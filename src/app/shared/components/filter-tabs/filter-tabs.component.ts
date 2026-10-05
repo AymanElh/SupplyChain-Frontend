@@ -13,21 +13,23 @@ export interface FilterTab {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="bg-[#111111] rounded-xl border border-gray-800 mb-6 overflow-hidden">
-      <div class="flex border-b border-gray-800">
-        @for (tab of tabs; track tab.value) {
-          <button
-            (click)="onTabClick(tab.value)"
-            [class]="getTabClasses(tab)"
-            class="px-6 py-3 font-semibold hover:text-white hover:bg-[#0a0a0a] transition-colors"
-          >
-            {{ tab.label }}
-            @if (tab.count !== undefined) {
-              <span class="ml-1">({{ tab.count }})</span>
-            }
-          </button>
-        }
-      </div>
+    <div class="bg-slate-100/90 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200/80 dark:border-slate-700/80 inline-flex flex-wrap gap-1 mb-6">
+      @for (tab of tabs; track tab.value) {
+        <button
+          type="button"
+          (click)="onTabClick(tab.value)"
+          [class]="getTabClasses(tab)"
+          class="px-4 py-2 text-xs font-semibold rounded-lg transition-all inline-flex items-center gap-1.5"
+        >
+          <span>{{ tab.label }}</span>
+          @if (tab.count !== undefined) {
+            <span [class]="activeTab === tab.value ? 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200' : 'bg-slate-200 dark:bg-slate-700/50 text-slate-600 dark:text-slate-400'" 
+                  class="px-1.5 py-0.2 rounded-full text-[10px] font-bold">
+              {{ tab.count }}
+            </span>
+          }
+        </button>
+      }
     </div>
   `
 })
@@ -44,19 +46,9 @@ export class FilterTabsComponent {
     const isActive = this.activeTab === tab.value;
     
     if (!isActive) {
-      return 'text-gray-400';
+      return 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/60 dark:hover:bg-slate-700/50';
     }
 
-    // Active tab classes based on color
-    const colorMap: { [key: string]: string } = {
-      'blue': 'bg-blue-600 text-white',
-      'yellow': 'bg-yellow-600 text-white',
-      'red': 'bg-red-600 text-white',
-      'green': 'bg-green-600 text-white',
-      'purple': 'bg-purple-600 text-white',
-      'gray': 'bg-gray-600 text-white'
-    };
-
-    return colorMap[tab.color || 'blue'] || 'bg-blue-600 text-white';
+    return 'bg-white dark:bg-[#111827] text-slate-900 dark:text-slate-100 shadow-xs border border-slate-200/80 dark:border-slate-700';
   }
 }
