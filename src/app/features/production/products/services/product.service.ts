@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { ProductApiService } from './product-api.service';
-import { Observable, tap } from 'rxjs';
-import { BomItem, BomRequest, ProductBom, ProductRequest, ProductResponse } from '../models/product.model';
+import { forkJoin, Observable, tap } from 'rxjs';
+import { BomItem, BomItemRequest, ProductBom, ProductRequest, ProductResponse } from '../models/product.model';
 
 @Injectable({
     providedIn: 'root',
@@ -88,11 +88,16 @@ export class ProductService {
         );
     }
 
-    saveBom(productId: number, bom: BomRequest) {
-        return this.api.saveBom(productId, bom).pipe(
+    /**
+     * Add several materials to a product's BOM.
+     * The backend only exposes a per-item POST, so items are created
+     * one by one and the BOM is reloaded afterwards.
+     */
+    saveBomItems(productId: number, items: BomItemRequest[]) {
+        const creations = items.map(item => this.api.addBomItem(productId, item));
+        return forkJoin(creations).pipe(
             tap({
-                next: (newBom) => {
-                    this.currentBom.set(newBom);
+                next: () => {
                     this.currentProduct.update(product => {
                         if (product) {
                             return { ...product, hasBom: true };
@@ -107,8 +112,54 @@ export class ProductService {
         );
     }
 
-    deleteBom(productId: number) {
-        return this.api.deleteBom(productId).pipe(
+    updateBomItemQuantity(bomId: number, quantity: number) {
+        return this.api.updateBomItemQuantity(bomId, quantity).pipe(
+            tap({
+                next: (updated) => {
+                    this.currentBom.update(bom => {
+                        if (!bom?.items) {
+                            return bom;
+                        }
+                        const items = bom.items.map(item => item.id === bomId ? updated : item);
+                        return {
+                            ...bom,
+                            items,
+                            totalMaterialCost: items.reduce((sum, item) => sum + (item.totalCost || 0), 0)
+                        };
+                    });
+                }
+            })
+        );
+    }
+
+    removeBomItem(bomId: number) {
+        return this.api.removeBomItem(bomId).pipe(
+            tap({
+                next: () => {
+                    this.currentBom.update(bom => {
+                        if (!bom?.items) {
+                            return bom;
+                        }
+                        const items = bom.items.filter(item => item.id !== bomId);
+                        return {
+                            ...bom,
+                            items,
+                            totalMaterialCost: items.reduce((sum, item) => sum + (item.totalCost || 0), 0)
+                        };
+                    });
+                }
+            })
+        );
+    }
+
+    clearBom(productId: number) {
+        const ids = (this.currentBom()?.items || [])
+            .map(item => item.id)
+            .filter((id): id is number => id !== undefined);
+        if (ids.length === 0) {
+            return forkJoin([]);
+        }
+        return forkJoin(ids.map(id => this.api.removeBomItem(id))).pipe(
             tap({
                 next: () => {
                     this.currentBom.set(null);

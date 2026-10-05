@@ -49,9 +49,9 @@ export interface BomRequest {
 }
 
 /**
- * Individual BOM item request
+ * Individual BOM item request (matches backend BillOfMaterialRequestDTO)
  */
 export interface BomItemRequest {
-    rawMaterialId: number;
+    materialId: number;
     quantity: number;
 }

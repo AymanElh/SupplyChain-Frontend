@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RawMaterialService } from '../../../../supply/raw-materials/services/raw-material-service';
 import { ProductService } from '../../services/product.service';
 import { NotificationService } from '../../../../../core/services/notification.service';
-import { BomRequest } from '../../models/product.model';
+import { BomItemRequest } from '../../models/product.model';
 import { MaterialItemsTableComponent } from '../../../../../shared/components/material-items-table/material-items-table.component';
 
 @Component({
@@ -94,11 +94,13 @@ export class BomFormComponent implements OnInit {
 
     this.isSubmitting.set(true);
 
-    const bomRequest: BomRequest = {
-      items: this.bomForm.value.items
-    };
+    // The form uses rawMaterialId (shared items table), the backend expects materialId
+    const items: BomItemRequest[] = this.bomForm.value.items.map((row: { rawMaterialId?: number; materialId?: number; quantity: number }) => ({
+      materialId: row.rawMaterialId ?? row.materialId,
+      quantity: row.quantity
+    }));
 
-    this.productService.saveBom(this.productId, bomRequest).subscribe({
+    this.productService.saveBomItems(this.productId, items).subscribe({
       next: () => {
         this.notification.success('Success', 'Bill of Materials created successfully');
         this.isSubmitting.set(false);

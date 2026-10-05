@@ -1,7 +1,7 @@
   import { Injectable } from '@angular/core';
   import { HttpClient, HttpParams } from '@angular/common/http';
   import { environment } from '../../../../../environments/environment';
-  import { BomItem, BomRequest, ProductBom, ProductDetailResponse, ProductRequest, ProductResponse } from '../models/product.model';
+  import { BomItem, BomItemRequest, ProductDetailResponse, ProductRequest, ProductResponse } from '../models/product.model';
   import { Observable } from 'rxjs';
   import { PageResponse } from '../../../../core/models/page-response.model';
 
@@ -79,23 +79,33 @@
       }
 
       /**
-       * Save BOM for a product
-       * POST /products/{productId}/bom
+       * Add a single material to a product's BOM
+       * POST /products/{productId}/bills
        * @param productId
-       * @param bom
-       * @returns
+       * @param item
+       * @returns the created BillOfMaterialResponseDTO
        */
-      saveBom(productId: number, bom: BomRequest): Observable<ProductBom> {
-          return this.http.post<ProductBom>(`${this.apiUrl}/${productId}/bills`, bom);
+      addBomItem(productId: number, item: BomItemRequest): Observable<BomItem> {
+          return this.http.post<BomItem>(`${this.apiUrl}/${productId}/bills`, item);
       }
 
       /**
-       * Delete BOM for a product
-       * DELETE /products/{productId}/bom
-       * @param productId
-       * @returns
+       * Update the quantity of a BOM line
+       * PATCH /products/bill/{bomId}?quantity=
+       * @param bomId
+       * @param quantity
        */
-      deleteBom(productId: number): Observable<void> {
-          return this.http.delete<void>(`${this.apiUrl}/${productId}/bills`);
+      updateBomItemQuantity(bomId: number, quantity: number): Observable<BomItem> {
+          const params = new HttpParams().set('quantity', quantity.toString());
+          return this.http.patch<BomItem>(`${this.apiUrl}/bill/${bomId}`, null, { params });
+      }
+
+      /**
+       * Remove a single material from a BOM
+       * DELETE /products/bom/{bomId}
+       * @param bomId
+       */
+      removeBomItem(bomId: number): Observable<void> {
+          return this.http.delete<void>(`${this.apiUrl}/bom/${bomId}`);
       }
   }
