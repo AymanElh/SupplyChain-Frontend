@@ -1,0 +1,25 @@
+<!-- Drivers Page -->
+<div class="p-6">
+  <!-- Header -->
+  <app-page-header
+    title="Drivers"
+    description="Manage your delivery drivers"
+    buttonText="+ Add New Driver"
+    buttonLink="/delivery/drivers/create"
+  />
+
+  <!-- Drivers Table -->
+  <app-data-table
+    [columns]="columns"
+    [data]="drivers()"
+    [loading]="isLoading()"
+    loadingMessage="Loading drivers..."
+    emptyMessage="No drivers found. Add your first driver to get started."
+    emptyIcon="🚚"
+    [trackBy]="trackByDriver"
+  />
+
+  <ng-template #availabilityTpl let-driver>
+    <app-status-badge [status]="driver.isAvailable ? 'SUCCESS' : 'WARNING'" [label]="driver.isAvailable ? 'Available' : 'Unavailable'" />
+  </ng-template>
+</div>

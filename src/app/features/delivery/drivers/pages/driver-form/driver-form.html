@@ -1,0 +1,125 @@
+<!-- Driver Form Page -->
+<div class="p-6 max-w-4xl mx-auto">
+  <!-- Header -->
+  <app-page-header
+    title="Add New Driver"
+    description="Create a new driver entry"
+    buttonText="← Back"
+    buttonLink="../"
+    buttonClass="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700"
+  />
+
+  <!-- Form Container -->
+  <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-8 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <form [formGroup]="driverForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Form Fields Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Driver Name -->
+        <div>
+          <label for="driver-name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            Driver Name <span class="text-rose-500">*</span>
+          </label>
+          <input
+            type="text"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+            [class.border-slate-200]="!isFieldInvalid('name')"
+            [class.dark:border-slate-700]="!isFieldInvalid('name')"
+            [class.border-rose-500]="isFieldInvalid('name')"
+            id="driver-name"
+            formControlName="name"
+            placeholder="Enter driver name"
+          />
+          @if(isFieldInvalid('name')) {
+          <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('name') }}</div>
+          }
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label for="driver-phone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            Phone <span class="text-rose-500">*</span>
+          </label>
+          <input
+            type="text"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+            [class.border-slate-200]="!isFieldInvalid('phone')"
+            [class.dark:border-slate-700]="!isFieldInvalid('phone')"
+            [class.border-rose-500]="isFieldInvalid('phone')"
+            id="driver-phone"
+            formControlName="phone"
+            placeholder="0XXXXXXXX"
+          />
+          @if (isFieldInvalid('phone')) {
+          <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('phone') }}</div>
+          }
+        </div>
+
+        <!-- License Number -->
+        <div>
+          <label for="driver-licenseNumber" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+            License Number <span class="text-rose-500">*</span>
+          </label>
+          <input
+            type="text"
+            class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-slate-400/25 focus:border-slate-400 dark:focus:border-slate-600 transition-all"
+            [class.border-slate-200]="!isFieldInvalid('licenseNumber')"
+            [class.dark:border-slate-700]="!isFieldInvalid('licenseNumber')"
+            [class.border-rose-500]="isFieldInvalid('licenseNumber')"
+            id="driver-licenseNumber"
+            formControlName="licenseNumber"
+            placeholder="Enter license number"
+          />
+          @if (isFieldInvalid('licenseNumber')) {
+          <div class="text-rose-500 text-xs mt-1.5">{{ getFieldError('licenseNumber') }}</div>
+          }
+        </div>
+
+        <!-- Availability -->
+        <div class="flex items-center gap-3 bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 rounded-lg px-4 py-2.5">
+          <input
+            class="w-4 h-4 rounded accent-slate-900 dark:accent-slate-100"
+            type="checkbox"
+            id="driver-isAvailable"
+            formControlName="isAvailable"
+          />
+          <label class="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider" for="driver-isAvailable">
+            Available for delivery
+          </label>
+        </div>
+      </div>
+
+      <!-- Terms and Conditions -->
+      <div class="border-t border-slate-100 dark:border-slate-800 pt-6">
+        <div class="flex items-start gap-3">
+          <input
+            class="mt-1 w-4 h-4 rounded accent-slate-900 dark:accent-slate-100 bg-slate-50 dark:bg-slate-900"
+            type="checkbox"
+            id="invalidCheck"
+            required
+          />
+          <label class="text-xs text-slate-600 dark:text-slate-400" for="invalidCheck">
+            I confirm that the driver license details are verified
+          </label>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-6">
+        <button
+          class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
+          type="button"
+          routerLink="../"
+        >
+          Cancel
+        </button>
+        <button
+          class="px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 rounded-lg text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+          type="submit"
+          [disabled]="driverForm.invalid || isSubmitting"
+        >
+          {{ isSubmitting ? 'Saving...' : 'Create Driver' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
