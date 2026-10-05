@@ -1,216 +1,369 @@
-<!-- Dashboard Content -->
-<div class="p-6">
-  <!-- Stats Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    <!-- Stat Card 1 -->
-    @for (card of statsCards; track $index) {
-    <app-stats-card
-      title="{{ card.title }}"
-      value="{{ card.value }}"
-      icon="{{ card.icon }}"
-      iconBgColor="{{ card.iconBgColor }}"
-      trend="{{ card.trend }}"
-      trendColor="{{ card.trendColor }}"
-    />
+<div class="p-4 sm:p-6 lg:p-8 w-full space-y-6 lg:space-y-8">
+  <!-- Operational Briefing Header Bar -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div>
+      <div class="flex items-center gap-2.5">
+        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Operations Briefing</h1>
+        <span class="px-2.5 py-0.5 text-xs font-semibold bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-md tracking-wide">LIVE</span>
+      </div>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+        Overview of manufacturing throughput, inventory safety stock, and procurement flow.
+      </p>
+    </div>
+
+    <!-- Actions & Period Filter -->
+    <div class="flex items-center gap-3">
+      <!-- Timeframe selector -->
+      <div class="bg-white dark:bg-[#111827] p-1 rounded-lg border border-slate-200/90 dark:border-slate-800 shadow-2xs inline-flex text-xs font-semibold text-slate-600 dark:text-slate-400">
+        <button 
+          (click)="setPeriod('today')" 
+          [class.bg-slate-100]="selectedPeriod() === 'today'"
+          [class.dark:bg-slate-800]="selectedPeriod() === 'today'"
+          [class.text-slate-900]="selectedPeriod() === 'today'"
+          [class.dark:text-slate-100]="selectedPeriod() === 'today'"
+          class="px-3 py-1.5 rounded-md hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+        >
+          Today
+        </button>
+        <button 
+          (click)="setPeriod('week')" 
+          [class.bg-slate-100]="selectedPeriod() === 'week'"
+          [class.dark:bg-slate-800]="selectedPeriod() === 'week'"
+          [class.text-slate-900]="selectedPeriod() === 'week'"
+          [class.dark:text-slate-100]="selectedPeriod() === 'week'"
+          class="px-3 py-1.5 rounded-md hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+        >
+          7 Days
+        </button>
+        <button 
+          (click)="setPeriod('month')" 
+          [class.bg-slate-100]="selectedPeriod() === 'month'"
+          [class.dark:bg-slate-800]="selectedPeriod() === 'month'"
+          [class.text-slate-900]="selectedPeriod() === 'month'"
+          [class.dark:text-slate-100]="selectedPeriod() === 'month'"
+          class="px-3 py-1.5 rounded-md hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+        >
+          30 Days
+        </button>
+      </div>
+
+      <!-- Primary Action -->
+      <a 
+        routerLink="/supply/orders/create"
+        class="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 rounded-lg text-xs font-semibold transition-all shadow-xs"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>New Purchase Order</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- KPI Ledger Metrics Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    @for (card of statsCards; track card.title) {
+      <app-stats-card
+        [title]="card.title"
+        [value]="card.value"
+        [icon]="card.icon"
+        [iconBgColor]="card.iconBgColor"
+        [trend]="card.trend"
+        [trendColor]="card.trendColor"
+      />
     }
   </div>
 
-  <!-- Two Column Layout -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-    <!-- Recent Orders -->
-    <div class="bg-[#111111] rounded-xl p-6 border border-gray-800">
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="text-lg font-semibold">Recent Orders</h3>
-        <a href="#" class="text-sm text-blue-500 hover:text-blue-400">View all →</a>
+  <!-- Production Pipeline Step Flow (Directly mirroring backend ProductionOrder state machine) -->
+  <div class="bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+      <div>
+        <div class="flex items-center gap-2">
+          <h2 class="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">Shop Floor Production Pipeline</h2>
+          <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700">
+            57 Active Work Orders
+          </span>
+        </div>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Real-time status tracking across production work centers</p>
       </div>
-      <div class="space-y-4">
-        <div
-          class="flex items-center justify-between p-4 bg-[#0a0a0a] rounded-lg border border-gray-800"
-        >
-          <div>
-            <p class="font-medium">Order #1234</p>
-            <p class="text-sm text-gray-500">ABC Supplier</p>
+      <a 
+        routerLink="/production/products" 
+        class="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 inline-flex items-center gap-1 group"
+      >
+        <span>View Production Orders</span>
+        <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Segmented Multi-Bar -->
+    <div class="h-3 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex gap-0.5 p-0.5 border border-slate-200/60 dark:border-slate-700 mb-5">
+      @for (stage of productionStages; track stage.id) {
+        <div 
+          [class]="stage.color + ' h-full rounded-full transition-all duration-500'" 
+          [style.width.%]="stage.percentage"
+          [title]="stage.name + ': ' + stage.count + ' units (' + stage.percentage + '%)'"
+        ></div>
+      }
+    </div>
+
+    <!-- Stages Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      @for (stage of productionStages; track stage.id) {
+        <div class="p-3.5 rounded-lg bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-600 dark:text-slate-300 truncate">{{ stage.name }}</span>
+            <span [class]="stage.color + ' w-2.5 h-2.5 rounded-full inline-block flex-shrink-0'"></span>
           </div>
-          <span class="px-3 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">In Progress</span>
-        </div>
-        <div
-          class="flex items-center justify-between p-4 bg-[#0a0a0a] rounded-lg border border-gray-800"
-        >
-          <div>
-            <p class="font-medium">Order #1233</p>
-            <p class="text-sm text-gray-500">XYZ Materials</p>
+          <div class="mt-2 flex items-baseline justify-between">
+            <span class="text-2xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">{{ stage.count }}</span>
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 tabular-nums">{{ stage.percentage }}%</span>
           </div>
-          <span class="px-3 py-1 bg-yellow-900 text-yellow-200 text-xs rounded-full">Pending</span>
         </div>
-        <div
-          class="flex items-center justify-between p-4 bg-[#0a0a0a] rounded-lg border border-gray-800"
+      }
+    </div>
+  </div>
+
+  <!-- Dual Workspace: Recent Orders Ledger & Materials Watchlist -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Left Column: Recent Orders Ledger (7 cols) -->
+    <div class="lg:col-span-7 bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col justify-between">
+      <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">Recent Orders & Batches</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Procurement and manufacturing order logs</p>
+        </div>
+        <a 
+          routerLink="/supply/orders" 
+          class="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
         >
-          <div>
-            <p class="font-medium">Order #1232</p>
-            <p class="text-sm text-gray-500">Steel Corp</p>
-          </div>
-          <span class="px-3 py-1 bg-green-900 text-green-200 text-xs rounded-full">Delivered</span>
-        </div>
-        <div
-          class="flex items-center justify-between p-4 bg-[#0a0a0a] rounded-lg border border-gray-800"
-        >
-          <div>
-            <p class="font-medium">Order #1231</p>
-            <p class="text-sm text-gray-500">Metal Works</p>
-          </div>
-          <span class="px-3 py-1 bg-green-900 text-green-200 text-xs rounded-full">Delivered</span>
-        </div>
+          All Orders →
+        </a>
+      </div>
+
+      <!-- Clean Paper Table -->
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-slate-50/80 dark:bg-slate-800/70 border-b border-slate-200/70 dark:border-slate-700/80 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            <tr>
+              <th class="px-5 py-3">Order / Code</th>
+              <th class="px-4 py-3">Partner / Line</th>
+              <th class="px-4 py-3 text-right">Value</th>
+              <th class="px-4 py-3 text-center">Status</th>
+              <th class="px-4 py-3 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs">
+            @for (order of recentOrders; track order.id) {
+              <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors">
+                <td class="px-5 py-3.5">
+                  <div class="font-mono font-semibold text-slate-900 dark:text-slate-100">{{ order.orderNumber }}</div>
+                  <div class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ order.date }}</div>
+                </td>
+                <td class="px-4 py-3.5">
+                  <div class="font-medium text-slate-800 dark:text-slate-200">{{ order.partyName }}</div>
+                  <div class="text-[11px] text-slate-400 dark:text-slate-500">{{ order.itemsCount }} items • {{ order.type }}</div>
+                </td>
+                <td class="px-4 py-3.5 text-right font-mono font-bold text-slate-900 dark:text-slate-100 tabular-nums">
+                  ${{ order.totalValue | number:'1.2-2' }}
+                </td>
+                <td class="px-4 py-3.5 text-center">
+                  <app-status-badge [status]="order.status" type="order" />
+                </td>
+                <td class="px-4 py-3.5 text-right">
+                  <a 
+                    [routerLink]="['/supply/orders', order.id]"
+                    class="px-2.5 py-1 text-[11px] font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-md transition-colors"
+                  >
+                    View
+                  </a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-3 bg-slate-50/50 dark:bg-slate-900/30 border-t border-slate-100 dark:border-slate-800 text-right">
+        <span class="text-[11px] text-slate-400 dark:text-slate-500 font-medium">Auto-updated via event stream</span>
       </div>
     </div>
 
-    <!-- Low Stock Alert -->
-    <div class="bg-[#111111] rounded-xl p-6 border border-gray-800">
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="text-lg font-semibold">Low Stock Alert</h3>
-        <span class="px-3 py-1 bg-red-900 text-red-200 text-xs rounded-full">5 Items</span>
+    <!-- Right Column: Materials Threshold Watchlist (5 cols) -->
+    <div class="lg:col-span-5 bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.02)] p-5 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">Materials Stock Watch</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Critical & reorder thresholds</p>
+          </div>
+          <span class="px-2 py-0.5 text-xs font-semibold bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 rounded-full">
+            2 Alerts
+          </span>
+        </div>
+
+        <!-- Material items list -->
+        <div class="divide-y divide-slate-100 dark:divide-slate-800 mt-1">
+          @for (item of lowStockItems; track item.id) {
+            <div class="py-3.5">
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <div>
+                  <h3 class="text-xs font-semibold text-slate-900 dark:text-slate-100">{{ item.name }}</h3>
+                  <span class="text-[10px] font-mono text-slate-400 dark:text-slate-500">{{ item.sku }} • {{ item.category }}</span>
+                </div>
+                <div class="text-right">
+                  <span 
+                    [class]="item.urgency === 'CRITICAL' ? 'text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900/60' : item.urgency === 'LOW' ? 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-900/60' : 'text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700'"
+                    class="text-[10px] font-bold px-2 py-0.5 rounded border inline-block"
+                  >
+                    {{ item.stock }} {{ item.unit }}
+                  </span>
+                  <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Min: {{ item.stockMin }}</div>
+                </div>
+              </div>
+
+              <!-- Meter bar -->
+              <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                <div 
+                  [class]="item.urgency === 'CRITICAL' ? 'bg-rose-500' : item.urgency === 'LOW' ? 'bg-amber-500' : 'bg-emerald-500'"
+                  class="h-full rounded-full transition-all" 
+                  [style.width.%]="item.percentRemaining"
+                ></div>
+              </div>
+            </div>
+          }
+        </div>
       </div>
-      <div class="space-y-4">
-        <div class="p-4 bg-[#0a0a0a] rounded-lg border border-red-900">
-          <div class="flex items-center justify-between mb-2">
-            <p class="font-medium">Steel Sheets</p>
-            <span class="text-red-500 text-sm font-bold">⚠️ 8 units</span>
-          </div>
-          <div class="w-full bg-gray-800 rounded-full h-2">
-            <div class="bg-red-500 h-2 rounded-full" style="width: 20%"></div>
-          </div>
-          <p class="text-xs text-gray-500 mt-2">Min: 50 units</p>
-        </div>
-        <div class="p-4 bg-[#0a0a0a] rounded-lg border border-yellow-900">
-          <div class="flex items-center justify-between mb-2">
-            <p class="font-medium">Copper Wire</p>
-            <span class="text-yellow-500 text-sm font-bold">⚠️ 32 units</span>
-          </div>
-          <div class="w-full bg-gray-800 rounded-full h-2">
-            <div class="bg-yellow-500 h-2 rounded-full" style="width: 40%"></div>
-          </div>
-          <p class="text-xs text-gray-500 mt-2">Min: 80 units</p>
-        </div>
-        <div class="p-4 bg-[#0a0a0a] rounded-lg border border-yellow-900">
-          <div class="flex items-center justify-between mb-2">
-            <p class="font-medium">Aluminum Bars</p>
-            <span class="text-yellow-500 text-sm font-bold">⚠️ 45 units</span>
-          </div>
-          <div class="w-full bg-gray-800 rounded-full h-2">
-            <div class="bg-yellow-500 h-2 rounded-full" style="width: 45%"></div>
-          </div>
-          <p class="text-xs text-gray-500 mt-2">Min: 100 units</p>
-        </div>
+
+      <!-- Reorder CTA button -->
+      <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-2">
+        <a 
+          routerLink="/supply/materials"
+          class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-semibold transition-colors border border-slate-200/70 dark:border-slate-700"
+        >
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Manage All Inventory Stock Levels</span>
+        </a>
       </div>
     </div>
   </div>
 
-  <!-- Three Column Layout -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- Production Status -->
-    <div class="bg-[#111111] rounded-xl p-6 border border-gray-800">
-      <h3 class="text-lg font-semibold mb-6">Production Status</h3>
-      <div class="space-y-4">
+  <!-- Bottom Row: Key Suppliers & Quick Operational Shortcuts -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Key Suppliers (7 cols) -->
+    <div class="lg:col-span-7 bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.02)] p-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
         <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-sm text-gray-400">In Waiting</span>
-            <span class="text-sm font-bold">15</span>
-          </div>
-          <div class="w-full bg-gray-800 rounded-full h-2">
-            <div class="bg-yellow-500 h-2 rounded-full" style="width: 30%"></div>
-          </div>
+          <h2 class="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">Top Performing Suppliers</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Reliability score and active fulfillment rates</p>
         </div>
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-sm text-gray-400">In Production</span>
-            <span class="text-sm font-bold">23</span>
-          </div>
-          <div class="w-full bg-gray-800 rounded-full h-2">
-            <div class="bg-blue-500 h-2 rounded-full" style="width: 46%"></div>
-          </div>
-        </div>
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-sm text-gray-400">Finished</span>
-            <span class="text-sm font-bold">12</span>
-          </div>
-          <div class="w-full bg-gray-800 rounded-full h-2">
-            <div class="bg-green-500 h-2 rounded-full" style="width: 24%"></div>
-          </div>
-        </div>
+        <a 
+          routerLink="/supply/suppliers"
+          class="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+        >
+          View All Suppliers →
+        </a>
       </div>
-    </div>
 
-    <!-- Top Suppliers -->
-    <div class="bg-[#111111] rounded-xl p-6 border border-gray-800">
-      <h3 class="text-lg font-semibold mb-6">Top Suppliers</h3>
-      <div class="space-y-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div
-              class="w-10 h-10 rounded-lg bg-blue-900 flex items-center justify-center font-bold text-blue-200 mr-3"
-            >
-              A
-            </div>
-            <div>
-              <p class="font-medium">ABC Supplier</p>
-              <p class="text-xs text-gray-500">45 orders</p>
-            </div>
-          </div>
-          <span class="text-yellow-500">★ 4.8</span>
-        </div>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div
-              class="w-10 h-10 rounded-lg bg-purple-900 flex items-center justify-center font-bold text-purple-200 mr-3"
-            >
-              X
-            </div>
-            <div>
-              <p class="font-medium">XYZ Materials</p>
-              <p class="text-xs text-gray-500">38 orders</p>
-            </div>
-          </div>
-          <span class="text-yellow-500">★ 4.6</span>
-        </div>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div
-              class="w-10 h-10 rounded-lg bg-green-900 flex items-center justify-center font-bold text-green-200 mr-3"
-            >
-              S
-            </div>
-            <div>
-              <p class="font-medium">Steel Corp</p>
-              <p class="text-xs text-gray-500">32 orders</p>
-            </div>
-          </div>
-          <span class="text-yellow-500">★ 4.5</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="bg-[#111111] rounded-xl p-6 border border-gray-800">
-      <h3 class="text-lg font-semibold mb-6">Quick Actions</h3>
       <div class="space-y-3">
-        <button class="w-full p-4 bg-blue-600 hover:bg-blue-700 rounded-lg text-left font-medium">
-          + Create Order
-        </button>
-        <button
-          class="w-full p-4 bg-[#0a0a0a] hover:bg-gray-800 rounded-lg text-left font-medium border border-gray-800"
-        >
-          + Add Supplier
-        </button>
-        <button
-          class="w-full p-4 bg-[#0a0a0a] hover:bg-gray-800 rounded-lg text-left font-medium border border-gray-800"
-        >
-          + New Material
-        </button>
-        <button
-          class="w-full p-4 bg-[#0a0a0a] hover:bg-gray-800 rounded-lg text-left font-medium border border-gray-800"
-        >
-          📊 View Reports
-        </button>
+        @for (supplier of keySuppliers; track supplier.id) {
+          <div class="p-3 rounded-lg border border-slate-200/70 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-colors flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-slate-900 dark:bg-slate-800 text-white font-bold text-xs flex items-center justify-center flex-shrink-0 border border-transparent dark:border-slate-700">
+                {{ supplier.name.charAt(0) }}
+              </div>
+              <div>
+                <h3 class="text-xs font-semibold text-slate-900 dark:text-slate-100 leading-tight">{{ supplier.name }}</h3>
+                <span class="text-[11px] text-slate-400 dark:text-slate-500">{{ supplier.category }} • {{ supplier.activeOrders }} active orders</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 text-right">
+              <div>
+                <span class="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/60">
+                  {{ supplier.fulfilledRate }}%
+                </span>
+                <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Fulfillment</p>
+              </div>
+              <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800/60">
+                ★ {{ supplier.rating }}
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Quick Operational Actions (5 cols) -->
+    <div class="lg:col-span-5 bg-white dark:bg-[#111827] rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.02)] p-5 flex flex-col justify-between">
+      <div>
+        <div class="pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
+          <h2 class="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">Quick Operations</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Direct entry points to common workflows</p>
+        </div>
+
+        <div class="space-y-2.5">
+          <a 
+            routerLink="/supply/orders/create"
+            class="p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-slate-900 dark:hover:border-slate-600 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-all flex items-center justify-between group"
+          >
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center flex-shrink-0 border border-slate-200/70 dark:border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-slate-700 dark:group-hover:text-white transition-colors">Create Supplier Order</span>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500">Initiate purchase order for raw stock</p>
+              </div>
+            </div>
+            <span class="text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors">→</span>
+          </a>
+
+          <a 
+            routerLink="/supply/suppliers/create"
+            class="p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-slate-900 dark:hover:border-slate-600 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-all flex items-center justify-between group"
+          >
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-md bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 flex items-center justify-center flex-shrink-0 border border-indigo-200/60 dark:border-indigo-800/60">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Onboard New Supplier</span>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500">Register new vendor partner details</p>
+              </div>
+            </div>
+            <span class="text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors">→</span>
+          </a>
+
+          <a 
+            routerLink="/supply/materials/create"
+            class="p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-slate-900 dark:hover:border-slate-600 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-all flex items-center justify-between group"
+          >
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 flex items-center justify-center flex-shrink-0 border border-emerald-200/60 dark:border-emerald-800/60">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Add Raw Material SKU</span>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500">Add catalog entry and min stock levels</p>
+              </div>
+            </div>
+            <span class="text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+        <span class="text-[11px] text-slate-400 dark:text-slate-500">System operator actions logged for audit</span>
       </div>
     </div>
   </div>
