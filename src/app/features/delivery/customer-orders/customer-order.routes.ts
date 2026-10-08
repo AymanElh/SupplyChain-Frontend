@@ -6,23 +6,25 @@ import { authGuard } from '../../../core/guards/auth.guard';
 import { roleGuard } from '../../../core/guards/role.guard';
 import { UserRole } from '../../../core/models/user-roles';
 
-const COMMERCIAL = [UserRole.GESTIONNAIRE_COMMERCIAL];
+const CUSTOMER_ORDERS_VIEW = [UserRole.GESTIONNAIRE_COMMERCIAL, UserRole.SUPERVISEUR_LIVRAISONS];
 
 export default [
   {
     path: '',
     component: CustomerOrderList,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: CUSTOMER_ORDERS_VIEW, sectionName: 'Customer Orders' }
   },
   {
     path: 'create',
     component: CustomerOrderForm,
     canActivate: [authGuard, roleGuard],
-    data: { roles: COMMERCIAL }
+    data: { roles: [UserRole.GESTIONNAIRE_COMMERCIAL], sectionName: 'Create Customer Order' }
   },
   {
     path: ':id',
     component: CustomerOrderDetail,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: CUSTOMER_ORDERS_VIEW, sectionName: 'Customer Order Details' }
   }
 ] as Routes;

@@ -12,17 +12,19 @@ export default [
   {
     path: '',
     component: DeliveryList,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: FLEET, sectionName: 'Deliveries' }
   },
   {
     path: 'create',
     component: DeliveryForm,
     canActivate: [authGuard, roleGuard],
-    data: { roles: FLEET }
+    data: { roles: FLEET, sectionName: 'Schedule Delivery' }
   },
   {
     path: ':id',
     component: DeliveryDetail,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: FLEET, sectionName: 'Delivery Details' }
   }
 ] as Routes;

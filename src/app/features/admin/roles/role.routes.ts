@@ -10,18 +10,18 @@ export default [
     path: '',
     component: RoleList,
     canActivate: [authGuard, roleGuard],
-    data: { roles: [UserRole.ADMIN] }
+    data: { roles: [UserRole.ADMIN], sectionName: 'Role Management' }
   },
   {
     path: 'create',
     component: RoleForm,
     canActivate: [authGuard, roleGuard],
-    data: { roles: [UserRole.ADMIN] }
+    data: { roles: [UserRole.ADMIN], sectionName: 'Create Role' }
   },
   {
     path: ':id/edit',
     component: RoleForm,
     canActivate: [authGuard, roleGuard],
-    data: { roles: [UserRole.ADMIN] }
+    data: { roles: [UserRole.ADMIN], sectionName: 'Edit Role' }
   }
 ] as Routes;

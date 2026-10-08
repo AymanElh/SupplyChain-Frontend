@@ -12,23 +12,25 @@ export default [
   {
     path: '',
     component: CustomerList,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: COMMERCIAL, sectionName: 'Customers' }
   },
   {
     path: 'create',
     component: CustomerForm,
     canActivate: [authGuard, roleGuard],
-    data: { roles: COMMERCIAL }
+    data: { roles: COMMERCIAL, sectionName: 'Create Customer' }
   },
   {
     path: ':id',
     component: CustomerDetail,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: COMMERCIAL, sectionName: 'Customer Details' }
   },
   {
     path: ':id/edit',
     component: CustomerForm,
     canActivate: [authGuard, roleGuard],
-    data: { roles: COMMERCIAL }
+    data: { roles: COMMERCIAL, sectionName: 'Edit Customer' }
   }
 ] as Routes;

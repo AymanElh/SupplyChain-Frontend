@@ -11,24 +11,24 @@ export default [
     path: '',
     component: UserList,
     canActivate: [authGuard, roleGuard],
-    data: { roles: [UserRole.ADMIN] }
+    data: { roles: [UserRole.ADMIN], sectionName: 'User Management' }
   },
   {
     path: 'create',
     component: UserForm,
     canActivate: [authGuard, roleGuard],
-    data: { roles: [UserRole.ADMIN] }
+    data: { roles: [UserRole.ADMIN], sectionName: 'Create User' }
   },
   {
     path: ':id',
     component: UserDetail,
     canActivate: [authGuard, roleGuard],
-    data: { roles: [UserRole.ADMIN] }
+    data: { roles: [UserRole.ADMIN], sectionName: 'User Details' }
   },
   {
     path: ':id/edit',
     component: UserForm,
     canActivate: [authGuard, roleGuard],
-    data: { roles: [UserRole.ADMIN] }
+    data: { roles: [UserRole.ADMIN], sectionName: 'Edit User' }
   }
 ] as Routes;
