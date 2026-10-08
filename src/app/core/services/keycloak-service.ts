@@ -60,11 +60,32 @@ export class KeycloakService {
   }
 
   hasRole(role: string): boolean {
-    return this.getUserRoles().includes(role);
+    const roles = this.getUserRoles();
+    return roles.includes('ADMIN') || roles.includes(role);
   }
 
   hasAnyRole(roles: string[]): boolean {
-    return roles.some(role => this.hasRole(role));
+    const userRoles = this.getUserRoles();
+    if (userRoles.includes('ADMIN')) {
+      return true;
+    }
+    return roles.some(role => userRoles.includes(role));
+  }
+
+  hasAnyBusinessRole(): boolean {
+    const userRoles = this.getUserRoles();
+    const businessRoles = [
+      'ADMIN',
+      'CHEF_PRODUCTION',
+      'SUPERVISEUR_PRODUCTION',
+      'PLANIFICATEUR',
+      'GESTIONNAIRE_APPROVISIONNEMENT',
+      'RESPONSABLE_ACHATS',
+      'SUPERVISEUR_LOGISTIQUE',
+      'GESTIONNAIRE_COMMERCIAL',
+      'SUPERVISEUR_LIVRAISONS'
+    ];
+    return userRoles.some(r => businessRoles.includes(r));
   }
 
   // update token

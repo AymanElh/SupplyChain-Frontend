@@ -14,4 +14,6 @@ export const UserRole = {
   SUPERVISEUR_LIVRAISONS: 'SUPERVISEUR_LIVRAISONS'
 } as const;
 
+export const ALL_BUSINESS_ROLES: string[] = Object.values(UserRole);
+
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
