@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
+import { ALL_BUSINESS_ROLES } from './core/models/user-roles';
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
 
 export const routes: Routes = [
@@ -14,8 +16,14 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
+        path: 'access-denied',
+        loadComponent: () => import('./features/access-denied/access-denied.component').then(m => m.AccessDeniedComponent)
+      },
+      {
         path: 'dashboard',
-        loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes)
+        loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes),
+        canActivate: [roleGuard],
+        data: { roles: ALL_BUSINESS_ROLES, sectionName: 'Dashboard' }
       },
       {
         path: "supply/suppliers",
@@ -66,5 +74,9 @@ export const routes: Routes = [
         loadChildren: () => import('./features/admin/roles/role.routes').then(m => m.default)
       }
     ]
+  },
+  {
+    path: '**',
+    redirectTo: '/dashboard'
   }
 ];
