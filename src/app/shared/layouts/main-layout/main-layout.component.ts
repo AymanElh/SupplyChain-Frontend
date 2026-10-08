@@ -4,6 +4,19 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { KeycloakService } from '../../../core/services/keycloak-service';
 import { UserProfile } from '../../../core/models/user-profile';
 import { ThemeService } from '../../../core/services/theme.service';
+import { UserRole, ALL_BUSINESS_ROLES } from '../../../core/models/user-roles';
+
+export interface NavItem {
+  label: string;
+  path: string;
+  iconType: string;
+  roles?: string[];
+}
+
+export interface NavSection {
+  label: string;
+  items: NavItem[];
+}
 
 @Component({
   selector: 'app-main-layout',
@@ -23,7 +36,7 @@ export class MainLayoutComponent implements OnInit {
   });
 
   constructor(
-    private keycloakService: KeycloakService,
+    public keycloakService: KeycloakService,
     private router: Router,
     public themeService: ThemeService
   ) { }
@@ -43,14 +56,15 @@ export class MainLayoutComponent implements OnInit {
     year: 'numeric'
   }));
 
-  navigationSections = [
+  navigationSections: NavSection[] = [
     {
       label: 'Overview',
       items: [
         {
           label: 'Dashboard',
           path: '/dashboard',
-          iconType: 'dashboard'
+          iconType: 'dashboard',
+          roles: ALL_BUSINESS_ROLES
         }
       ]
     },
@@ -60,17 +74,20 @@ export class MainLayoutComponent implements OnInit {
         {
           label: 'Suppliers',
           path: '/supply/suppliers',
-          iconType: 'suppliers'
+          iconType: 'suppliers',
+          roles: [UserRole.RESPONSABLE_ACHATS, UserRole.GESTIONNAIRE_APPROVISIONNEMENT]
         },
         {
           label: 'Materials',
           path: '/supply/materials',
-          iconType: 'materials'
+          iconType: 'materials',
+          roles: [UserRole.GESTIONNAIRE_APPROVISIONNEMENT]
         },
         {
           label: 'Purchase Orders',
           path: '/supply/orders',
-          iconType: 'orders'
+          iconType: 'orders',
+          roles: [UserRole.RESPONSABLE_ACHATS, UserRole.SUPERVISEUR_LOGISTIQUE]
         }
       ]
     },
@@ -80,12 +97,14 @@ export class MainLayoutComponent implements OnInit {
         {
           label: 'Production & Products',
           path: '/production/products',
-          iconType: 'products'
+          iconType: 'products',
+          roles: [UserRole.CHEF_PRODUCTION, UserRole.SUPERVISEUR_PRODUCTION]
         },
         {
           label: 'Production Orders',
           path: '/production/orders',
-          iconType: 'orders'
+          iconType: 'orders',
+          roles: [UserRole.CHEF_PRODUCTION, UserRole.SUPERVISEUR_PRODUCTION, UserRole.PLANIFICATEUR]
         }
       ]
     },
@@ -95,27 +114,32 @@ export class MainLayoutComponent implements OnInit {
         {
           label: 'Customers',
           path: '/delivery/customers',
-          iconType: 'suppliers'
+          iconType: 'suppliers',
+          roles: [UserRole.GESTIONNAIRE_COMMERCIAL]
         },
         {
           label: 'Customer Orders',
           path: '/delivery/customer-orders',
-          iconType: 'orders'
+          iconType: 'orders',
+          roles: [UserRole.GESTIONNAIRE_COMMERCIAL, UserRole.SUPERVISEUR_LIVRAISONS]
         },
         {
           label: 'Deliveries',
           path: '/delivery/deliveries',
-          iconType: 'materials'
+          iconType: 'materials',
+          roles: [UserRole.SUPERVISEUR_LIVRAISONS]
         },
         {
           label: 'Drivers',
           path: '/delivery/drivers',
-          iconType: 'dashboard'
+          iconType: 'dashboard',
+          roles: [UserRole.SUPERVISEUR_LIVRAISONS]
         },
         {
           label: 'Vehicles',
           path: '/delivery/vehicles',
-          iconType: 'materials'
+          iconType: 'materials',
+          roles: [UserRole.SUPERVISEUR_LIVRAISONS]
         }
       ]
     },
@@ -125,16 +149,30 @@ export class MainLayoutComponent implements OnInit {
         {
           label: 'Users',
           path: '/admin/users',
-          iconType: 'suppliers'
+          iconType: 'suppliers',
+          roles: [UserRole.ADMIN]
         },
         {
           label: 'Roles',
           path: '/admin/roles',
-          iconType: 'dashboard'
+          iconType: 'dashboard',
+          roles: [UserRole.ADMIN]
         }
       ]
     }
   ];
+
+  get visibleNavigationSections(): NavSection[] {
+    return this.navigationSections
+      .map(section => ({
+        ...section,
+        items: section.items.filter(item => {
+          if (!item.roles || item.roles.length === 0) return true;
+          return this.keycloakService.hasAnyRole(item.roles);
+        })
+      }))
+      .filter(section => section.items.length > 0);
+  }
 
   /** Flat list kept for backwards-compatible lookups */
   navigationItems = this.navigationSections.flatMap(section => section.items);

@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { forkJoin, map, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { KeycloakService } from '../../../core/services/keycloak-service';
+import { UserRole } from '../../../core/models/user-roles';
 import { SupplierApiService } from '../../supply/suppliers/services/supplier-api.service';
 import { RawMaterialApiService } from '../../supply/raw-materials/services/raw-material-api-service';
 import { SupplierOrderApiService } from '../../supply/supplier-orders/services/supplier-order-api-service';
@@ -31,13 +33,9 @@ export interface DashboardSummary {
 
 const STAGE_ORDER: ProductionStatus[] = ['IN_WAITING', 'IN_PRODUCTION', 'FINISHED', 'BLOCKED'];
 
-/**
- * Aggregates the numbers shown on the operations dashboard.
- * Every source is guarded so one denied/offline endpoint cannot
- * break the whole briefing (e.g. role-restricted users).
- */
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
+  private keycloakService = inject(KeycloakService);
 
   constructor(
     private suppliers: SupplierApiService,
@@ -45,19 +43,39 @@ export class DashboardService {
     private supplierOrders: SupplierOrderApiService,
     private productionOrders: ProductionOrderApiService,
     private customerOrders: CustomerOrderApiService
-  ) {
-  }
+  ) {}
 
   loadSummary(): Observable<DashboardSummary> {
+    const canReadSuppliers = this.keycloakService.hasAnyRole([
+      UserRole.RESPONSABLE_ACHATS,
+      UserRole.GESTIONNAIRE_APPROVISIONNEMENT
+    ]);
+    const canReadMaterials = this.keycloakService.hasRole(
+      UserRole.GESTIONNAIRE_APPROVISIONNEMENT
+    );
+    const canReadOrders = this.keycloakService.hasAnyRole([
+      UserRole.RESPONSABLE_ACHATS,
+      UserRole.SUPERVISEUR_LOGISTIQUE
+    ]);
+    const canReadSales = this.keycloakService.hasAnyRole([
+      UserRole.GESTIONNAIRE_COMMERCIAL,
+      UserRole.SUPERVISEUR_LIVRAISONS
+    ]);
+    const canReadProduction = this.keycloakService.hasAnyRole([
+      UserRole.CHEF_PRODUCTION,
+      UserRole.SUPERVISEUR_PRODUCTION,
+      UserRole.PLANIFICATEUR
+    ]);
+
     return forkJoin({
-      suppliers: this.suppliers.getAll(0, 3).pipe(catchError(() => of(null))),
-      materials: this.materials.getAll(0, 100).pipe(catchError(() => of(null))),
-      orders: this.supplierOrders.getAll(0, 5, 'id').pipe(catchError(() => of(null))),
-      pendingSales: this.customerOrders.getAll('PENDING', 0, 1).pipe(catchError(() => of(null))),
-      waiting: this.productionOrders.getByStatus('IN_WAITING', 0, 1).pipe(catchError(() => of(null))),
-      inProduction: this.productionOrders.getByStatus('IN_PRODUCTION', 0, 1).pipe(catchError(() => of(null))),
-      finished: this.productionOrders.getByStatus('FINISHED', 0, 1).pipe(catchError(() => of(null))),
-      blocked: this.productionOrders.getByStatus('BLOCKED', 0, 1).pipe(catchError(() => of(null)))
+      suppliers: canReadSuppliers ? this.suppliers.getAll(0, 3).pipe(catchError(() => of(null))) : of(null),
+      materials: canReadMaterials ? this.materials.getAll(0, 100).pipe(catchError(() => of(null))) : of(null),
+      orders: canReadOrders ? this.supplierOrders.getAll(0, 5, 'id').pipe(catchError(() => of(null))) : of(null),
+      pendingSales: canReadSales ? this.customerOrders.getAll('PENDING', 0, 1).pipe(catchError(() => of(null))) : of(null),
+      waiting: canReadProduction ? this.productionOrders.getByStatus('IN_WAITING', 0, 1).pipe(catchError(() => of(null))) : of(null),
+      inProduction: canReadProduction ? this.productionOrders.getByStatus('IN_PRODUCTION', 0, 1).pipe(catchError(() => of(null))) : of(null),
+      finished: canReadProduction ? this.productionOrders.getByStatus('FINISHED', 0, 1).pipe(catchError(() => of(null))) : of(null),
+      blocked: canReadProduction ? this.productionOrders.getByStatus('BLOCKED', 0, 1).pipe(catchError(() => of(null))) : of(null)
     }).pipe(
       map(result => {
         const materialList = result.materials?.content ?? [];
