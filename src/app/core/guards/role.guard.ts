@@ -5,25 +5,32 @@ import { NotificationService } from '../services/notification.service';
 
 /**
  * Role-based route guard. Declare required realm roles via route data:
- *   { path: 'admin', canActivate: [authGuard, roleGuard], data: { roles: ['ADMIN'] } }
+ *   { path: '...', canActivate: [authGuard, roleGuard], data: { roles: ['...'], sectionName: '...' } }
  *
- * The backend remains the source of truth for authorization; this guard only
- * keeps users from navigating to screens whose actions would all return 403.
+ * If a user lacks the required role, they are redirected to /access-denied
+ * with clear feedback specifying what they tried to access.
  */
-export const roleGuard: CanActivateFn = (route) => {
+export const roleGuard: CanActivateFn = (route, state) => {
   const keycloakService = inject(KeycloakService);
   const notification = inject(NotificationService);
   const router = inject(Router);
 
-  const requiredRoles = (route.data?.['roles'] ?? []) as string[];
-
-  if (requiredRoles.length === 0) {
-    return true;
-  }
-
   if (!keycloakService.isLoggedIn()) {
     keycloakService.login();
     return false;
+  }
+
+  // If user has no business roles at all
+  if (!keycloakService.hasAnyBusinessRole()) {
+    router.navigate(['/access-denied'], { queryParams: { reason: 'no_role' } });
+    return false;
+  }
+
+  const requiredRoles = (route.data?.['roles'] ?? []) as string[];
+  const sectionName = (route.data?.['sectionName'] ?? route.routeConfig?.path ?? '') as string;
+
+  if (requiredRoles.length === 0) {
+    return true;
   }
 
   if (keycloakService.hasAnyRole(requiredRoles)) {
@@ -32,8 +39,13 @@ export const roleGuard: CanActivateFn = (route) => {
 
   notification.warning(
     'Insufficient permissions',
-    'Your account does not have access to this section.'
+    `You are unauthorized to access ${sectionName || 'this section'}.`
   );
-  router.navigate(['/dashboard']);
+  router.navigate(['/access-denied'], {
+    queryParams: {
+      section: sectionName,
+      required: requiredRoles.join(',')
+    }
+  });
   return false;
 };
